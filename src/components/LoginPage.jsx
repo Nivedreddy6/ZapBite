@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export const LoginPage = ({ onLoginSuccess }) => {
-  const { setCurrentRole, setUser, showNotification } = useApp();
+  const { setCurrentRole, setUser, showNotification, registerUser, registeredUsers } = useApp();
   
   // Auth Mode: 'signin' | 'signup'
   const [authMode, setAuthMode] = useState('signin');
@@ -83,16 +83,21 @@ export const LoginPage = ({ onLoginSuccess }) => {
     setIsLoading(true);
 
     setTimeout(() => {
-      const userObj = demoAccounts[selectedRole];
+      const query = (emailOrPhone || '').toLowerCase().trim();
+      const matched = (registeredUsers || []).find(
+        (u) => u.email.toLowerCase() === query || u.phone.includes(query)
+      );
+
+      const userObj = matched || demoAccounts[selectedRole];
       if (setUser) setUser(userObj);
-      setCurrentRole(selectedRole);
+      setCurrentRole(userObj.role || selectedRole);
       setIsLoading(false);
-      showNotification(`Logged in as ${userObj.name} (${selectedRole.toUpperCase()})`, 'success');
+      showNotification(`Logged in as ${userObj.name} (${(userObj.role || selectedRole).toUpperCase()})`, 'success');
       if (onLoginSuccess) onLoginSuccess();
     }, 500);
   };
 
-  const handleSignUpSubmit = (e) => {
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     setPhoneError('');
 
@@ -124,23 +129,24 @@ export const LoginPage = ({ onLoginSuccess }) => {
       console.log(e);
     }
 
-    setTimeout(() => {
-      const formattedPhone = `+91 ${cleanPhone.slice(0, 5)} ${cleanPhone.slice(5)}`;
-      const newAccount = {
-        id: `user-${Date.now()}`,
-        name: signUpName,
-        email: signUpEmail,
+    const formattedPhone = `+91 ${cleanPhone.slice(0, 5)} ${cleanPhone.slice(5)}`;
+
+    try {
+      const registered = await registerUser({
+        name: signUpName.trim(),
+        email: signUpEmail.trim(),
         phone: formattedPhone,
         role: signUpRole,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80'
-      };
+        password: signUpPassword
+      });
 
-      if (setUser) setUser(newAccount);
-      setCurrentRole(signUpRole);
       setIsLoading(false);
-      showNotification(`🎉 Account registered for ${signUpName}! Welcome to ZapBite.ai`, 'success');
+      showNotification(`🎉 Account registered and saved for ${registered.name}! Welcome to ZapBite.ai`, 'success');
       if (onLoginSuccess) onLoginSuccess();
-    }, 700);
+    } catch (err) {
+      setIsLoading(false);
+      showNotification(err.message || 'Error registering account', 'error');
+    }
   };
 
   return (

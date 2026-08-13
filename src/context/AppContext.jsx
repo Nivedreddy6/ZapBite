@@ -10,17 +10,48 @@ const API_BASE = 'http://localhost:5000/api';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [currentRole, setCurrentRole] = useState('customer');
-  const [isLandingPageOpen, setIsLandingPageOpen] = useState(true);
-  const [user, setUser] = useState({
-    id: 'cust-101',
-    name: 'Rahul Malhotra',
-    email: 'rahul@zapbite.ai',
-    phone: '+91 98765 00112',
-    role: 'customer',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'
+  const [currentRole, setCurrentRoleState] = useState(() => {
+    return localStorage.getItem('zapbite_role') || 'customer';
   });
 
+  const setCurrentRole = (role) => {
+    setCurrentRoleState(role);
+    localStorage.setItem('zapbite_role', role);
+  };
+
+  const [user, setUserState] = useState(() => {
+    const saved = localStorage.getItem('zapbite_user');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return {
+      id: 'cust-101',
+      name: 'Rahul Malhotra',
+      email: 'rahul@zapbite.ai',
+      phone: '+91 98765 00112',
+      role: 'customer',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'
+    };
+  });
+
+  const setUser = (userObj) => {
+    setUserState(userObj);
+    if (userObj) {
+      localStorage.setItem('zapbite_user', JSON.stringify(userObj));
+    } else {
+      localStorage.removeItem('zapbite_user');
+    }
+  };
+
+  const [registeredUsers, setRegisteredUsers] = useState(() => {
+    const saved = localStorage.getItem('zapbite_registered_users');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return [];
+  });
+
+  const [isLandingPageOpen, setIsLandingPageOpen] = useState(false);
   const [restaurants, setRestaurants] = useState(INITIAL_RESTAURANTS);
   const [menuItems, setMenuItems] = useState(INITIAL_MENU_ITEMS);
   const [deliveryPartners, setDeliveryPartners] = useState(INITIAL_DELIVERY_PARTNERS);
@@ -32,6 +63,45 @@ export const AppProvider = ({ children }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [notification, setNotification] = useState(null);
   const [isBackendConnected, setIsBackendConnected] = useState(false);
+
+  const registerUser = async (userPayload) => {
+    let created = null;
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userPayload)
+      });
+
+      if (res.ok) {
+        created = await res.json();
+      } else {
+        const errData = await res.json();
+        throw new Error(errData.error || 'Registration failed');
+      }
+    } catch (e) {
+      console.log('Registering locally / offline fallback:', e);
+      if (e.message && e.message !== 'Failed to fetch') {
+        throw e;
+      }
+      created = {
+        id: `user-${Date.now()}`,
+        ...userPayload,
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80'
+      };
+    }
+
+    setRegisteredUsers((prev) => {
+      const updated = [created, ...prev.filter(u => u.email !== created.email)];
+      localStorage.setItem('zapbite_registered_users', JSON.stringify(updated));
+      return updated;
+    });
+
+    setUser(created);
+    setCurrentRole(created.role || 'customer');
+    return created;
+  };
 
   // Sync initial state from Express REST API
   useEffect(() => {
@@ -199,7 +269,7 @@ export const AppProvider = ({ children }) => {
       status: 'Placed',
       createdAt: new Date().toISOString(),
       estimatedDeliveryMins: 25,
-      deliveryPartnerId: null,
+      deliveryPartnerId: deliveryPartners.find(p => p.status === 'Available')?.id || 'partner-1',
       history: [{ status: 'Placed', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), note: 'Placed order' }]
     };
 
@@ -211,12 +281,12 @@ export const AppProvider = ({ children }) => {
     return newOrderId;
   };
 
-  const updateOrderStatus = async (orderId, newStatus, note = '') => {
+  const updateOrderStatus = async (orderId, newStatus, note = '', partnerIdOverride = null) => {
     try {
       const res = await fetch(`${API_BASE}/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus, note })
+        body: JSON.stringify({ status: newStatus, note, deliveryPartnerId: partnerIdOverride })
       });
 
       if (res.ok) {
@@ -232,7 +302,7 @@ export const AppProvider = ({ children }) => {
     setOrders((prev) =>
       prev.map((ord) => {
         if (ord.id === orderId) {
-          const partnerId = ord.deliveryPartnerId || 'partner-1';
+          const partnerId = partnerIdOverride || ord.deliveryPartnerId || 'partner-1';
           return { ...ord, status: newStatus, deliveryPartnerId: partnerId };
         }
         return ord;
@@ -321,6 +391,8 @@ export const AppProvider = ({ children }) => {
         addMenuItem,
         togglePartnerStatus,
         isBackendConnected,
+        registerUser,
+        registeredUsers,
       }}
     >
       {children}

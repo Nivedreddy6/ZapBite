@@ -21,10 +21,14 @@ export const DeliveryView = () => {
     togglePartnerStatus 
   } = useApp();
 
-  const [selectedPartnerId, setSelectedPartnerId] = useState('partner-1'); // Default Rahul Sharma
+  const [selectedPartnerId, setSelectedPartnerId] = useState('all'); // Default to All Active Delivery Fleet
 
   const partner = deliveryPartners.find((p) => p.id === selectedPartnerId) || deliveryPartners[0];
-  const assignedOrders = orders.filter((o) => o.deliveryPartnerId === partner?.id && o.status !== 'Delivered');
+  const assignedOrders = orders.filter((o) => {
+    if (o.status === 'Delivered') return false;
+    if (selectedPartnerId === 'all') return true;
+    return o.deliveryPartnerId === partner?.id || !o.deliveryPartnerId;
+  });
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100">
@@ -41,7 +45,7 @@ export const DeliveryView = () => {
             />
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-black text-white">{partner.name}</h2>
+                <h2 className="text-xl font-black text-white">{selectedPartnerId === 'all' ? 'All Active Fleet Operations' : partner.name}</h2>
                 <span className="bg-amber-400/20 text-amber-300 text-xs font-extrabold px-2 py-0.5 rounded-md">
                   ★ {partner.rating}
                 </span>
@@ -61,9 +65,10 @@ export const DeliveryView = () => {
               onChange={(e) => setSelectedPartnerId(e.target.value)}
               className="bg-slate-950 text-white text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-800 focus:outline-none"
             >
+              <option value="all">🌐 All Active Fleet Tasks ({orders.filter(o => o.status !== 'Delivered').length} Live)</option>
               {deliveryPartners.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} ({p.status})
+                  🛵 {p.name} ({p.status})
                 </option>
               ))}
             </select>
@@ -177,16 +182,16 @@ export const DeliveryView = () => {
                       <Phone className="w-3.5 h-3.5" /> Call Customer
                     </a>
 
-                    {order.status === 'Ready' || order.status === 'Preparing' || order.status === 'Accepted' ? (
+                    {order.status === 'Ready' || order.status === 'Preparing' || order.status === 'Accepted' || order.status === 'Placed' ? (
                       <button
-                        onClick={() => updateOrderStatus(order.id, 'Out for Delivery', 'Rider picked up order from kitchen')}
+                        onClick={() => updateOrderStatus(order.id, 'Out for Delivery', 'Rider picked up order from kitchen', partner.id)}
                         className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs py-2.5 rounded-xl shadow active:scale-95 transition-all"
                       >
                         Confirm Pickup from Kitchen
                       </button>
                     ) : (
                       <button
-                        onClick={() => updateOrderStatus(order.id, 'Delivered', 'Order successfully handed over to customer')}
+                        onClick={() => updateOrderStatus(order.id, 'Delivered', 'Order successfully handed over to customer', partner.id)}
                         className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 text-slate-950 font-black text-xs py-2.5 rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle2 className="w-4 h-4" /> Mark Order Delivered

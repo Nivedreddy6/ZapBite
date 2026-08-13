@@ -18,6 +18,44 @@ let restaurants = [...INITIAL_RESTAURANTS];
 let menuItems = [...INITIAL_MENU_ITEMS];
 let deliveryPartners = [...INITIAL_DELIVERY_PARTNERS];
 let orders = [...INITIAL_ORDERS];
+let users = [
+  {
+    id: 'cust-101',
+    name: 'Rahul Malhotra',
+    email: 'rahul@zapbite.ai',
+    phone: '+91 98765 00112',
+    role: 'customer',
+    password: 'password123',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 'rest-1',
+    name: 'Chef Vikram (Spicy Junction)',
+    email: 'kitchen@spicyjunction.com',
+    phone: '+91 98111 22334',
+    role: 'restaurant',
+    password: 'password123',
+    avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=200&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 'partner-1',
+    name: 'Rahul Sharma (Rider)',
+    email: 'rahul.rider@zapbite.ai',
+    phone: '+91 98765 43210',
+    role: 'delivery',
+    password: 'password123',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 'admin-01',
+    name: 'System Super Admin',
+    email: 'admin@zapbite.ai',
+    phone: '+91 90000 00000',
+    role: 'admin',
+    password: 'password123',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80'
+  }
+];
 
 // 0. Root API Portal Landing
 app.get('/', (req, res) => {
@@ -60,9 +98,58 @@ app.get('/api/health', (req, res) => {
       totalRestaurants: restaurants.length,
       totalMenuItems: menuItems.length,
       totalOrders: orders.length,
-      activePartners: deliveryPartners.filter(p => p.status !== 'Offline').length
+      activePartners: deliveryPartners.filter(p => p.status !== 'Offline').length,
+      registeredUsers: users.length
     }
   });
+});
+
+// 1b. User Authentication & Registration Endpoints
+app.get('/api/users', (req, res) => res.json(users));
+
+app.post('/api/auth/register', (req, res) => {
+  const { name, email, phone, role, password } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and Email are required.' });
+  }
+
+  const cleanEmail = email.toLowerCase().trim();
+  const existing = users.find(u => u.email.toLowerCase() === cleanEmail);
+  if (existing) {
+    return res.status(400).json({ error: 'An account with this email address already exists.' });
+  }
+
+  const newUser = {
+    id: `user-${Date.now()}`,
+    name: name.trim(),
+    email: cleanEmail,
+    phone: phone || '+91 98765 00000',
+    role: role || 'customer',
+    password: password || 'password123',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80',
+    createdAt: new Date().toISOString()
+  };
+
+  users.unshift(newUser);
+  res.status(201).json(newUser);
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const { emailOrPhone, role } = req.body;
+  const q = (emailOrPhone || '').toLowerCase().trim();
+
+  const userMatch = users.find(u => 
+    (u.email.toLowerCase() === q || u.phone.includes(q)) && 
+    (u.role === role || !role)
+  );
+
+  if (userMatch) {
+    return res.json(userMatch);
+  }
+
+  // Fallback demo user for requested role
+  const fallback = users.find(u => u.role === role) || users[0];
+  res.json({ ...fallback, name: emailOrPhone ? emailOrPhone.split('@')[0] : fallback.name });
 });
 
 // 2. ZapPay AI Payment Verification & Promo Optimizer Endpoint
@@ -198,11 +285,18 @@ app.post('/api/orders', (req, res) => {
 });
 
 app.patch('/api/orders/:id/status', (req, res) => {
-  const { status, note } = req.body;
+  const { status, note, deliveryPartnerId } = req.body;
   const order = orders.find(o => o.id === req.params.id);
   if (!order) return res.status(404).json({ error: 'Order not found' });
 
   order.status = status;
+  if (deliveryPartnerId) {
+    order.deliveryPartnerId = deliveryPartnerId;
+  } else if (!order.deliveryPartnerId) {
+    const availablePartner = deliveryPartners.find(p => p.status === 'Available') || deliveryPartners[0];
+    order.deliveryPartnerId = availablePartner ? availablePartner.id : 'partner-1';
+  }
+
   order.history.push({
     status,
     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
