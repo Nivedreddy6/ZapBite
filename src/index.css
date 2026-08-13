@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@layer utilities {
+  /* Vibrant Semi-Dark Glassmorphic Container styling */
+  .glass-card {
+    background: rgba(19, 28, 49, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-card-hover {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 46, 99, 0.5);
+    box-shadow: 0 20px 45px -10px rgba(255, 46, 99, 0.3);
+  }
+
+  /* Shimmer metallic sweep effect */
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.25) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+  }
+
+  /* Floating animation */
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 4s ease-in-out 2s infinite;
+  }
+
+  /* Neon Breathing Glow */
+  .animate-neon-glow {
+    animation: neonGlow 3.5s ease-in-out infinite alternate;
+  }
+
+  /* Slow Spin */
+  .animate-spin-slow {
+    animation: spinSlow 18s linear infinite;
+  }
+
+  /* Fade In Up Entrance */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
+}
+
+/* Custom Animation Keyframes */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes neonGlow {
+  0% {
+    box-shadow: 0 0 15px rgba(255, 46, 99, 0.3), inset 0 0 10px rgba(255, 46, 99, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(123, 44, 191, 0.6), inset 0 0 15px rgba(123, 44, 191, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(0, 245, 212, 0.5), inset 0 0 12px rgba(0, 245, 212, 0.25);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modern Slate Scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+  border: 2px solid #0f172a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff2e63;
+}
