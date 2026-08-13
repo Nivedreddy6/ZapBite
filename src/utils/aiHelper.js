@@ -1,5 +1,33 @@
 import { INITIAL_MENU_ITEMS } from '../data/mockData';
 
+const API_BASE = 'http://localhost:5000/api';
+
+export async function fetchBiteBotAIResponse(userMessage, activeOrders = [], cart = []) {
+  try {
+    const res = await fetch(`${API_BASE}/ai/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userMessage, activeOrders })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      const localResult = getBiteBotResponse(userMessage, activeOrders, cart);
+      return {
+        ...localResult,
+        text: data.text || localResult.text,
+        isGemini: Boolean(data.isGemini),
+        suggestions: data.suggestions || localResult.suggestions,
+        actions: data.actions || localResult.actions
+      };
+    }
+  } catch (err) {
+    console.log('AI API offline, using local smart engine', err);
+  }
+
+  return getBiteBotResponse(userMessage, activeOrders, cart);
+}
+
 export function getBiteBotResponse(userMessage, activeOrders = [], cart = []) {
   const query = userMessage.toLowerCase().trim();
 
@@ -45,9 +73,9 @@ export function getBiteBotResponse(userMessage, activeOrders = [], cart = []) {
 
     return {
       text: statusMsg,
-      suggestions: ['📍 Open Live Order Tracker', '📞 Call Restaurant', '🍔 Order Dessert'],
+      suggestions: ['📍 Open Interactive HUD Map', '📞 Call Restaurant', '🍔 Order Dessert'],
       actions: [
-        { type: 'TRACK_ORDER', orderId: latestOrder.id, label: '📍 View Live Tracking Map' }
+        { type: 'TRACK_ORDER', orderId: latestOrder.id, label: '📍 View Interactive HUD Delivery Map' }
       ]
     };
   }
@@ -60,7 +88,7 @@ export function getBiteBotResponse(userMessage, activeOrders = [], cart = []) {
 
     if (affordableItems.length > 0) {
       return {
-        text: `Here are top delicious dishes under ₹${maxPrice} for you:`,
+        text: `Here are top delicious dishes under ₹${maxPrice} curated by ZapBot AI:`,
         items: affordableItems.slice(0, 3),
         suggestions: ['🌱 Show Veg Only', '🌶️ Spicy Starters', '🛒 View My Cart'],
         actions: []
@@ -138,7 +166,7 @@ export function getBiteBotResponse(userMessage, activeOrders = [], cart = []) {
 
   // Default Greeting / Help
   return {
-    text: `Greetings! I am **ZapBot AI** ⚡, your smart neural food concierge. How can I assist you today?
+    text: `Greetings! I am **ZapBot AI** ⚡ (Powered by ZapBite AI). How can I assist you today?
 - Ask me for dish recommendations (*"Spicy biryani under ₹300"*)
 - Filter by diet (*"Pure veg healthy bowls"*)
 - Track your live delivery (*"Where is my order?"*)`,

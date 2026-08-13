@@ -1,0 +1,593 @@
+{
+  "restaurants": [
+    {
+      "id": "rest-1",
+      "name": "Spicy Junction",
+      "cuisine": "Biryani, Hyderabadi & Mughlai",
+      "rating": 4.8,
+      "ratingCount": 1240,
+      "deliveryTimeMins": "25-30",
+      "priceForTwo": "₹350",
+      "image": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop&q=80",
+      "tag": "Bestseller",
+      "address": "Sector 4, Main Road, Vizag",
+      "isPureVeg": false
+    },
+    {
+      "id": "rest-2",
+      "name": "Burger Craft & Co.",
+      "cuisine": "Gourmet Burgers, Fries & Shakes",
+      "rating": 4.7,
+      "ratingCount": 890,
+      "deliveryTimeMins": "20-25",
+      "priceForTwo": "₹400",
+      "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80",
+      "tag": "Trending",
+      "address": "MVP Colony, Beach Road",
+      "isPureVeg": false
+    },
+    {
+      "id": "rest-3",
+      "name": "Green Leaf Bistro",
+      "cuisine": "Pure Veg, Healthy Bowls & South Indian",
+      "rating": 4.9,
+      "ratingCount": 2100,
+      "deliveryTimeMins": "15-20",
+      "priceForTwo": "₹250",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop&q=80",
+      "tag": "Top Rated",
+      "address": "Siripuram Circle, Vizag",
+      "isPureVeg": true
+    },
+    {
+      "id": "rest-4",
+      "name": "Pizza Express & Slice",
+      "cuisine": "Woodfired Pizza, Pasta & Garlic Bread",
+      "rating": 4.6,
+      "ratingCount": 1540,
+      "deliveryTimeMins": "30-35",
+      "priceForTwo": "₹500",
+      "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop&q=80",
+      "tag": "Offers Available",
+      "address": "Dwaraka Nagar 3rd Lane",
+      "isPureVeg": false
+    },
+    {
+      "id": "rest-5",
+      "name": "Wok & Roll Asian",
+      "cuisine": "Pan Asian, Ramen, Dim Sum & Noodles",
+      "rating": 4.75,
+      "ratingCount": 670,
+      "deliveryTimeMins": "25-30",
+      "priceForTwo": "₹450",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&auto=format&fit=crop&q=80",
+      "tag": "Chef Special",
+      "address": "RK Beach Boulevard",
+      "isPureVeg": false
+    },
+    {
+      "id": "rest-6",
+      "name": "Sweet Sensations",
+      "cuisine": "Desserts, Waffles, Cakes & Sundaes",
+      "rating": 4.85,
+      "ratingCount": 950,
+      "deliveryTimeMins": "15-20",
+      "priceForTwo": "₹300",
+      "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&auto=format&fit=crop&q=80",
+      "tag": "Sweet Tooth",
+      "address": "Lawsons Bay Colony",
+      "isPureVeg": true
+    }
+  ],
+  "menuItems": [
+    {
+      "id": "item-101",
+      "restaurantId": "rest-1",
+      "name": "Hyderabadi Dum Chicken Biryani",
+      "category": "Biryani",
+      "price": 290,
+      "isVeg": false,
+      "rating": 4.9,
+      "ratingCount": 840,
+      "description": "Slow-cooked fragrant basmati rice infused with aromatic spices, tender marinated chicken pieces, served with mirchi ka salan & raita.",
+      "image": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop&q=80",
+      "tag": "Bestseller",
+      "calories": "650 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-102",
+      "restaurantId": "rest-1",
+      "name": "Paneer Butter Masala Biryani",
+      "category": "Biryani",
+      "price": 240,
+      "isVeg": true,
+      "rating": 4.7,
+      "ratingCount": 420,
+      "description": "Char-grilled cottage cheese cubes cooked in rich cashew tomato gravy, layered with saffron basmati rice.",
+      "image": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&auto=format&fit=crop&q=80",
+      "tag": "Must Try",
+      "calories": "580 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-103",
+      "restaurantId": "rest-1",
+      "name": "Tandoori Chicken Tikka (8 Pcs)",
+      "category": "Starters",
+      "price": 320,
+      "isVeg": false,
+      "rating": 4.8,
+      "ratingCount": 310,
+      "description": "Juicy chicken chunks marinated in hung curd and red chili paste, roasted to perfection in clay tandoor.",
+      "image": "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=800&auto=format&fit=crop&q=80",
+      "tag": "Chef Special",
+      "calories": "490 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-201",
+      "restaurantId": "rest-2",
+      "name": "Monster Smoked Bacon & Cheese Burger",
+      "category": "Burgers",
+      "price": 280,
+      "isVeg": false,
+      "rating": 4.8,
+      "ratingCount": 510,
+      "description": "Double flame-grilled beef patty, aged cheddar cheese, crispy bacon strips, caramelized onions & smoked bbq sauce.",
+      "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80",
+      "tag": "Popular",
+      "calories": "780 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-202",
+      "restaurantId": "rest-2",
+      "name": "Crispy Veg Spicy Crunch Burger",
+      "category": "Burgers",
+      "price": 180,
+      "isVeg": true,
+      "rating": 4.6,
+      "ratingCount": 390,
+      "description": "Crispy corn and potato patty loaded with jalapeños, lettuce, melted cheese sauce, in a toasted brioche bun.",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&auto=format&fit=crop&q=80",
+      "tag": "Bestseller",
+      "calories": "520 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-203",
+      "restaurantId": "rest-2",
+      "name": "Loaded Peri-Peri Crinkle Fries",
+      "category": "Sides",
+      "price": 140,
+      "isVeg": true,
+      "rating": 4.7,
+      "ratingCount": 650,
+      "description": "Golden crispy crinkle fries dusted with African peri-peri spice mix, drizzled with spicy mayo.",
+      "image": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=800&auto=format&fit=crop&q=80",
+      "tag": "Kid Favorite",
+      "calories": "410 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-301",
+      "restaurantId": "rest-3",
+      "name": "Special Ghee Roast Masala Dosa",
+      "category": "South Indian",
+      "price": 130,
+      "isVeg": true,
+      "rating": 4.9,
+      "ratingCount": 1420,
+      "description": "Ultra-crispy fermented rice crepe roasted in pure Desi A2 Ghee, stuffed with spiced potato masala. Served with 3 chutneys.",
+      "image": "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=800&auto=format&fit=crop&q=80",
+      "tag": "Iconic",
+      "calories": "380 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-302",
+      "restaurantId": "rest-3",
+      "name": "Quinoa & Avocado Protein Buddha Bowl",
+      "category": "Healthy",
+      "price": 260,
+      "isVeg": true,
+      "rating": 4.8,
+      "ratingCount": 280,
+      "description": "Organic fluffy quinoa, sliced fresh avocado, roasted chickpeas, cherry tomatoes, edamame, and tahini lemon dressing.",
+      "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop&q=80",
+      "tag": "Fit Choice",
+      "calories": "320 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-303",
+      "restaurantId": "rest-3",
+      "name": "Paneer Tikka Kathi Roll",
+      "category": "Healthy",
+      "price": 170,
+      "isVeg": true,
+      "rating": 4.7,
+      "ratingCount": 490,
+      "description": "Whole wheat paratha wrapped with tandoori paneer tikka, mint chutney, bell peppers, and onion rings.",
+      "image": "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=800&auto=format&fit=crop&q=80",
+      "tag": "Quick Snack",
+      "calories": "440 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-401",
+      "restaurantId": "rest-4",
+      "name": "Supreme Pepperoni & Sausage Pizza (12\")",
+      "category": "Pizzas",
+      "price": 490,
+      "isVeg": false,
+      "rating": 4.85,
+      "ratingCount": 920,
+      "description": "Hand-tossed sourdough crust, San Marzano tomato sauce, fresh mozzarella, pork pepperoni slices, and Italian sausage.",
+      "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop&q=80",
+      "tag": "Bestseller",
+      "calories": "920 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-402",
+      "restaurantId": "rest-4",
+      "name": "Cheesy Garlic Breadsticks with Dip",
+      "category": "Starters",
+      "price": 160,
+      "isVeg": true,
+      "rating": 4.75,
+      "ratingCount": 780,
+      "description": "Freshly baked buttery breadsticks stuffed with mozzarella cheese, sprinkled with oregano and served with marinara dip.",
+      "image": "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=800&auto=format&fit=crop&q=80",
+      "tag": "Side Favorite",
+      "calories": "450 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-501",
+      "restaurantId": "rest-5",
+      "name": "Spicy Tonkotsu Pork Ramen",
+      "category": "Asian",
+      "price": 360,
+      "isVeg": false,
+      "rating": 4.9,
+      "ratingCount": 340,
+      "description": "Rich 12-hour simmered pork broth, hand-crafted ramen noodles, chashu pork belly, ajitsuke tamago egg, and nori.",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&auto=format&fit=crop&q=80",
+      "tag": "Chef Special",
+      "calories": "610 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-502",
+      "restaurantId": "rest-5",
+      "name": "Steamed Crystal Veg Dim Sum (6 Pcs)",
+      "category": "Asian",
+      "price": 220,
+      "isVeg": true,
+      "rating": 4.8,
+      "ratingCount": 290,
+      "description": "Translucent tapioca dumplings filled with water chestnuts, shiitake mushrooms, and bok choy. Served with chili oil.",
+      "image": "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=800&auto=format&fit=crop&q=80",
+      "tag": "Delicate",
+      "calories": "240 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-601",
+      "restaurantId": "rest-6",
+      "name": "Belgian Chocolate Overload Waffle",
+      "category": "Desserts",
+      "price": 190,
+      "isVeg": true,
+      "rating": 4.9,
+      "ratingCount": 1120,
+      "description": "Warm freshly baked waffle smothered in dark & milk Belgian melted chocolate, chocolate chips, served with vanilla ice cream.",
+      "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&auto=format&fit=crop&q=80",
+      "tag": "Must Have",
+      "calories": "590 kcal",
+      "inStock": true
+    },
+    {
+      "id": "item-602",
+      "restaurantId": "rest-6",
+      "name": "Thick Nutella & Ferrero Rocher Shake",
+      "category": "Desserts",
+      "price": 210,
+      "isVeg": true,
+      "rating": 4.8,
+      "ratingCount": 840,
+      "description": "Decadent thick milkshake blended with pure Nutella spread, crushed Ferrero Rocher pralines, topped with whipped cream.",
+      "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=800&auto=format&fit=crop&q=80",
+      "tag": "Bestseller",
+      "calories": "670 kcal",
+      "inStock": true
+    }
+  ],
+  "deliveryPartners": [
+    {
+      "id": "partner-1",
+      "name": "Rahul Sharma",
+      "phone": "+91 98765 43210",
+      "vehicle": "Honda Activa 6G (AP 31 BH 4092)",
+      "rating": 4.9,
+      "deliveriesCount": 485,
+      "status": "Available",
+      "activeOrderId": null,
+      "location": {
+        "lat": 17.7289,
+        "lng": 83.3031,
+        "area": "MVP Colony, Sector 3"
+      },
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "partner-2",
+      "name": "Vikram Singh",
+      "phone": "+91 98123 45678",
+      "vehicle": "TVS Jupiter 125 (AP 31 CH 9102)",
+      "rating": 4.8,
+      "deliveriesCount": 310,
+      "status": "Available",
+      "activeOrderId": null,
+      "location": {
+        "lat": 17.7123,
+        "lng": 83.315,
+        "area": "Siripuram Junction"
+      },
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "partner-3",
+      "name": "Anita Roy",
+      "phone": "+91 97890 12345",
+      "vehicle": "Ather 450X EV (AP 31 EV 2041)",
+      "rating": 4.95,
+      "deliveriesCount": 560,
+      "status": "Available",
+      "activeOrderId": null,
+      "location": {
+        "lat": 17.731,
+        "lng": 83.298,
+        "area": "Dwaraka Nagar"
+      },
+      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "partner-4",
+      "name": "Kabir Verma",
+      "phone": "+91 96543 21098",
+      "vehicle": "Hero Splendor Plus (AP 31 AK 1189)",
+      "rating": 4.7,
+      "deliveriesCount": 215,
+      "status": "Offline",
+      "activeOrderId": null,
+      "location": {
+        "lat": 17.7001,
+        "lng": 83.28,
+        "area": "Jagadamba Centre"
+      },
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-7077",
+      "customerName": "Rahul Malhotra",
+      "customerPhone": "+91 98765 00112",
+      "deliveryAddress": "Flat 301, Sunshine Heights, MVP Colony, Vizag",
+      "restaurantId": "rest-1",
+      "restaurantName": "Spicy Junction",
+      "items": [
+        {
+          "id": "item-101",
+          "restaurantId": "rest-1",
+          "name": "Hyderabadi Dum Chicken Biryani",
+          "price": 290,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 240,
+      "subtotal": 290,
+      "deliveryFee": 35,
+      "taxes": 15,
+      "discount": 100,
+      "paymentMode": "Credit Card",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Delivered",
+      "createdAt": "2026-08-13T16:56:07.605Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "10:26 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "10:26 PM",
+          "note": "Kitchen accepted order"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "10:26 PM",
+          "note": "Packed & ready for pickup"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "10:26 PM",
+          "note": "Rider picked up order from kitchen"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "10:26 PM",
+          "note": "Order successfully handed over to customer"
+        }
+      ]
+    },
+    {
+      "id": "ORD-5712",
+      "customerName": "Rahul Malhotra",
+      "customerPhone": "+91 98765 00112",
+      "deliveryAddress": "Flat 301, Sunshine Heights, MVP Colony, Vizag",
+      "restaurantId": "rest-2",
+      "restaurantName": "Burger Craft & Co.",
+      "items": [
+        {
+          "id": "item-201",
+          "restaurantId": "rest-2",
+          "name": "Monster Smoked Bacon & Cheese Burger",
+          "price": 280,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 229,
+      "subtotal": 280,
+      "deliveryFee": 35,
+      "taxes": 14,
+      "discount": 100,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Delivered",
+      "createdAt": "2026-08-13T16:39:20.652Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "10:09 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "10:09 PM",
+          "note": "Kitchen started preparing items"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "10:09 PM",
+          "note": "Order packed and ready for rider"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "10:09 PM",
+          "note": "Rider picked up order from kitchen"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "10:10 PM",
+          "note": "Order successfully handed over to customer"
+        }
+      ]
+    },
+    {
+      "id": "ORD-8821",
+      "customerName": "Aarav Patel",
+      "customerPhone": "+91 91234 56789",
+      "deliveryAddress": "Flat 402, Sea Breeze Apartments, Beach Road, Vizag",
+      "restaurantId": "rest-1",
+      "restaurantName": "Spicy Junction",
+      "items": [
+        {
+          "id": "item-101",
+          "name": "Hyderabadi Dum Chicken Biryani",
+          "price": 290,
+          "quantity": 2,
+          "isVeg": false
+        },
+        {
+          "id": "item-103",
+          "name": "Tandoori Chicken Tikka (8 Pcs)",
+          "price": 320,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 955,
+      "subtotal": 900,
+      "deliveryFee": 25,
+      "taxes": 30,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid",
+      "status": "Delivered",
+      "createdAt": "2026-08-13T21:35:00.000Z",
+      "estimatedDeliveryMins": 12,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "09:35 PM",
+          "note": "Order placed by customer"
+        },
+        {
+          "status": "Accepted",
+          "timestamp": "09:37 PM",
+          "note": "Restaurant confirmed order"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "09:38 PM",
+          "note": "Chef started preparing food"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "09:48 PM",
+          "note": "Packed & ready at dispatch counter"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "09:51 PM",
+          "note": "Rahul Sharma picked up order"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "10:03 PM",
+          "note": "Fast-forwarded to Delivered"
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "cust-101",
+      "name": "Rahul Malhotra",
+      "email": "rahul@zapbite.ai",
+      "phone": "+91 98765 00112",
+      "role": "customer",
+      "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rest-1",
+      "name": "Chef Vikram (Spicy Junction)",
+      "email": "kitchen@spicyjunction.com",
+      "phone": "+91 98111 22334",
+      "role": "restaurant",
+      "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "partner-1",
+      "name": "Rahul Sharma (Rider)",
+      "email": "rahul.rider@zapbite.ai",
+      "phone": "+91 98765 43210",
+      "role": "delivery",
+      "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "admin-01",
+      "name": "System Super Admin",
+      "email": "admin@zapbite.ai",
+      "phone": "+91 90000 00000",
+      "role": "admin",
+      "password": "password123",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80"
+    }
+  ]
+}

@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Truck, 
-  MapPin, 
   Phone, 
   CheckCircle2, 
   Navigation, 
   Wallet, 
-  Star, 
   Power,
   Package,
   Award
@@ -21,7 +19,7 @@ export const DeliveryView = () => {
     togglePartnerStatus 
   } = useApp();
 
-  const [selectedPartnerId, setSelectedPartnerId] = useState('all'); // Default to All Active Delivery Fleet
+  const [selectedPartnerId, setSelectedPartnerId] = useState('all');
 
   const partner = deliveryPartners.find((p) => p.id === selectedPartnerId) || deliveryPartners[0];
   const assignedOrders = orders.filter((o) => {
@@ -31,39 +29,41 @@ export const DeliveryView = () => {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-900 font-sans">
       
       {/* Rider Header & Profile */}
-      <div className="bg-slate-900 rounded-3xl p-6 border border-slate-800 shadow-2xl space-y-6">
+      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-6">
         
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
           <div className="flex items-center gap-4">
             <img
               src={partner.avatar}
               alt={partner.name}
-              className="w-16 h-16 rounded-2xl object-cover border-2 border-orange-500 shadow-lg"
+              className="w-16 h-16 rounded-2xl object-cover border-2 border-orange-400 shadow-xs"
             />
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-black text-white">{selectedPartnerId === 'all' ? 'All Active Fleet Operations' : partner.name}</h2>
-                <span className="bg-amber-400/20 text-amber-300 text-xs font-extrabold px-2 py-0.5 rounded-md">
+                <h2 className="text-xl font-extrabold text-slate-900">
+                  {selectedPartnerId === 'all' ? 'All Active Fleet Operations' : partner.name}
+                </h2>
+                <span className="bg-amber-50 text-amber-700 border border-amber-200 text-xs font-extrabold px-2 py-0.5 rounded-md">
                   ★ {partner.rating}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">{partner.vehicle}</p>
-              <div className="flex items-center gap-1 text-[11px] text-emerald-400 font-semibold mt-1">
-                <Navigation className="w-3 h-3" />
+              <p className="text-xs text-slate-500 mt-0.5 font-medium">{partner.vehicle}</p>
+              <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold mt-1">
+                <Navigation className="w-3.5 h-3.5" />
                 <span>Near {partner.location.area}</span>
               </div>
             </div>
           </div>
 
-          {/* Partner Selector Dropdown & Duty Switch */}
+          {/* Partner Selector & Duty Switch */}
           <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
             <select
               value={selectedPartnerId}
               onChange={(e) => setSelectedPartnerId(e.target.value)}
-              className="bg-slate-950 text-white text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-800 focus:outline-none"
+              className="bg-slate-50 text-slate-900 text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none"
             >
               <option value="all">🌐 All Active Fleet Tasks ({orders.filter(o => o.status !== 'Delivered').length} Live)</option>
               {deliveryPartners.map((p) => (
@@ -75,10 +75,10 @@ export const DeliveryView = () => {
 
             <button
               onClick={() => togglePartnerStatus(partner.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow ${
+              className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 transition-all ${
                 partner.status === 'Offline'
-                  ? 'bg-red-950 text-red-400 border border-red-500/40'
-                  : 'bg-emerald-600 text-white shadow-emerald-600/30'
+                  ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
               }`}
             >
               <Power className="w-4 h-4" />
@@ -87,87 +87,87 @@ export const DeliveryView = () => {
           </div>
         </div>
 
-        {/* Today's Earnings & Performance Bar */}
+        {/* Performance Metrics Bar */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-            <div className="flex items-center gap-2 text-slate-400 text-xs font-medium">
-              <Wallet className="w-4 h-4 text-emerald-400" />
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold">
+              <Wallet className="w-4 h-4 text-emerald-600" />
               Today's Earnings
             </div>
-            <div className="text-xl font-black text-emerald-400 mt-1">₹680.00</div>
+            <div className="text-xl font-extrabold text-emerald-700 mt-1">₹680.00</div>
           </div>
 
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-            <div className="flex items-center gap-2 text-slate-400 text-xs font-medium">
-              <Package className="w-4 h-4 text-orange-400" />
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold">
+              <Package className="w-4 h-4 text-orange-500" />
               Completed
             </div>
-            <div className="text-xl font-black text-white mt-1">{partner.deliveriesCount} trips</div>
+            <div className="text-xl font-extrabold text-slate-900 mt-1">{partner.deliveriesCount} trips</div>
           </div>
 
-          <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-            <div className="flex items-center gap-2 text-slate-400 text-xs font-medium">
-              <Award className="w-4 h-4 text-amber-400" />
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold">
+              <Award className="w-4 h-4 text-amber-500" />
               Satisfaction
             </div>
-            <div className="text-xl font-black text-amber-300 mt-1">98% Positive</div>
+            <div className="text-xl font-extrabold text-amber-700 mt-1">98% Positive</div>
           </div>
         </div>
 
-        {/* Assigned Active Delivery Tasks */}
+        {/* Active Delivery Orders */}
         <div>
-          <h3 className="text-sm font-extrabold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-            <Truck className="w-4 h-4 text-orange-500" />
+          <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <Truck className="w-4 h-4 text-rose-500" />
             Active Delivery Orders ({assignedOrders.length})
           </h3>
 
           {assignedOrders.length === 0 ? (
-            <div className="text-center py-16 bg-slate-950 rounded-2xl border border-slate-800 text-slate-400">
-              <Truck className="w-12 h-12 text-slate-700 mx-auto mb-2" />
-              <p className="font-bold text-sm text-slate-300">No active delivery assignments right now.</p>
+            <div className="text-center py-16 bg-slate-50 rounded-2xl border border-slate-200 text-slate-500">
+              <Truck className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+              <p className="font-extrabold text-sm text-slate-800">No active delivery assignments right now.</p>
               <p className="text-xs text-slate-500 mt-1">You are online and queued for the next customer order nearby.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {assignedOrders.map((order) => (
-                <div key={order.id} className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                <div key={order.id} className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
                   
-                  {/* Order Top Strip */}
-                  <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+                  {/* Order Header */}
+                  <div className="flex justify-between items-center pb-3 border-b border-slate-200">
                     <div>
-                      <span className="font-mono font-extrabold text-xs text-orange-400">{order.id}</span>
-                      <h4 className="font-bold text-sm text-white">Earn ₹55 (Base + Tip)</h4>
+                      <span className="font-mono font-extrabold text-xs text-rose-600">{order.id}</span>
+                      <h4 className="font-extrabold text-sm text-slate-900">Earn ₹55 (Base + Tip)</h4>
                     </div>
-                    <span className="bg-orange-500/20 text-orange-400 text-xs font-extrabold px-3 py-1 rounded-full border border-orange-500/30">
+                    <span className="bg-orange-50 text-orange-700 text-xs font-extrabold px-3 py-1 rounded-full border border-orange-200">
                       {order.status}
                     </span>
                   </div>
 
                   {/* Pickup & Drop Addresses */}
-                  <div className="space-y-3 bg-slate-900 p-4 rounded-xl text-xs">
+                  <div className="space-y-3 bg-white p-4 rounded-xl border border-slate-200/80 text-xs">
                     
                     {/* Pickup */}
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                      <div className="w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                         A
                       </div>
                       <div>
                         <div className="text-slate-400 text-[10px] uppercase font-bold">PICKUP FROM RESTAURANT</div>
-                        <div className="font-extrabold text-white text-xs">{order.restaurantName}</div>
+                        <div className="font-extrabold text-slate-900 text-xs">{order.restaurantName}</div>
                       </div>
                     </div>
 
-                    <div className="ml-3 border-l-2 border-dashed border-slate-700 h-4" />
+                    <div className="ml-3 border-l-2 border-dashed border-slate-300 h-4" />
 
                     {/* Drop */}
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                      <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                         B
                       </div>
                       <div>
                         <div className="text-slate-400 text-[10px] uppercase font-bold">DELIVER TO CUSTOMER</div>
-                        <div className="font-extrabold text-white text-xs">{order.customerName}</div>
-                        <div className="text-slate-400 text-[11px] mt-0.5">{order.deliveryAddress}</div>
+                        <div className="font-extrabold text-slate-900 text-xs">{order.customerName}</div>
+                        <div className="text-slate-500 text-[11px] mt-0.5 font-medium">{order.deliveryAddress}</div>
                       </div>
                     </div>
 
@@ -177,7 +177,7 @@ export const DeliveryView = () => {
                   <div className="flex items-center gap-3 pt-2">
                     <a
                       href={`tel:${order.customerPhone}`}
-                      className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5"
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 border border-slate-200"
                     >
                       <Phone className="w-3.5 h-3.5" /> Call Customer
                     </a>
@@ -185,14 +185,14 @@ export const DeliveryView = () => {
                     {order.status === 'Ready' || order.status === 'Preparing' || order.status === 'Accepted' || order.status === 'Placed' ? (
                       <button
                         onClick={() => updateOrderStatus(order.id, 'Out for Delivery', 'Rider picked up order from kitchen', partner.id)}
-                        className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs py-2.5 rounded-xl shadow active:scale-95 transition-all"
+                        className="flex-1 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-extrabold text-xs py-2.5 rounded-xl shadow-xs active:scale-95 transition-all"
                       >
                         Confirm Pickup from Kitchen
                       </button>
                     ) : (
                       <button
                         onClick={() => updateOrderStatus(order.id, 'Delivered', 'Order successfully handed over to customer', partner.id)}
-                        className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 text-slate-950 font-black text-xs py-2.5 rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs py-2.5 rounded-xl shadow-xs active:scale-95 transition-all flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle2 className="w-4 h-4" /> Mark Order Delivered
                       </button>

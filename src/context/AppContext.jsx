@@ -24,14 +24,7 @@ export const AppProvider = ({ children }) => {
     if (saved) {
       try { return JSON.parse(saved); } catch (e) {}
     }
-    return {
-      id: 'cust-101',
-      name: 'Rahul Malhotra',
-      email: 'rahul@zapbite.ai',
-      phone: '+91 98765 00112',
-      role: 'customer',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'
-    };
+    return null;
   });
 
   const setUser = (userObj) => {
@@ -51,7 +44,11 @@ export const AppProvider = ({ children }) => {
     return [];
   });
 
-  const [isLandingPageOpen, setIsLandingPageOpen] = useState(false);
+  const [isLandingPageOpen, setIsLandingPageOpen] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState({
+    area: 'MVP Colony',
+    city: 'Vizag'
+  });
   const [restaurants, setRestaurants] = useState(INITIAL_RESTAURANTS);
   const [menuItems, setMenuItems] = useState(INITIAL_MENU_ITEMS);
   const [deliveryPartners, setDeliveryPartners] = useState(INITIAL_DELIVERY_PARTNERS);
@@ -393,6 +390,8 @@ export const AppProvider = ({ children }) => {
         isBackendConnected,
         registerUser,
         registeredUsers,
+        selectedLocation,
+        setSelectedLocation,
       }}
     >
       {children}

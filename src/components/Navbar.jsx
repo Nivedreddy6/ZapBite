@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   ShoppingBag, 
-  Bot, 
   ChevronDown, 
-  UtensilsCrossed, 
-  Truck, 
-  BarChart3, 
-  UserCheck, 
   Zap,
   Sparkles,
   Compass,
   LogIn,
   LogOut,
   Home,
-  ShieldCheck
+  MapPin,
+  Search,
+  X,
+  Check
 } from 'lucide-react';
 
 export const Navbar = () => {
@@ -29,24 +27,77 @@ export const Navbar = () => {
     setIsBiteBotOpen,
     setIsLoginModalOpen,
     setIsLandingPageOpen,
-    orders 
+    orders,
+    selectedLocation,
+    setSelectedLocation
   } = useApp();
+
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [citySearch, setCitySearch] = useState('');
 
   const totalCartItems = cart.reduce((acc, i) => acc + i.quantity, 0);
 
-  // Role-based visibility logic:
-  // If logged in as customer, hide kitchen, delivery, admin pills unless admin or logged out/demo mode!
-  const isCustomerRole = user?.role === 'customer';
-  const isAdminRole = user?.role === 'admin' || !user;
+  const indianCities = [
+    {
+      name: 'Visakhapatnam (Vizag)',
+      shortName: 'Vizag',
+      icon: '🏖️',
+      areas: ['MVP Colony', 'Siripuram', 'Beach Road', 'Gajuwaka', 'Jagadamba Junction', 'Madhurawada', 'Seethammadhara']
+    },
+    {
+      name: 'Hyderabad',
+      shortName: 'Hyderabad',
+      icon: '🏰',
+      areas: ['Banjara Hills', 'Jubilee Hills', 'Hitec City', 'Gachibowli', 'Madhapur', 'Kondapur', 'Begumpet']
+    },
+    {
+      name: 'Bengaluru',
+      shortName: 'Bengaluru',
+      icon: '🌆',
+      areas: ['Koramangala', 'Indiranagar', 'HSR Layout', 'Whitefield', 'MG Road', 'Jayanagar', 'JP Nagar']
+    },
+    {
+      name: 'Mumbai',
+      shortName: 'Mumbai',
+      icon: '🌊',
+      areas: ['Bandra West', 'Powai', 'Andheri West', 'Juhu', 'Lower Parel', 'Colaba', 'Malad West']
+    },
+    {
+      name: 'Delhi NCR',
+      shortName: 'Delhi NCR',
+      icon: '🏛️',
+      areas: ['Connaught Place', 'Cyber City Gurgaon', 'Hauz Khas', 'Noida Sec 18', 'Greater Kailash', 'Saket']
+    },
+    {
+      name: 'Chennai',
+      shortName: 'Chennai',
+      icon: '⛵',
+      areas: ['T. Nagar', 'Adyar', 'Velachery', 'Anna Nagar', 'Nungambakkam', 'Mylapore', 'Besant Nagar']
+    }
+  ];
+
+  const filteredCities = indianCities.map(cityObj => ({
+    ...cityObj,
+    areas: cityObj.areas.filter(a => 
+      a.toLowerCase().includes(citySearch.toLowerCase()) || 
+      cityObj.name.toLowerCase().includes(citySearch.toLowerCase())
+    )
+  })).filter(cityObj => cityObj.areas.length > 0);
+
+  const handleSelectLocality = (area, cityShort) => {
+    setSelectedLocation({ area, city: cityShort });
+    setIsLocationModalOpen(false);
+  };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0b1329]/95 backdrop-blur-xl text-white border-b border-slate-700/80 shadow-2xl">
+    <>
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md text-slate-900 border-b border-slate-200/80 shadow-xs transition-all font-sans">
       {/* Top Banner Notice */}
-      <div className="bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 text-[11px] font-bold px-4 py-1 text-center text-white flex items-center justify-center gap-2 shadow-inner">
-        <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
-        <span>ZapBite.ai Next-Gen Food & Delivery Platform Engine</span>
-        <span className="bg-black/40 border border-white/20 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider text-cyan-300">
-          {user ? `Logged in: ${user.role.toUpperCase()}` : 'Live Multi-Role Sync'}
+      <div className="bg-gradient-to-r from-orange-500 via-rose-500 to-amber-500 text-[11px] font-bold px-4 py-1 text-center text-white flex items-center justify-center gap-2 shadow-xs">
+        <Sparkles className="w-3.5 h-3.5 text-amber-200 animate-pulse" />
+        <span>ZapBite.ai — Smart Food Ordering & Real-Time Delivery Ecosystem</span>
+        <span className="bg-black/20 border border-white/20 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider text-amber-100">
+          {user ? `Logged in: ${user.role.toUpperCase()}` : 'Pan-India Delivery Network'}
         </span>
       </div>
 
@@ -57,132 +108,83 @@ export const Navbar = () => {
           <div className="flex items-center gap-5">
             <div 
               onClick={() => setIsLandingPageOpen(true)}
-              className="flex items-center gap-3 cursor-pointer group"
+              className="flex items-center gap-2.5 cursor-pointer group"
               title="Return to Welcome Landing Page"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 via-purple-600 to-cyan-400 p-0.5 shadow-lg shadow-rose-500/25 group-hover:scale-105 transition-transform">
-                <div className="w-full h-full bg-[#0b1329] rounded-[10px] flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-rose-400 fill-rose-400 group-hover:text-cyan-300 transition-colors" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-400 p-0.5 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform">
+                <div className="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-rose-500 fill-rose-500 group-hover:text-orange-500 transition-colors" />
                 </div>
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-2xl font-black tracking-tight text-white font-sans">
-                    Zap<span className="bg-gradient-to-r from-rose-400 to-violet-400 bg-clip-text text-transparent">Bite</span>
+                  <span className="text-xl font-extrabold tracking-tight text-slate-900 font-sans">
+                    Zap<span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Bite</span>
                   </span>
-                  <span className="bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md uppercase tracking-wider shadow-[0_0_10px_rgba(0,245,212,0.2)]">
+                  <span className="bg-orange-50 text-orange-600 border border-orange-200 text-[10px] font-extrabold px-1.5 py-0.2 rounded-md uppercase tracking-wider">
                     .AI
                   </span>
                 </div>
-                <p className="text-[10px] text-slate-300 font-medium tracking-wide">Next-Gen Food & Delivery OS</p>
+                <p className="text-[10px] text-slate-500 font-medium tracking-wide">Smart Food & Logistics OS</p>
               </div>
             </div>
 
-            {/* Location Selector (Customer Only) */}
+            {/* Interactive Location Selector Button */}
             {currentRole === 'customer' && (
-              <div className="hidden md:flex items-center gap-2 text-xs text-slate-200 bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-700 hover:border-cyan-500/50 cursor-pointer transition-all shadow-inner">
-                <Compass className="w-3.5 h-3.5 text-cyan-400 shrink-0 animate-spin-slow" />
-                <span className="font-bold text-white">MVP Colony</span>
-                <span className="text-slate-400">| Vizag</span>
+              <button
+                onClick={() => setIsLocationModalOpen(true)}
+                className="hidden md:flex items-center gap-2 text-xs text-slate-700 bg-slate-50 hover:bg-orange-50/60 px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-orange-300 transition-all font-bold group"
+                title="Change Delivery City & Area"
+              >
+                <Compass className="w-3.5 h-3.5 text-rose-500 shrink-0 group-hover:rotate-45 transition-transform" />
+                <span className="font-extrabold text-slate-900">{selectedLocation?.area || 'MVP Colony'}</span>
+                <span className="text-slate-400 font-medium">| {selectedLocation?.city || 'Vizag'}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-              </div>
-            )}
-          </div>
-
-          {/* Role Navigation Pills - Filtered strictly by logged in user role! */}
-          <div className="hidden lg:flex items-center bg-[#070d1e] p-1.5 rounded-2xl border border-slate-700/80 shadow-inner gap-1">
-            
-            {/* Customer Tab */}
-            {(isCustomerRole || isAdminRole || currentRole === 'customer') && (
-              <button
-                onClick={() => setCurrentRole('customer')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  currentRole === 'customer'
-                    ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-lg shadow-rose-500/30 font-extrabold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
-                }`}
-              >
-                <UserCheck className="w-3.5 h-3.5" />
-                Customer Portal
-              </button>
-            )}
-
-            {/* Kitchen Hub Tab (Only if Kitchen Staff or Admin/Demo mode) */}
-            {(!isCustomerRole || isAdminRole) && (
-              <button
-                onClick={() => setCurrentRole('restaurant')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  currentRole === 'restaurant'
-                    ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-lg shadow-rose-500/30 font-extrabold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
-                }`}
-              >
-                <UtensilsCrossed className="w-3.5 h-3.5" />
-                Kitchen Hub
-                {orders.filter(o => o.status === 'Placed' || o.status === 'Preparing').length > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                )}
-              </button>
-            )}
-
-            {/* Delivery Fleet Tab (Only if Rider or Admin/Demo mode) */}
-            {(!isCustomerRole || isAdminRole) && (
-              <button
-                onClick={() => setCurrentRole('delivery')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  currentRole === 'delivery'
-                    ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-lg shadow-rose-500/30 font-extrabold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
-                }`}
-              >
-                <Truck className="w-3.5 h-3.5" />
-                Delivery Fleet
-              </button>
-            )}
-
-            {/* Admin Intelligence Tab (Only if Admin or Demo mode) */}
-            {(!isCustomerRole || isAdminRole) && (
-              <button
-                onClick={() => setCurrentRole('admin')}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                  currentRole === 'admin'
-                    ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-lg shadow-rose-500/30 font-extrabold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
-                }`}
-              >
-                <BarChart3 className="w-3.5 h-3.5" />
-                Admin Intelligence
               </button>
             )}
           </div>
 
-          {/* Action Buttons & User Profile / Logout */}
+          {/* Compact Role Switcher Selector */}
+          <div className="hidden lg:flex items-center bg-slate-100/90 p-1 rounded-2xl border border-slate-200">
+            <select
+              value={currentRole}
+              onChange={(e) => setCurrentRole(e.target.value)}
+              className="bg-white text-slate-800 text-xs font-extrabold px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-none cursor-pointer"
+            >
+              <option value="customer">🍽️ Customer Ordering Portal</option>
+              <option value="restaurant">👨‍🍳 Kitchen Operating System ({orders.filter(o => o.status === 'Placed' || o.status === 'Preparing').length} Live)</option>
+              <option value="delivery">🛵 Delivery Rider Fleet</option>
+              <option value="admin">📊 Admin Command Center</option>
+            </select>
+          </div>
+
+          {/* Action Buttons & User Profile */}
           <div className="flex items-center gap-2">
             
-            {/* Overview / Landing Page Toggle Button */}
+            {/* Landing Page Button */}
             <button
               onClick={() => setIsLandingPageOpen(true)}
-              className="bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700 p-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
               title="Overview Landing Page"
             >
-              <Home className="w-3.5 h-3.5 text-rose-400" />
+              <Home className="w-3.5 h-3.5 text-rose-500" />
               <span className="hidden xl:inline">About</span>
             </button>
 
-            {/* User Profile / Switch Account Button */}
+            {/* User Profile Button */}
             <button
               onClick={() => setIsLoginModalOpen(true)}
-              className="flex items-center gap-2 bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
-              title="Switch Account / Open Login Modal"
+              className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
+              title="Switch Account / Login"
             >
               {user ? (
                 <>
-                  <img src={user.avatar} alt="avatar" className="w-5 h-5 rounded-full object-cover border border-rose-500" />
+                  <img src={user.avatar} alt="avatar" className="w-5 h-5 rounded-full object-cover border border-orange-400" />
                   <span className="hidden sm:inline max-w-[90px] truncate font-extrabold">{user.name.split(' ')[0]}</span>
                 </>
               ) : (
                 <>
-                  <LogIn className="w-3.5 h-3.5 text-cyan-400" />
+                  <LogIn className="w-3.5 h-3.5 text-orange-500" />
                   <span className="hidden sm:inline">Sign In</span>
                 </>
               )}
@@ -192,10 +194,10 @@ export const Navbar = () => {
             {user && (
               <button
                 onClick={logout}
-                className="flex items-center gap-1.5 bg-red-950/80 hover:bg-red-900/90 text-red-200 border border-red-500/50 px-2.5 py-1.5 rounded-xl text-xs font-extrabold transition-all shadow"
+                className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-2.5 py-1.5 rounded-xl text-xs font-extrabold transition-all"
                 title="Log Out"
               >
-                <LogOut className="w-3.5 h-3.5 text-red-400" />
+                <LogOut className="w-3.5 h-3.5 text-rose-600" />
                 <span className="hidden md:inline">Logout</span>
               </button>
             )}
@@ -203,75 +205,108 @@ export const Navbar = () => {
             {/* ZapBot AI Launcher */}
             <button
               onClick={() => setIsBiteBotOpen(!isBiteBotOpen)}
-              className={`relative flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all border ${
-                isBiteBotOpen
-                  ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 border-cyan-300 shadow-lg shadow-cyan-500/30'
-                  : 'bg-slate-900 text-cyan-300 border-cyan-500/40 hover:border-cyan-400 hover:bg-cyan-950/60'
-              }`}
+              className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border border-amber-300/40 px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-xs transition-all active:scale-95"
             >
-              <Bot className="w-4 h-4 text-cyan-300 animate-bounce" />
-              <span className="hidden sm:inline">ZapBot AI</span>
+              <Zap className="w-3.5 h-3.5 fill-white" />
+              <span>ZapBot AI</span>
             </button>
 
-            {/* Customer Cart Button */}
-            {currentRole === 'customer' && (
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="relative bg-gradient-to-r from-rose-500 via-purple-600 to-indigo-600 hover:from-rose-600 hover:to-purple-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-2 shadow-lg shadow-rose-500/25 active:scale-95 transition-all border border-rose-400/30"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span className="hidden sm:inline">Cart</span>
-                {totalCartItems > 0 && (
-                  <span className="bg-white text-rose-600 font-black text-[11px] px-1.5 py-0.2 rounded-full min-w-[20px] text-center shadow">
-                    {totalCartItems}
-                  </span>
-                )}
-              </button>
-            )}
-          </div>
-        </div>
+            {/* Cart Slide-Over Trigger */}
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white border border-rose-300/40 px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 ml-1"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>Cart</span>
 
-        {/* Mobile Role Switcher Bar */}
-        <div className="lg:hidden flex items-center justify-between py-2 border-t border-slate-800 gap-1 text-[11px]">
-          <button
-            onClick={() => setCurrentRole('customer')}
-            className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold ${
-              currentRole === 'customer' ? 'bg-rose-600 text-white shadow' : 'text-slate-300'
-            }`}
-          >
-            Customer
-          </button>
-          
-          {(!isCustomerRole || isAdminRole) && (
-            <>
-              <button
-                onClick={() => setCurrentRole('restaurant')}
-                className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold ${
-                  currentRole === 'restaurant' ? 'bg-rose-600 text-white shadow' : 'text-slate-300'
-                }`}
-              >
-                Kitchen
-              </button>
-              <button
-                onClick={() => setCurrentRole('delivery')}
-                className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold ${
-                  currentRole === 'delivery' ? 'bg-rose-600 text-white shadow' : 'text-slate-300'
-                }`}
-              >
-                Rider
-              </button>
-              <button
-                onClick={() => setCurrentRole('admin')}
-                className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold ${
-                  currentRole === 'admin' ? 'bg-rose-600 text-white shadow' : 'text-slate-300'
-                }`}
-              >
-                Admin
-              </button>
-            </>
-          )}
+              {totalCartItems > 0 && (
+                <span className="bg-white text-rose-600 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-rose-200">
+                  {totalCartItems}
+                </span>
+              )}
+            </button>
+          </div>
+
         </div>
       </div>
+
     </header>
+
+    {/* Interactive Location Selector Modal */}
+    {isLocationModalOpen && (
+      <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+        <div className="bg-white rounded-3xl max-w-xl w-full max-h-[85vh] flex flex-col p-6 border border-slate-200 shadow-2xl space-y-4 relative overflow-hidden">
+          
+          {/* Close Button */}
+          <button
+            onClick={() => setIsLocationModalOpen(false)}
+            className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 bg-slate-100 p-2 rounded-full border border-slate-200 transition-colors z-10"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          {/* Header */}
+          <div className="shrink-0 pr-10">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-rose-500" />
+              <h3 className="text-lg font-extrabold text-slate-900">Select Delivery Location</h3>
+            </div>
+            <p className="text-xs text-slate-500 mt-1 font-medium">Choose your city & locality across India for ultra-fast food delivery</p>
+          </div>
+
+          {/* Search Input */}
+          <div className="relative shrink-0">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={citySearch}
+              onChange={(e) => setCitySearch(e.target.value)}
+              placeholder="Search your city or area (e.g. Banjara Hills, Koramangala)..."
+              className="w-full bg-slate-50 text-slate-900 text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-orange-500 font-medium"
+            />
+          </div>
+
+          {/* Cities & Localities Scrollable List */}
+          <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
+            {filteredCities.map((cObj) => (
+              <div key={cObj.name} className="space-y-2">
+                <div className="flex items-center gap-2 text-xs font-extrabold text-slate-800 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 sticky top-0 z-10 backdrop-blur-md">
+                  <span>{cObj.icon}</span>
+                  <span>{cObj.name}</span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pl-1">
+                  {cObj.areas.map((areaName) => {
+                    const isSelected = selectedLocation?.area === areaName && selectedLocation?.city === cObj.shortName;
+
+                    return (
+                      <button
+                        key={areaName}
+                        onClick={() => handleSelectLocality(areaName, cObj.shortName)}
+                        className={`p-2.5 rounded-xl text-xs text-left font-bold border transition-all flex items-center justify-between ${
+                          isSelected
+                            ? 'bg-rose-50 border-rose-400 text-rose-700 shadow-xs'
+                            : 'bg-white hover:bg-orange-50 border-slate-200 text-slate-700 hover:border-orange-300'
+                        }`}
+                      >
+                        <span className="truncate">{areaName}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-rose-600 shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer Notice */}
+          <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-400 text-center font-medium shrink-0">
+            💡 Selecting a location updates live delivery rider SLAs and restaurant dispatch distances.
+          </div>
+
+        </div>
+      </div>
+    )}
+    </>
   );
 };

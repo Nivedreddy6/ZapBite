@@ -1,22 +1,36 @@
 @import "tailwindcss";
 
+:root {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #fcfbf9;
+  color: #0f172a;
+}
+
+body {
+  background-color: #fcfbf9;
+  color: #0f172a;
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 @layer utilities {
-  /* Vibrant Semi-Dark Glassmorphic Container styling */
-  .glass-card {
-    background: rgba(19, 28, 49, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+  /* Warm Gourmet Glassmorphic Cards */
+  .glass-card-warm {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
   }
 
-  .glass-card-hover {
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  .warm-shadow {
+    box-shadow: 0 10px 30px -5px rgba(249, 115, 22, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
   }
 
-  .glass-card-hover:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255, 46, 99, 0.5);
-    box-shadow: 0 20px 45px -10px rgba(255, 46, 99, 0.3);
+  .warm-shadow-lg {
+    box-shadow: 0 20px 40px -10px rgba(225, 29, 72, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
   }
 
   /* Shimmer metallic sweep effect */
@@ -24,11 +38,11 @@
     background: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.25) 50%,
+      rgba(255, 255, 255, 0.6) 50%,
       rgba(255, 255, 255, 0) 100%
     );
     background-size: 200% 100%;
-    animation: shimmer 3s infinite;
+    animation: shimmer 2.5s infinite;
   }
 
   /* Floating animation */
@@ -40,11 +54,6 @@
     animation: float 4s ease-in-out 2s infinite;
   }
 
-  /* Neon Breathing Glow */
-  .animate-neon-glow {
-    animation: neonGlow 3.5s ease-in-out infinite alternate;
-  }
-
   /* Slow Spin */
   .animate-spin-slow {
     animation: spinSlow 18s linear infinite;
@@ -52,7 +61,7 @@
 
   /* Fade In Up Entrance */
   .animate-fade-in-up {
-    animation: fadeInUp 0.5s ease-out forwards;
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 }
 
@@ -63,18 +72,6 @@
   }
   50% {
     transform: translateY(-8px);
-  }
-}
-
-@keyframes neonGlow {
-  0% {
-    box-shadow: 0 0 15px rgba(255, 46, 99, 0.3), inset 0 0 10px rgba(255, 46, 99, 0.15);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(123, 44, 191, 0.6), inset 0 0 15px rgba(123, 44, 191, 0.35);
-  }
-  100% {
-    box-shadow: 0 0 25px rgba(0, 245, 212, 0.5), inset 0 0 12px rgba(0, 245, 212, 0.25);
   }
 }
 
@@ -99,7 +96,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -107,22 +104,21 @@
   }
 }
 
-/* Modern Slate Scrollbar */
+/* Gourmet Soft Scrollbar */
 ::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 9999px;
-  border: 2px solid #0f172a;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff2e63;
+  background: #f97316;
 }

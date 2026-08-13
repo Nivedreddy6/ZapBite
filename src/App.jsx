@@ -22,7 +22,7 @@ const MainAppContent = () => {
     setIsLandingPageOpen
   } = useApp();
   
-  const [customerSubTab, setCustomerSubTab] = useState('menu'); // 'menu' | 'track'
+  const [customerSubTab, setCustomerSubTab] = useState('menu');
 
   if (isLandingPageOpen) {
     return (
@@ -31,11 +31,11 @@ const MainAppContent = () => {
 
         {/* Login Modal on top of Landing Page */}
         {isLoginModalOpen && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
             <div className="relative w-full max-w-md">
               <button
                 onClick={() => setIsLoginModalOpen(false)}
-                className="absolute top-4 right-4 z-20 text-slate-400 hover:text-white bg-slate-900/80 p-1.5 rounded-full border border-slate-800"
+                className="absolute top-4 right-4 z-20 text-slate-400 hover:text-slate-700 bg-slate-100 p-1.5 rounded-full border border-slate-200"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -52,20 +52,20 @@ const MainAppContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0b1329] via-[#0f172a] to-[#1e1b4b] text-slate-100 flex flex-col font-sans selection:bg-rose-500 selection:text-white">
+    <div className="min-h-screen bg-[#fcfbf9] text-slate-900 flex flex-col font-sans selection:bg-rose-500 selection:text-white">
       
       {/* Top Sticky Navbar */}
       <Navbar />
 
       {/* Global Notification Toast */}
       {notification && (
-        <div className="fixed top-20 right-4 z-50 animate-in fade-in slide-in-from-top-4">
-          <div className={`px-4 py-3 rounded-2xl shadow-2xl border text-xs font-bold flex items-center gap-2.5 backdrop-blur-md ${
+        <div className="fixed top-20 right-4 z-50 animate-fade-in-up">
+          <div className={`px-4 py-3 rounded-2xl shadow-xl border text-xs font-bold flex items-center gap-2.5 backdrop-blur-md ${
             notification.type === 'error'
-              ? 'bg-red-950/90 text-red-300 border-red-500/50'
-              : 'bg-emerald-950/90 text-emerald-300 border-emerald-500/50'
+              ? 'bg-rose-50 text-rose-800 border-rose-200'
+              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
           }`}>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{notification.msg}</span>
           </div>
         </div>
@@ -73,11 +73,11 @@ const MainAppContent = () => {
 
       {/* Login Modal */}
       {isLoginModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="relative w-full max-w-md">
             <button
               onClick={() => setIsLoginModalOpen(false)}
-              className="absolute top-4 right-4 z-20 text-slate-400 hover:text-white bg-slate-900/80 p-1.5 rounded-full border border-slate-800"
+              className="absolute top-4 right-4 z-20 text-slate-400 hover:text-slate-700 bg-slate-100 p-1.5 rounded-full border border-slate-200"
             >
               <X className="w-5 h-5" />
             </button>
@@ -92,15 +92,15 @@ const MainAppContent = () => {
         {currentRole === 'customer' && (
           <div>
             {/* Customer Sub-Nav Tabs */}
-            <div className="bg-[#0f172a]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 py-2.5">
+            <div className="bg-white border-b border-slate-200/80 px-4 py-2.5 shadow-xs">
               <div className="max-w-7xl mx-auto flex items-center justify-between">
-                <div className="flex bg-slate-900/90 p-1 rounded-2xl border border-slate-800 text-xs font-bold shadow-inner">
+                <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-bold">
                   <button
                     onClick={() => setCustomerSubTab('menu')}
                     className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl transition-all ${
                       customerSubTab === 'menu'
-                        ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-md'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-xs font-extrabold'
+                        : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
                     <Utensils className="w-3.5 h-3.5" /> Explore Menu & Order
@@ -110,16 +110,16 @@ const MainAppContent = () => {
                     onClick={() => setCustomerSubTab('track')}
                     className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl transition-all ${
                       customerSubTab === 'track'
-                        ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-md'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-xs font-extrabold'
+                        : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    <MapPin className="w-3.5 h-3.5 text-cyan-300 animate-pulse" /> Track Live Order
+                    <MapPin className="w-3.5 h-3.5 text-rose-300 animate-pulse" /> Track Live Order
                   </button>
                 </div>
 
-                <span className="hidden md:inline-block text-xs text-slate-400 font-medium">
-                  Active Order: <span className="font-mono text-rose-400 font-bold">{activeTrackingOrderId}</span>
+                <span className="hidden md:inline-block text-xs text-slate-500 font-medium">
+                  Active Order: <span className="font-mono text-rose-600 font-extrabold">{activeTrackingOrderId}</span>
                 </span>
               </div>
             </div>
@@ -137,10 +137,10 @@ const MainAppContent = () => {
       <BiteBotChatbot />
 
       {/* Footer */}
-      <footer className="bg-[#090d1a] border-t border-slate-800/80 py-6 text-center text-xs text-slate-400">
-        <p className="font-extrabold text-slate-300">ZapBite.ai • Smart Food & Delivery Management OS</p>
-        <p className="text-[11px] text-slate-500 mt-1">
-          Next-Gen AI Food Ordering & Delivery Logistics Matrix
+      <footer className="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+        <p className="font-extrabold text-slate-800">ZapBite.ai • Smart Food & Delivery Management OS</p>
+        <p className="text-[11px] text-slate-400 mt-1">
+          Next-Gen Food Ordering & Real-Time Logistics Matrix
         </p>
       </footer>
     </div>

@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { 
   INITIAL_RESTAURANTS, 
   INITIAL_MENU_ITEMS, 
@@ -8,54 +11,90 @@ import {
 } from '../src/data/mockData.js';
 import { getSmartPaymentRecommendation, generatePaymentSecurityScore } from '../src/utils/aiPayments.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DB_PATH = path.join(__dirname, 'db.json');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
-let restaurants = [...INITIAL_RESTAURANTS];
-let menuItems = [...INITIAL_MENU_ITEMS];
-let deliveryPartners = [...INITIAL_DELIVERY_PARTNERS];
-let orders = [...INITIAL_ORDERS];
-let users = [
-  {
-    id: 'cust-101',
-    name: 'Rahul Malhotra',
-    email: 'rahul@zapbite.ai',
-    phone: '+91 98765 00112',
-    role: 'customer',
-    password: 'password123',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'rest-1',
-    name: 'Chef Vikram (Spicy Junction)',
-    email: 'kitchen@spicyjunction.com',
-    phone: '+91 98111 22334',
-    role: 'restaurant',
-    password: 'password123',
-    avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=200&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'partner-1',
-    name: 'Rahul Sharma (Rider)',
-    email: 'rahul.rider@zapbite.ai',
-    phone: '+91 98765 43210',
-    role: 'delivery',
-    password: 'password123',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'admin-01',
-    name: 'System Super Admin',
-    email: 'admin@zapbite.ai',
-    phone: '+91 90000 00000',
-    role: 'admin',
-    password: 'password123',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80'
+// Persistent Database Helper
+let dbData = {
+  restaurants: [...INITIAL_RESTAURANTS],
+  menuItems: [...INITIAL_MENU_ITEMS],
+  deliveryPartners: [...INITIAL_DELIVERY_PARTNERS],
+  orders: [...INITIAL_ORDERS],
+  users: [
+    {
+      id: 'cust-101',
+      name: 'Rahul Malhotra',
+      email: 'rahul@zapbite.ai',
+      phone: '+91 98765 00112',
+      role: 'customer',
+      password: 'password123',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 'rest-1',
+      name: 'Chef Vikram (Spicy Junction)',
+      email: 'kitchen@spicyjunction.com',
+      phone: '+91 98111 22334',
+      role: 'restaurant',
+      password: 'password123',
+      avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=200&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 'partner-1',
+      name: 'Rahul Sharma (Rider)',
+      email: 'rahul.rider@zapbite.ai',
+      phone: '+91 98765 43210',
+      role: 'delivery',
+      password: 'password123',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 'admin-01',
+      name: 'System Super Admin',
+      email: 'admin@zapbite.ai',
+      phone: '+91 90000 00000',
+      role: 'admin',
+      password: 'password123',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80'
+    }
+  ]
+};
+
+function loadDb() {
+  try {
+    if (fs.existsSync(DB_PATH)) {
+      const fileRaw = fs.readFileSync(DB_PATH, 'utf-8');
+      const parsed = JSON.parse(fileRaw);
+      dbData = { ...dbData, ...parsed };
+      console.log('📦 ZapBite DB synced persistently from disk.');
+    }
+  } catch (err) {
+    console.error('Error loading db.json:', err.message);
   }
-];
+}
+
+function saveDb() {
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(dbData, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving db.json:', err.message);
+  }
+}
+
+loadDb();
+
+let restaurants = dbData.restaurants;
+let menuItems = dbData.menuItems;
+let deliveryPartners = dbData.deliveryPartners;
+let orders = dbData.orders;
+let users = dbData.users;
 
 // 0. Root API Portal Landing
 app.get('/', (req, res) => {
@@ -77,9 +116,9 @@ app.get('/', (req, res) => {
     </head>
     <body>
       <div class="card">
-        <span class="badge">⚡ Express REST API Engine Online</span>
+        <span class="badge">⚡ Express REST API Engine Online (ZapBite AI Enabled)</span>
         <h1>ZapBite.ai Backend</h1>
-        <p>You have connected to the REST API server running on port <strong>5000</strong>.</p>
+        <p>Connected to REST API server with persistent JSON database running on port <strong>5000</strong>.</p>
         <p>To launch the main <strong>ZapBite.ai Web Application Interface</strong>, click below:</p>
         <a href="http://localhost:5173" class="btn">🚀 Open Frontend Web App (Port 5173)</a>
       </div>
@@ -92,8 +131,9 @@ app.get('/', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    service: 'ZapBite.ai Express REST API Backend & ZapPay AI Payment Shield',
+    service: 'ZapBite.ai Express REST API & Persistent Engine',
     timestamp: new Date().toISOString(),
+    aiEngine: 'ZapBite AI Engine / Smart Concierge',
     stats: {
       totalRestaurants: restaurants.length,
       totalMenuItems: menuItems.length,
@@ -131,6 +171,7 @@ app.post('/api/auth/register', (req, res) => {
   };
 
   users.unshift(newUser);
+  saveDb();
   res.status(201).json(newUser);
 });
 
@@ -150,6 +191,67 @@ app.post('/api/auth/login', (req, res) => {
   // Fallback demo user for requested role
   const fallback = users.find(u => u.role === role) || users[0];
   res.json({ ...fallback, name: emailOrPhone ? emailOrPhone.split('@')[0] : fallback.name });
+});
+
+// 1c. Gemini AI Chat Endpoint
+app.post('/api/ai/chat', async (req, res) => {
+  const { message, activeOrders = [] } = req.body;
+  const query = (message || '').toLowerCase().trim();
+
+  // If Gemini API Key is available in process.env, query Gemini REST API
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+
+  if (geminiApiKey) {
+    try {
+      const menuContext = menuItems.map(i => `${i.name} (₹${i.price}, ${i.category}, ${i.isVeg ? 'Veg' : 'Non-Veg'}, ${i.calories})`).join('; ');
+      const orderContext = activeOrders.map(o => `Order ${o.id}: ${o.status} from ${o.restaurantName}`).join('; ');
+
+      const systemPrompt = `You are BiteBot AI, the intelligent neural food concierge for ZapBite.ai.
+Available Menu Items: ${menuContext}.
+Active User Orders: ${orderContext || 'None'}.
+Be enthusiastic, friendly, food-passionate, and concise. Highlight dish names and prices clearly.`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `${systemPrompt}\n\nUser Question: ${message}` }] }]
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (aiText) {
+          return res.json({ text: aiText, isGemini: true });
+        }
+      }
+    } catch (err) {
+      console.log('Gemini API call failed, using intelligent assistant:', err.message);
+    }
+  }
+
+  // Fallback Smart Natural Language Parser
+  if (query.includes('track') || query.includes('where is') || query.includes('status') || query.includes('order')) {
+    if (activeOrders.length === 0) {
+      return res.json({
+        text: `You don't have any active orders queued right now. Explore our chef specials! 🍔🍕`,
+        suggestions: ['🔥 Best Biryani under ₹300', '🥗 Healthy Veg Bowls', '⚡ Quick 15 min items']
+      });
+    }
+
+    const latest = activeOrders[0];
+    return res.json({
+      text: `⚡ **Live Tracking Update**: Order **${latest.id}** from **${latest.restaurantName}** is currently **${latest.status}**! Estimated delivery time: approx ${latest.estimatedDeliveryMins || 15} mins.`,
+      suggestions: ['📍 View HUD Route Map', '📞 Contact Rider', '🍨 Add Dessert to Order'],
+      actions: [{ type: 'TRACK_ORDER', orderId: latest.id, label: '📍 Open Interactive HUD Route Map' }]
+    });
+  }
+
+  res.json({
+    text: `Greetings! I am **ZapBot AI** ⚡ (Powered by ZapBite AI). I can recommend dishes tailored to your budget, diet, or craving, and track your live deliveries in real-time!`,
+    suggestions: ['🔥 Top Biryanis under ₹300', '🥗 High-Protein Veg Bowls', '🍕 Cheesy Pizza Deals', '📍 Track Live Order']
+  });
 });
 
 // 2. ZapPay AI Payment Verification & Promo Optimizer Endpoint
@@ -217,6 +319,7 @@ app.post('/api/menu', (req, res) => {
     inStock: true,
   };
   menuItems.unshift(newItem);
+  saveDb();
   res.status(201).json(newItem);
 });
 
@@ -224,6 +327,7 @@ app.patch('/api/menu/:id/stock', (req, res) => {
   const item = menuItems.find(m => m.id === req.params.id);
   if (!item) return res.status(404).json({ error: 'Menu item not found' });
   item.inStock = !item.inStock;
+  saveDb();
   res.json(item);
 });
 
@@ -261,7 +365,7 @@ app.post('/api/orders', (req, res) => {
     taxes,
     discount,
     paymentMode: paymentMode || 'UPI (PhonePe)',
-    paymentStatus: paymentMode === 'Cash on Delivery' ? 'Pending' : 'Paid (ZapPay Verified)',
+    paymentStatus: paymentMode === 'Cash on Delivery' ? 'Pending' : 'Paid (ZapPay AI Verified)',
     status: 'Placed',
     createdAt: new Date().toISOString(),
     estimatedDeliveryMins: 25,
@@ -281,6 +385,7 @@ app.post('/api/orders', (req, res) => {
   }
 
   orders.unshift(newOrder);
+  saveDb();
   res.status(201).json(newOrder);
 });
 
@@ -312,6 +417,7 @@ app.patch('/api/orders/:id/status', (req, res) => {
     }
   }
 
+  saveDb();
   res.json(order);
 });
 
@@ -340,6 +446,7 @@ app.post('/api/orders/:id/fast-forward', (req, res) => {
     }
   }
 
+  saveDb();
   res.json(order);
 });
 
@@ -350,6 +457,7 @@ app.patch('/api/partners/:id/status', (req, res) => {
   const partner = deliveryPartners.find(p => p.id === req.params.id);
   if (!partner) return res.status(404).json({ error: 'Partner not found' });
   partner.status = partner.status === 'Available' ? 'Offline' : 'Available';
+  saveDb();
   res.json(partner);
 });
 
@@ -365,5 +473,5 @@ app.get('/api/admin/metrics', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`⚡ ZapBite.ai Express Backend + ZapPay AI Payment Shield running on http://localhost:${PORT}`);
+  console.log(`⚡ ZapBite.ai Express Backend + Persistent DB + Gemini AI Shield running on http://localhost:${PORT}`);
 });
