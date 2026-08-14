@@ -14,6 +14,10 @@ import {
   Gauge,
   AlertCircle
 } from 'lucide-react';
+import { LiveMap } from './LiveMap';
+
+
+
 
 export const OrderTracker = () => {
   const { 
@@ -130,116 +134,14 @@ export const OrderTracker = () => {
           </div>
         </div>
 
-        {/* HUD Map Canvas */}
-        <div className="relative h-64 bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden p-4 flex flex-col justify-between shadow-inner text-white">
-          
-          {/* Map Grid Pattern */}
-          <div 
-            className="absolute inset-0 opacity-15 pointer-events-none"
-            style={{
-              backgroundImage: 'radial-gradient(#f97316 1px, transparent 1px), radial-gradient(#fb7185 1px, #0f172a 1px)',
-              backgroundSize: '24px 24px',
-              backgroundPosition: '0 0, 12px 12px'
-            }}
-          />
+        {/* Real Swiggy-Style Live Interactive Map */}
+        <LiveMap 
+          orderStatus={activeOrder.status}
+          restaurantName={activeOrder.restaurantName}
+          deliveryAddress={activeOrder.deliveryAddress}
+          partnerName={partner?.name}
+        />
 
-          {/* HUD Top Bar */}
-          <div className="flex items-center justify-between text-xs text-slate-300 z-10 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-            <div className="flex items-center gap-2">
-              <Navigation className="w-4 h-4 text-rose-400 animate-pulse" />
-              <span className="font-extrabold text-white text-xs">{activeOrder.restaurantName}</span>
-              <span className="text-[10px] text-slate-500 font-mono">→</span>
-              <span className="font-extrabold text-amber-300 text-xs truncate max-w-[200px]">{activeOrder.deliveryAddress}</span>
-            </div>
-
-            <div className="flex items-center gap-4 text-[11px] font-mono">
-              <div className="flex items-center gap-1 text-emerald-400 font-bold">
-                <Gauge className="w-3.5 h-3.5" />
-                <span>{activeOrder.status === 'Out for Delivery' ? `${telemetrySpeed} km/h` : '0 km/h'}</span>
-              </div>
-              <div className="hidden sm:flex items-center gap-1 text-cyan-300">
-                <Activity className="w-3.5 h-3.5" />
-                <span>GPS {signalStrength}%</span>
-              </div>
-              <div className="hidden md:block bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded font-extrabold border border-emerald-500/30">
-                Traffic: Smooth
-              </div>
-            </div>
-          </div>
-
-          {/* Animated Route Vector Path SVG */}
-          <div className="relative my-auto w-full h-20 flex items-center justify-center">
-            <svg className="absolute w-full h-full inset-0 pointer-events-none" viewBox="0 0 600 80">
-              <path
-                d="M 40 40 Q 200 10, 300 40 T 560 40"
-                fill="none"
-                stroke="#1e293b"
-                strokeWidth="6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 40 40 Q 200 10, 300 40 T 560 40"
-                fill="none"
-                stroke="url(#warm-gradient)"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeDasharray="600"
-                strokeDashoffset={600 - (600 * progressPercent) / 100}
-                className="transition-all duration-1000 ease-out"
-              />
-              <defs>
-                <linearGradient id="warm-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#f43f5e" />
-                  <stop offset="50%" stopColor="#f97316" />
-                  <stop offset="100%" stopColor="#10b981" />
-                </linearGradient>
-              </defs>
-            </svg>
-
-            {/* Waypoint 1: Kitchen Hub */}
-            <div className="absolute left-[6%] top-1/2 -translate-y-1/2 flex flex-col items-center z-10">
-              <div className="w-9 h-9 rounded-xl bg-rose-950 border border-rose-500 text-rose-300 flex items-center justify-center shadow-xs">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-mono text-slate-300 mt-1 font-bold">Kitchen Hub</span>
-            </div>
-
-            {/* Rider Position Icon */}
-            <div 
-              className="absolute top-1/2 -translate-y-1/2 transition-all duration-1000 ease-out z-20"
-              style={{ left: `${Math.min(88, Math.max(8, progressPercent * 0.88))}%` }}
-            >
-              <div className="relative">
-                <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 to-orange-500 p-0.5 shadow-lg shadow-orange-500/40 animate-bounce">
-                  <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center text-orange-400">
-                    <Truck className="w-5 h-5" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-orange-950/90 text-orange-300 text-[9px] font-mono px-2 py-0.5 rounded-full border border-orange-500/40">
-                  Rider Node #01
-                </div>
-              </div>
-            </div>
-
-            {/* Waypoint 2: Destination Drop */}
-            <div className="absolute right-[6%] top-1/2 -translate-y-1/2 flex flex-col items-center z-10">
-              <div className="w-9 h-9 rounded-xl bg-emerald-950 border border-emerald-500 text-emerald-300 flex items-center justify-center shadow-xs">
-                <Navigation className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-mono text-slate-300 mt-1 font-bold">Doorstep</span>
-            </div>
-          </div>
-
-          {/* HUD Bottom Strip */}
-          <div className="flex justify-between items-center text-[11px] text-slate-400 font-mono z-10 bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800">
-            <span>Dispatch Location: Sector 4, Vizag</span>
-            <span className="text-orange-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-orange-400 animate-ping" />
-              {activeOrder.status}
-            </span>
-            <span>Target ETA: {activeOrder.estimatedDeliveryMins} mins</span>
-          </div>
-        </div>
 
         {/* Stepper Grid */}
         <div className="space-y-3">

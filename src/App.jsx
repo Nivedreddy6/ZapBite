@@ -9,7 +9,10 @@ import { RestaurantView } from './components/RestaurantView';
 import { DeliveryView } from './components/DeliveryView';
 import { AdminView } from './components/AdminView';
 import { LoginPage } from './components/LoginPage';
+import { CartDrawer } from './components/CartDrawer';
+
 import { Utensils, MapPin, CheckCircle2, X } from 'lucide-react';
+
 
 const MainAppContent = () => {
   const { 
@@ -135,6 +138,10 @@ const MainAppContent = () => {
 
       {/* ZapBot AI Floating Widget */}
       <BiteBotChatbot />
+
+      {/* Global Checkout Cart Drawer */}
+      <CartDrawer />
+
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">

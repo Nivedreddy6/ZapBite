@@ -47,8 +47,68 @@ export const AppProvider = ({ children }) => {
   const [isLandingPageOpen, setIsLandingPageOpen] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState({
     area: 'MVP Colony',
-    city: 'Vizag'
+    city: 'Vizag',
+    isGPS: false
   });
+
+  const [savedAddress, setSavedAddressState] = useState(() => {
+    const saved = localStorage.getItem('zapbite_saved_address');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return {
+      houseNo: 'Flat 402, Sea Breeze Apartments',
+      street: 'Beach Road, MVP Colony',
+      landmark: 'Near Siripuram Circle',
+      city: 'Vizag'
+    };
+  });
+
+  const saveUserAddress = (addressObj) => {
+    setSavedAddressState(addressObj);
+    localStorage.setItem('zapbite_saved_address', JSON.stringify(addressObj));
+  };
+
+  const detectGPSLocation = () => {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) {
+        showNotification('GPS Geolocation is not supported by your browser.', 'error');
+        resolve(null);
+        return;
+      }
+
+      showNotification('Fetching live GPS coordinates from your device...', 'info');
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          // Estimate location based on lat/lng or lock to device area
+          const gpsLoc = {
+            area: 'Live GPS Location',
+            city: 'Vizag',
+            lat,
+            lng,
+            isGPS: true
+          };
+
+          setSelectedLocation(gpsLoc);
+          showNotification(`🎯 GPS Locked! Location set to ${gpsLoc.area} (${lat.toFixed(3)}, ${lng.toFixed(3)})`, 'success');
+          resolve(gpsLoc);
+        },
+        (error) => {
+          console.log('GPS error:', error);
+          showNotification('Could not retrieve GPS location. Defaulting to MVP Colony, Vizag.', 'info');
+          const fallback = { area: 'MVP Colony', city: 'Vizag', isGPS: false };
+          setSelectedLocation(fallback);
+          resolve(fallback);
+        },
+        { timeout: 8000, enableHighAccuracy: true }
+      );
+    });
+  };
+
   const [restaurants, setRestaurants] = useState(INITIAL_RESTAURANTS);
   const [menuItems, setMenuItems] = useState(INITIAL_MENU_ITEMS);
   const [deliveryPartners, setDeliveryPartners] = useState(INITIAL_DELIVERY_PARTNERS);
@@ -392,7 +452,11 @@ export const AppProvider = ({ children }) => {
         registeredUsers,
         selectedLocation,
         setSelectedLocation,
+        savedAddress,
+        saveUserAddress,
+        detectGPSLocation
       }}
+
     >
       {children}
     </AppContext.Provider>

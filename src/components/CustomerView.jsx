@@ -36,7 +36,10 @@ export const CustomerView = () => {
     isCartOpen,
     setIsCartOpen,
     setActiveTrackingOrderId,
-    setIsBiteBotOpen
+    setIsBiteBotOpen,
+    selectedLocation,
+    savedAddress,
+    saveUserAddress
   } = useApp();
 
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -44,14 +47,36 @@ export const CustomerView = () => {
   const [isPureVeg, setIsPureVeg] = useState(false);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState(null);
 
-  // Checkout Form State
+  // Checkout Form State (Structured Saved Address)
   const [customerName, setCustomerName] = useState('Rahul Malhotra');
   const [customerPhone, setCustomerPhone] = useState('+91 98765 00112');
-  const [deliveryAddress, setDeliveryAddress] = useState('Flat 301, Sunshine Heights, MVP Colony, Vizag');
+  const [houseNo, setHouseNo] = useState(savedAddress?.houseNo || 'Flat 402, Sea Breeze Apartments');
+  const [street, setStreet] = useState(savedAddress?.street || 'Beach Road, MVP Colony');
+  const [landmark, setLandmark] = useState(savedAddress?.landmark || 'Near Siripuram Circle');
+  const [shouldSaveAddress, setShouldSaveAddress] = useState(true);
   const [paymentMode, setPaymentMode] = useState('UPI (PhonePe)');
   const [isPlacing, setIsPlacing] = useState(false);
 
+
   const categories = ['All', 'Biryani', 'Burgers', 'Pizzas', 'South Indian', 'Asian', 'Healthy', 'Desserts'];
+
+  const handleCategorySelect = (cat) => {
+    setSelectedCategory(cat);
+    setSelectedRestaurantId(null);
+  };
+
+
+  // Filter partner kitchens based on category, veg preference, and search
+  const filteredRestaurants = restaurants.filter((rest) => {
+    if (isPureVeg && !rest.isPureVeg) return false;
+    if (selectedCategory === 'All') return true;
+    const catLower = selectedCategory.toLowerCase();
+    const cuisineLower = rest.cuisine.toLowerCase();
+    const hasMatchingDishes = menuItems.some(
+      (m) => m.restaurantId === rest.id && m.category === selectedCategory
+    );
+    return cuisineLower.includes(catLower) || hasMatchingDishes;
+  });
 
   // Filter menu items
   const filteredMenuItems = menuItems.filter((item) => {
@@ -62,6 +87,7 @@ export const CustomerView = () => {
     const matchesRest = !selectedRestaurantId || item.restaurantId === selectedRestaurantId;
     return matchesCategory && matchesVeg && matchesSearch && matchesRest && item.inStock;
   });
+
 
   const cartSubtotal = cart.reduce((acc, curr) => acc + curr.item.price * curr.quantity, 0);
   const aiPaymentRec = getSmartPaymentRecommendation(cart.map(c => c.item), cartSubtotal);
@@ -79,6 +105,17 @@ export const CustomerView = () => {
 
     setIsPlacing(true);
 
+    const fullDeliveryAddress = `${houseNo}${street ? `, ${street}` : ''}${landmark ? ` (Landmark: ${landmark})` : ''}, ${selectedLocation?.area || 'MVP Colony'}, ${selectedLocation?.city || 'Vizag'}`;
+
+    if (shouldSaveAddress) {
+      saveUserAddress({
+        houseNo,
+        street,
+        landmark,
+        city: selectedLocation?.city || 'Vizag'
+      });
+    }
+
     try {
       confetti({
         particleCount: 120,
@@ -93,7 +130,7 @@ export const CustomerView = () => {
       const orderId = await placeOrder({
         customerName,
         customerPhone,
-        deliveryAddress,
+        deliveryAddress: fullDeliveryAddress,
         paymentMode
       });
 
@@ -103,6 +140,7 @@ export const CustomerView = () => {
       }
     }, 600);
   };
+
 
   return (
     <div className="min-h-screen bg-[#fcfbf9] text-slate-900 pb-20">
@@ -229,10 +267,10 @@ export const CustomerView = () => {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => handleCategorySelect(cat)}
               className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold whitespace-nowrap transition-all ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-md shadow-orange-500/20 border border-orange-400/40'
+                  ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-md shadow-orange-500/20 border border-orange-400/40 scale-105'
                   : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -242,15 +280,15 @@ export const CustomerView = () => {
         </div>
 
         {/* Partner Kitchen Cards */}
-        {!selectedRestaurantId && (
+        {!selectedRestaurantId && filteredRestaurants.length > 0 && (
           <div className="mb-8">
             <h3 className="text-lg font-extrabold text-slate-900 mb-3.5 flex items-center gap-2">
               <Utensils className="w-5 h-5 text-rose-500" />
-              Verified Partner Kitchens
+              {selectedCategory === 'All' ? 'Verified Partner Kitchens' : `Kitchens Serving ${selectedCategory}`}
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {restaurants.map((rest) => (
+              {filteredRestaurants.map((rest) => (
                 <div
                   key={rest.id}
                   onClick={() => setSelectedRestaurantId(rest.id)}
@@ -304,10 +342,23 @@ export const CustomerView = () => {
               <Tag className="w-5 h-5 text-orange-500" />
               {selectedRestaurantId
                 ? `Menu for ${restaurants.find((r) => r.id === selectedRestaurantId)?.name}`
-                : 'Available Menu Delicacies'}
+                : selectedCategory === 'All'
+                ? 'Available Menu Delicacies'
+                : `Popular ${selectedCategory} Delicacies`}
             </h3>
-            <span className="text-xs font-bold text-slate-500">{filteredMenuItems.length} Items Available</span>
+            <div className="flex items-center gap-2">
+              {selectedCategory !== 'All' && (
+                <button
+                  onClick={() => setSelectedCategory('All')}
+                  className="text-xs text-rose-600 hover:underline font-bold"
+                >
+                  Show All Categories ✕
+                </button>
+              )}
+              <span className="text-xs font-bold text-slate-500">{filteredMenuItems.length} Items Available</span>
+            </div>
           </div>
+
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filteredMenuItems.map((item) => {
@@ -395,172 +446,7 @@ export const CustomerView = () => {
         </div>
 
       </div>
-
-      {/* Cart & Checkout Slide-Over Drawer */}
-      {isCartOpen && (
-        <div className="fixed inset-0 z-50 overflow-hidden">
-          <div
-            className="absolute inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
-            onClick={() => setIsCartOpen(false)}
-          />
-
-          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-            <div className="w-screen max-w-md bg-white text-slate-900 border-l border-slate-200 flex flex-col shadow-2xl">
-              
-              {/* Header */}
-              <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                <div className="flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5 text-rose-500" />
-                  <h3 className="font-extrabold text-base text-slate-900">Your Checkout Basket</h3>
-                </div>
-                <button
-                  onClick={() => setIsCartOpen(false)}
-                  className="text-slate-400 hover:text-slate-700 p-1 rounded-lg"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Items List */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {cart.length === 0 ? (
-                  <div className="p-12 text-center text-slate-400 space-y-2">
-                    <ShoppingBag className="w-12 h-12 text-slate-300 mx-auto" />
-                    <p className="font-bold text-slate-600">Your basket is empty!</p>
-                    <p className="text-xs">Add delicious dishes from our menu to unlock AI discounts.</p>
-                  </div>
-                ) : (
-                  cart.map((c) => (
-                    <div
-                      key={c.item.id}
-                      className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3"
-                    >
-                      <img
-                        src={c.item.image}
-                        alt={c.item.name}
-                        className="w-12 h-12 rounded-xl object-cover"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-extrabold text-xs text-slate-900 truncate">{c.item.name}</h4>
-                        <div className="text-xs font-bold text-rose-600 mt-0.5">₹{c.item.price * c.quantity}</div>
-                      </div>
-
-                      <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-2 py-1">
-                        <button
-                          onClick={() => updateCartQuantity(c.item.id, -1)}
-                          className="text-slate-600 hover:text-slate-900"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="text-xs font-black">{c.quantity}</span>
-                        <button
-                          onClick={() => updateCartQuantity(c.item.id, 1)}
-                          className="text-slate-600 hover:text-slate-900"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Checkout Footer & ZapPay AI Shield */}
-              {cart.length > 0 && (
-                <div className="p-4 border-t border-slate-200 bg-slate-50 space-y-4">
-                  
-                  {/* AI Promo Shield Notice */}
-                  {aiDiscount > 0 && (
-                    <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-2xl flex items-center gap-2 text-xs text-emerald-800">
-                      <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>{aiPaymentRec.aiAdvice}</span>
-                    </div>
-                  )}
-
-                  {/* Summary Charges */}
-                  <div className="space-y-1.5 text-xs text-slate-600 font-medium">
-                    <div className="flex justify-between">
-                      <span>Subtotal</span>
-                      <span className="font-bold text-slate-900">₹{cartSubtotal}</span>
-                    </div>
-                    {aiDiscount > 0 && (
-                      <div className="flex justify-between text-emerald-600 font-extrabold">
-                        <span>ZapPay AI Discount ({aiPaymentRec.bestOffer?.code})</span>
-                        <span>-₹{aiDiscount}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between">
-                      <span>Delivery Fee</span>
-                      <span>{deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Taxes & GST (5%)</span>
-                      <span>₹{taxes}</span>
-                    </div>
-                    <div className="pt-2 border-t border-slate-200 flex justify-between text-base font-extrabold text-slate-900">
-                      <span>Grand Total</span>
-                      <span className="text-rose-600">₹{grandTotal}</span>
-                    </div>
-                  </div>
-
-                  {/* Customer Delivery Details Form */}
-                  <div className="space-y-2 pt-2 border-t border-slate-200">
-                    <label className="text-xs font-extrabold text-slate-700 block">Delivery Details</label>
-                    <input
-                      type="text"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Your Full Name"
-                      className="w-full bg-white text-slate-900 text-xs p-2.5 rounded-xl border border-slate-200 font-bold"
-                      required
-                    />
-                    <input
-                      type="tel"
-                      value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
-                      placeholder="Mobile Phone Number"
-                      className="w-full bg-white text-slate-900 text-xs p-2.5 rounded-xl border border-slate-200 font-bold"
-                      required
-                    />
-                    <input
-                      type="text"
-                      value={deliveryAddress}
-                      onChange={(e) => setDeliveryAddress(e.target.value)}
-                      placeholder="Delivery Address"
-                      className="w-full bg-white text-slate-900 text-xs p-2.5 rounded-xl border border-slate-200 font-bold"
-                      required
-                    />
-                  </div>
-
-                  {/* Payment Mode Selector */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-extrabold text-slate-700">Payment Mode</label>
-                    <select
-                      value={paymentMode}
-                      onChange={(e) => setPaymentMode(e.target.value)}
-                      className="w-full bg-white text-slate-900 text-xs p-2.5 rounded-xl border border-slate-200 font-bold"
-                    >
-                      <option value="UPI (PhonePe)">UPI (PhonePe / GooglePay)</option>
-                      <option value="Credit Card">Credit / Debit Card</option>
-                      <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-                    </select>
-                  </div>
-
-                  <button
-                    onClick={handleCheckoutSubmit}
-                    disabled={isPlacing}
-                    className="w-full bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 hover:from-rose-600 hover:to-orange-600 text-white font-extrabold py-3.5 rounded-2xl shadow-md shadow-orange-500/20 active:scale-95 transition-all text-sm flex items-center justify-center gap-2"
-                  >
-                    {isPlacing ? 'Securing Transaction...' : `Pay ₹${grandTotal} & Place Order`}
-                  </button>
-                </div>
-              )}
-
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };
+

@@ -80,7 +80,7 @@ export const INITIAL_RESTAURANTS = [
 ];
 
 export const INITIAL_MENU_ITEMS = [
-  // Spicy Junction (Biryani)
+  // Spicy Junction (Biryani & Mughlai)
   {
     id: 'item-101',
     restaurantId: 'rest-1',
@@ -109,6 +109,36 @@ export const INITIAL_MENU_ITEMS = [
     image: 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&auto=format&fit=crop&q=80',
     tag: 'Must Try',
     calories: '580 kcal',
+    inStock: true,
+  },
+  {
+    id: 'item-104',
+    restaurantId: 'rest-1',
+    name: 'Royal Mutton Dum Biryani',
+    category: 'Biryani',
+    price: 390,
+    isVeg: false,
+    rating: 4.95,
+    ratingCount: 950,
+    description: 'Succulent mutton shank pieces marinated for 12 hours, dum-cooked with long grain basmati rice, saffron & desi ghee.',
+    image: 'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?w=800&auto=format&fit=crop&q=80',
+    tag: 'Chef Special',
+    calories: '720 kcal',
+    inStock: true,
+  },
+  {
+    id: 'item-105',
+    restaurantId: 'rest-1',
+    name: 'Special Egg Dum Biryani',
+    category: 'Biryani',
+    price: 210,
+    isVeg: false,
+    rating: 4.6,
+    ratingCount: 310,
+    description: 'Crispy boiled eggs tossed in spicy biryani masala, layered with mint basmati rice.',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop&q=80',
+    tag: 'Popular',
+    calories: '510 kcal',
     inStock: true,
   },
   {
@@ -159,6 +189,36 @@ export const INITIAL_MENU_ITEMS = [
     inStock: true,
   },
   {
+    id: 'item-204',
+    restaurantId: 'rest-2',
+    name: 'Fiery Zinger Fried Chicken Burger',
+    category: 'Burgers',
+    price: 240,
+    isVeg: false,
+    rating: 4.85,
+    ratingCount: 680,
+    description: 'Ultra-crispy buttermilk fried chicken breast, chipotle mayo, crunchy slaw, pickles on toasted sesame brioche.',
+    image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=800&auto=format&fit=crop&q=80',
+    tag: 'Spicy',
+    calories: '690 kcal',
+    inStock: true,
+  },
+  {
+    id: 'item-205',
+    restaurantId: 'rest-2',
+    name: 'Double Cheese Smash Burger',
+    category: 'Burgers',
+    price: 310,
+    isVeg: false,
+    rating: 4.9,
+    ratingCount: 420,
+    description: 'Two smashed beef patties, double American cheese slices, house secret sauce, diced onions on potato bun.',
+    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=800&auto=format&fit=crop&q=80',
+    tag: 'Chef Choice',
+    calories: '810 kcal',
+    inStock: true,
+  },
+  {
     id: 'item-203',
     restaurantId: 'rest-2',
     name: 'Loaded Peri-Peri Crinkle Fries',
@@ -174,7 +234,7 @@ export const INITIAL_MENU_ITEMS = [
     inStock: true,
   },
 
-  // Green Leaf Bistro (Pure Veg)
+  // Green Leaf Bistro (Pure Veg & South Indian)
   {
     id: 'item-301',
     restaurantId: 'rest-3',
@@ -188,6 +248,21 @@ export const INITIAL_MENU_ITEMS = [
     image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=800&auto=format&fit=crop&q=80',
     tag: 'Iconic',
     calories: '380 kcal',
+    inStock: true,
+  },
+  {
+    id: 'item-304',
+    restaurantId: 'rest-3',
+    name: 'Fluffy Button Idli & Medu Vada Combo',
+    category: 'South Indian',
+    price: 120,
+    isVeg: true,
+    rating: 4.85,
+    ratingCount: 890,
+    description: 'Steamed piping hot rice idlis served alongside crispy lentil medu vada, piping hot drumstick sambar & coconut chutney.',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop&q=80',
+    tag: 'Breakfast Fav',
+    calories: '310 kcal',
     inStock: true,
   },
   {
@@ -238,6 +313,36 @@ export const INITIAL_MENU_ITEMS = [
     inStock: true,
   },
   {
+    id: 'item-403',
+    restaurantId: 'rest-4',
+    name: 'Classic Margherita Basil Pizza (12")',
+    category: 'Pizzas',
+    price: 340,
+    isVeg: true,
+    rating: 4.8,
+    ratingCount: 640,
+    description: 'San Marzano tomato base, fresh buffalo mozzarella, fragrant extra virgin olive oil and torn garden basil leaves.',
+    image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=800&auto=format&fit=crop&q=80',
+    tag: 'Italian Classic',
+    calories: '710 kcal',
+    inStock: true,
+  },
+  {
+    id: 'item-404',
+    restaurantId: 'rest-4',
+    name: 'BBQ Smokey Chicken & Corn Pizza',
+    category: 'Pizzas',
+    price: 440,
+    isVeg: false,
+    rating: 4.75,
+    ratingCount: 510,
+    description: 'Smokey Hickory BBQ sauce base, roasted chicken chunks, sweet corn, red onions, jalapenos, and melted mozzarella.',
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop&q=80',
+    tag: 'Top Offer',
+    calories: '860 kcal',
+    inStock: true,
+  },
+  {
     id: 'item-402',
     restaurantId: 'rest-4',
     name: 'Cheesy Garlic Breadsticks with Dip',
@@ -284,8 +389,23 @@ export const INITIAL_MENU_ITEMS = [
     calories: '240 kcal',
     inStock: true,
   },
+  {
+    id: 'item-503',
+    restaurantId: 'rest-5',
+    name: 'Schezwan Chicken Hakka Noodles',
+    category: 'Asian',
+    price: 250,
+    isVeg: false,
+    rating: 4.7,
+    ratingCount: 450,
+    description: 'Wok-tossed noodles with shredded chicken, crunchy bell peppers, spring onions in fiery Schezwan chili garlic sauce.',
+    image: 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=800&auto=format&fit=crop&q=80',
+    tag: 'Spicy Wok',
+    calories: '530 kcal',
+    inStock: true,
+  },
 
-  // Sweet Sensations
+  // Sweet Sensations (Desserts)
   {
     id: 'item-601',
     restaurantId: 'rest-6',
@@ -315,8 +435,24 @@ export const INITIAL_MENU_ITEMS = [
     tag: 'Bestseller',
     calories: '670 kcal',
     inStock: true,
+  },
+  {
+    id: 'item-603',
+    restaurantId: 'rest-6',
+    name: 'Sizzling Chocolate Brownie Sundae',
+    category: 'Desserts',
+    price: 220,
+    isVeg: true,
+    rating: 4.95,
+    ratingCount: 670,
+    description: 'Fudgy hot chocolate brownie served on a sizzling hot plate with cold vanilla bean ice cream & hot fudge sauce.',
+    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80',
+    tag: 'Decadent',
+    calories: '540 kcal',
+    inStock: true,
   }
 ];
+
 
 export const INITIAL_DELIVERY_PARTNERS = [
   {

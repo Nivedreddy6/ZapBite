@@ -29,8 +29,10 @@ export const Navbar = () => {
     setIsLandingPageOpen,
     orders,
     selectedLocation,
-    setSelectedLocation
+    setSelectedLocation,
+    detectGPSLocation
   } = useApp();
+
 
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [citySearch, setCitySearch] = useState('');
@@ -254,6 +256,18 @@ export const Navbar = () => {
             <p className="text-xs text-slate-500 mt-1 font-medium">Choose your city & locality across India for ultra-fast food delivery</p>
           </div>
 
+          {/* GPS Live Geolocation Button */}
+          <button
+            onClick={async () => {
+              const loc = await detectGPSLocation();
+              if (loc) setIsLocationModalOpen(false);
+            }}
+            className="w-full bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 hover:from-rose-600 hover:to-orange-600 text-white font-extrabold text-xs py-3 rounded-2xl shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer border border-orange-300/40"
+          >
+            <Compass className="w-4 h-4 text-amber-200 animate-spin-slow" />
+            <span>🎯 Use Current Device Location (Live GPS)</span>
+          </button>
+
           {/* Search Input */}
           <div className="relative shrink-0">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -265,6 +279,7 @@ export const Navbar = () => {
               className="w-full bg-slate-50 text-slate-900 text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-orange-500 font-medium"
             />
           </div>
+
 
           {/* Cities & Localities Scrollable List */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
