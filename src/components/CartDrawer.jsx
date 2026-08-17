@@ -126,9 +126,13 @@ export const CartDrawer = () => {
                   className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3 shadow-xs"
                 >
                   <img
-                    src={c.item.image}
+                    src={c.item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80'}
                     alt={c.item.name}
-                    className="w-12 h-12 rounded-xl object-cover border border-slate-200"
+                    className="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80';
+                    }}
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-extrabold text-xs text-slate-900 truncate">{c.item.name}</h4>

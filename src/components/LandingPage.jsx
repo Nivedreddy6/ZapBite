@@ -13,6 +13,12 @@ import {
   BadgeCheck,
   CheckCircle2
 } from 'lucide-react';
+import { 
+  DinerExperienceSvg, 
+  KitchenOsSvg, 
+  RiderFleetSvg, 
+  AnalyticsOpsSvg 
+} from './EcosystemSvgAnimations';
 
 export const LandingPage = ({ onGetStarted }) => {
   const { setCurrentRole } = useApp();
@@ -139,7 +145,7 @@ export const LandingPage = ({ onGetStarted }) => {
                     Diner Experience
                   </span>
                 </div>
-
+                <DinerExperienceSvg />
                 <h3 className="text-lg font-extrabold text-slate-900">
                   Customer Ordering & AI Concierge
                 </h3>
@@ -175,7 +181,7 @@ export const LandingPage = ({ onGetStarted }) => {
                     Kitchen Display
                   </span>
                 </div>
-
+                <KitchenOsSvg />
                 <h3 className="text-lg font-extrabold text-slate-900">
                   Kitchen Operating System
                 </h3>
@@ -211,7 +217,7 @@ export const LandingPage = ({ onGetStarted }) => {
                     Smart Logistics
                   </span>
                 </div>
-
+                <RiderFleetSvg />
                 <h3 className="text-lg font-extrabold text-slate-900">
                   Rider Fleet Dispatch
                 </h3>
@@ -247,7 +253,7 @@ export const LandingPage = ({ onGetStarted }) => {
                     Platform Intelligence
                   </span>
                 </div>
-
+                <AnalyticsOpsSvg />
                 <h3 className="text-lg font-extrabold text-slate-900">
                   Analytics & Operations
                 </h3>

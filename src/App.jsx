@@ -10,6 +10,7 @@ import { DeliveryView } from './components/DeliveryView';
 import { AdminView } from './components/AdminView';
 import { LoginPage } from './components/LoginPage';
 import { CartDrawer } from './components/CartDrawer';
+import { UserProfileModal } from './components/UserProfileModal';
 
 import { Utensils, MapPin, CheckCircle2, X } from 'lucide-react';
 
@@ -21,6 +22,8 @@ const MainAppContent = () => {
     activeTrackingOrderId, 
     isLoginModalOpen, 
     setIsLoginModalOpen,
+    isProfileModalOpen,
+    setIsProfileModalOpen,
     isLandingPageOpen,
     setIsLandingPageOpen
   } = useApp();
@@ -34,19 +37,15 @@ const MainAppContent = () => {
 
         {/* Login Modal on top of Landing Page */}
         {isLoginModalOpen && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="relative w-full max-w-md">
-              <button
-                onClick={() => setIsLoginModalOpen(false)}
-                className="absolute top-4 right-4 z-20 text-slate-400 hover:text-slate-700 bg-slate-100 p-1.5 rounded-full border border-slate-200"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <LoginPage onLoginSuccess={() => {
-                setIsLoginModalOpen(false);
-                setIsLandingPageOpen(false);
-              }} />
+          <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in">
+            <div className="relative w-full max-w-md my-auto">
+              <LoginPage 
+                onClose={() => setIsLoginModalOpen(false)}
+                onLoginSuccess={() => {
+                  setIsLoginModalOpen(false);
+                  setIsLandingPageOpen(false);
+                }} 
+              />
             </div>
           </div>
         )}
@@ -89,6 +88,12 @@ const MainAppContent = () => {
           </div>
         </div>
       )}
+
+      {/* User Profile Modal (Swiggy Profile & Past Orders Replica) */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
 
       {/* Role View Container */}
       <main className="flex-1">
@@ -141,6 +146,26 @@ const MainAppContent = () => {
 
       {/* Global Checkout Cart Drawer */}
       <CartDrawer />
+
+      {/* User Profile Modal */}
+      <UserProfileModal 
+        isOpen={isProfileModalOpen} 
+        onClose={() => setIsProfileModalOpen(false)} 
+      />
+
+      {/* Login & Registration Modal Overlay */}
+      {isLoginModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in">
+          <div className="relative w-full max-w-md my-auto">
+            <LoginPage 
+              onClose={() => setIsLoginModalOpen(false)}
+              onLoginSuccess={() => {
+                setIsLoginModalOpen(false);
+              }} 
+            />
+          </div>
+        </div>
+      )}
 
 
       {/* Footer */}

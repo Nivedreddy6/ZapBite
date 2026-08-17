@@ -507,12 +507,41 @@ export const INITIAL_DELIVERY_PARTNERS = [
 
 export const INITIAL_ORDERS = [
   {
+    id: 'ORD-7712',
+    type: 'food',
+    customerName: 'Nived Reddy Tamma',
+    customerPhone: '+91 - 7702618534',
+    deliveryAddress: 'Madhurawada, Vizag',
+    restaurantId: 'rest-hwy',
+    restaurantName: 'Highway Drive In',
+    restaurantLocation: 'Madhurawada',
+    restaurantImage: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&auto=format&fit=crop&q=80',
+    items: [
+      { id: 'item-h1', name: 'White Rice with Chicken Curry', price: 212, quantity: 1, isVeg: false }
+    ],
+    totalAmount: 247,
+    subtotal: 212,
+    deliveryFee: 20,
+    taxes: 15,
+    paymentMode: 'UPI (PhonePe)',
+    paymentStatus: 'Paid',
+    status: 'Delivered',
+    foodRating: 0,
+    deliveryRating: 0,
+    createdAt: '2026-08-13T20:56:00.000Z',
+    formattedDate: 'August 13, 8:56 PM',
+    deliveryPartnerId: 'partner-1'
+  },
+  {
     id: 'ORD-8821',
-    customerName: 'Aarav Patel',
-    customerPhone: '+91 91234 56789',
+    type: 'food',
+    customerName: 'Nived Reddy Tamma',
+    customerPhone: '+91 - 7702618534',
     deliveryAddress: 'Flat 402, Sea Breeze Apartments, Beach Road, Vizag',
     restaurantId: 'rest-1',
     restaurantName: 'Spicy Junction',
+    restaurantLocation: 'Sector 4, Main Road',
+    restaurantImage: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=300&auto=format&fit=crop&q=80',
     items: [
       { id: 'item-101', name: 'Hyderabadi Dum Chicken Biryani', price: 290, quantity: 2, isVeg: false },
       { id: 'item-103', name: 'Tandoori Chicken Tikka (8 Pcs)', price: 320, quantity: 1, isVeg: false }
@@ -524,6 +553,8 @@ export const INITIAL_ORDERS = [
     paymentMode: 'UPI (PhonePe)',
     paymentStatus: 'Paid',
     status: 'Out for Delivery',
+    foodRating: 0,
+    deliveryRating: 0,
     createdAt: new Date(Date.now() - 18 * 60 * 1000).toISOString(),
     estimatedDeliveryMins: 12,
     deliveryPartnerId: 'partner-1',
@@ -537,11 +568,14 @@ export const INITIAL_ORDERS = [
   },
   {
     id: 'ORD-8822',
+    type: 'food',
     customerName: 'Priya Sharma',
     customerPhone: '+91 99887 76655',
     deliveryAddress: 'Villa 12, Green Meadows, MVP Colony, Vizag',
     restaurantId: 'rest-3',
     restaurantName: 'Green Leaf Bistro',
+    restaurantLocation: 'Siripuram Circle',
+    restaurantImage: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&auto=format&fit=crop&q=80',
     items: [
       { id: 'item-301', name: 'Special Ghee Roast Masala Dosa', price: 130, quantity: 2, isVeg: true },
       { id: 'item-302', name: 'Quinoa & Avocado Protein Buddha Bowl', price: 260, quantity: 1, isVeg: true }
@@ -553,6 +587,8 @@ export const INITIAL_ORDERS = [
     paymentMode: 'Credit Card',
     paymentStatus: 'Paid',
     status: 'Preparing',
+    foodRating: 0,
+    deliveryRating: 0,
     createdAt: new Date(Date.now() - 8 * 60 * 1000).toISOString(),
     estimatedDeliveryMins: 22,
     deliveryPartnerId: null,
@@ -564,11 +600,14 @@ export const INITIAL_ORDERS = [
   },
   {
     id: 'ORD-8820',
+    type: 'food',
     customerName: 'Rohan Mehta',
     customerPhone: '+91 98711 22334',
     deliveryAddress: '3rd Floor, Tech Park Towers, Siripuram',
     restaurantId: 'rest-2',
     restaurantName: 'Burger Craft & Co.',
+    restaurantLocation: 'MVP Colony',
+    restaurantImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&auto=format&fit=crop&q=80',
     items: [
       { id: 'item-201', name: 'Monster Smoked Bacon & Cheese Burger', price: 280, quantity: 1, isVeg: false },
       { id: 'item-203', name: 'Loaded Peri-Peri Crinkle Fries', price: 140, quantity: 1, isVeg: true }
@@ -580,7 +619,10 @@ export const INITIAL_ORDERS = [
     paymentMode: 'Cash on Delivery',
     paymentStatus: 'Pending',
     status: 'Delivered',
+    foodRating: 4,
+    deliveryRating: 5,
     createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+    formattedDate: 'August 10, 1:15 PM',
     estimatedDeliveryMins: 0,
     deliveryPartnerId: 'partner-3',
     history: [
@@ -591,5 +633,32 @@ export const INITIAL_ORDERS = [
       { status: 'Out for Delivery', timestamp: new Date(Date.now() - 22 * 60 * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), note: 'Anita Roy dispatched' },
       { status: 'Delivered', timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), note: 'Delivered to customer' }
     ]
+  },
+  {
+    id: 'ORD-INSTA-01',
+    type: 'instamart',
+    customerName: 'Nived Reddy Tamma',
+    customerPhone: '+91 - 7702618534',
+    deliveryAddress: 'Flat 402, Sea Breeze Apartments, Vizag',
+    restaurantId: 'rest-instamart',
+    restaurantName: 'ZapBite Instamart',
+    restaurantLocation: 'MVP Superstore Hub',
+    restaurantImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&auto=format&fit=crop&q=80',
+    items: [
+      { id: 'item-im-1', name: 'Amul Taaza Toned Milk (1L)', price: 56, quantity: 2, isVeg: true },
+      { id: 'item-im-2', name: 'Farm Fresh Organic Eggs (6 Pcs)', price: 48, quantity: 1, isVeg: true }
+    ],
+    totalAmount: 175,
+    subtotal: 160,
+    deliveryFee: 15,
+    taxes: 0,
+    paymentMode: 'UPI (Paytm)',
+    paymentStatus: 'Paid',
+    status: 'Delivered',
+    foodRating: 5,
+    deliveryRating: 5,
+    createdAt: '2026-08-12T09:30:00.000Z',
+    formattedDate: 'August 12, 9:30 AM',
+    deliveryPartnerId: 'partner-3'
   }
 ];

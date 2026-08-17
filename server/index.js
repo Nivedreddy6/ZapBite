@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import { 
   INITIAL_RESTAURANTS, 
   INITIAL_MENU_ITEMS, 
@@ -10,6 +11,8 @@ import {
   INITIAL_ORDERS 
 } from '../src/data/mockData.js';
 import { getSmartPaymentRecommendation, generatePaymentSecurityScore } from '../src/utils/aiPayments.js';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -173,6 +176,70 @@ app.post('/api/auth/register', (req, res) => {
   users.unshift(newUser);
   saveDb();
   res.status(201).json(newUser);
+});
+
+app.post('/api/auth/send-sms-otp', async (req, res) => {
+  const { phone, otp } = req.body;
+  const cleanPhone = (phone || '').replace(/\D/g, '').slice(-10);
+
+  console.log(`💬 [REAL SMS DISPATCH] Triggered SMS OTP code [${otp}] to mobile +91 ${cleanPhone}`);
+
+  let smsSentSuccess = false;
+  let activeProvider = 'Console Logger (Dev)';
+
+  // 1. 2Factor.in Pure Text SMS Gateway with Approved Template ZapBite_OTP
+  const twoFactorKey = process.env.TWOFACTOR_API_KEY || 'fff2bb13-9a60-11f1-9cb1-0200cd936042';
+  if (twoFactorKey) {
+    try {
+      // 1. Direct Template-bound SMS Endpoint
+      const tfUrl = `https://2factor.in/API/V1/${twoFactorKey}/SMS/+91${cleanPhone}/${otp}/ZapBite_OTP`;
+      const response = await fetch(tfUrl);
+      const data = await response.json();
+      console.log('📱 2Factor.in ZapBite_OTP Route Response:', data);
+
+      if (data.Status === 'Success') {
+        smsSentSuccess = true;
+        activeProvider = '2Factor.in ZapBite_OTP SMS';
+      } else {
+        // 2. Try TRANS_SMS with templatename parameter
+        const tsmsUrl = `https://2factor.in/API/R1/?module=TRANS_SMS&apikey=${twoFactorKey}&to=${cleanPhone}&from=OPTOTP&templatename=ZapBite_OTP&var1=${otp}`;
+        const res2 = await fetch(tsmsUrl);
+        const data2 = await res2.json();
+        console.log('📱 2Factor.in TRANS_SMS Response:', data2);
+        if (data2.Status === 'Success') {
+          smsSentSuccess = true;
+          activeProvider = '2Factor.in TRANS_SMS';
+        }
+      }
+    } catch (e) {
+      console.error('2Factor.in Dispatch Error:', e.message);
+    }
+  }
+
+  // 2. Fast2SMS Integration as secondary
+  if (!smsSentSuccess && process.env.FAST2SMS_API_KEY) {
+    try {
+      const apiKey = process.env.FAST2SMS_API_KEY;
+      const qUrl = `https://www.fast2sms.com/dev/bulkV2?authorization=${apiKey}&route=q&message=${encodeURIComponent(`Your ZapBite mobile verification code is ${otp}`)}&language=english&flash=0&numbers=${cleanPhone}`;
+      const qRes = await fetch(qUrl);
+      const qData = await qRes.json();
+      console.log('📱 Fast2SMS Response:', qData);
+      if (qData.return) {
+        smsSentSuccess = true;
+        activeProvider = 'Fast2SMS Gateway';
+      }
+    } catch (e) {
+      console.error('Fast2SMS Dispatch Error:', e.message);
+    }
+  }
+
+  res.json({
+    success: true,
+    message: smsSentSuccess ? `Real SMS delivered to +91 ${cleanPhone}` : `SMS queued for +91 ${cleanPhone}`,
+    phone: cleanPhone,
+    provider: activeProvider,
+    smsDelivered: smsSentSuccess
+  });
 });
 
 app.post('/api/auth/login', (req, res) => {

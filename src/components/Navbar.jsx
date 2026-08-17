@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { LocationPickerModal } from './LocationPickerModal';
 import { 
   ShoppingBag, 
   ChevronDown, 
@@ -26,6 +27,7 @@ export const Navbar = () => {
     isBiteBotOpen, 
     setIsBiteBotOpen,
     setIsLoginModalOpen,
+    setIsProfileModalOpen,
     setIsLandingPageOpen,
     orders,
     selectedLocation,
@@ -44,7 +46,22 @@ export const Navbar = () => {
       name: 'Visakhapatnam (Vizag)',
       shortName: 'Vizag',
       icon: '🏖️',
-      areas: ['MVP Colony', 'Siripuram', 'Beach Road', 'Gajuwaka', 'Jagadamba Junction', 'Madhurawada', 'Seethammadhara']
+      areas: [
+        'MVP Colony (Sector 1-12)',
+        'Siripuram (Dutt Island)',
+        'Beach Road (RK Beach)',
+        'Madhurawada (IT SEZ)',
+        'Dwaraka Nagar (RTC Complex)',
+        'Rushikonda (GITAM Univ)',
+        'Seethammadhara (HB Colony)',
+        'Waltair Uplands (Siripuram)',
+        'Lawsons Bay Colony',
+        'Gajuwaka (Steel Plant)',
+        'Jagadamba Junction',
+        'Yendada & Sagar Nagar',
+        'Pendurthi & Simhachalam',
+        'Kurmannapalem & Duvvada'
+      ]
     },
     {
       name: 'Hyderabad',
@@ -131,19 +148,19 @@ export const Navbar = () => {
               </div>
             </div>
 
-            {/* Interactive Location Selector Button */}
-            {currentRole === 'customer' && (
-              <button
-                onClick={() => setIsLocationModalOpen(true)}
-                className="hidden md:flex items-center gap-2 text-xs text-slate-700 bg-slate-50 hover:bg-orange-50/60 px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-orange-300 transition-all font-bold group"
-                title="Change Delivery City & Area"
-              >
-                <Compass className="w-3.5 h-3.5 text-rose-500 shrink-0 group-hover:rotate-45 transition-transform" />
-                <span className="font-extrabold text-slate-900">{selectedLocation?.area || 'MVP Colony'}</span>
-                <span className="text-slate-400 font-medium">| {selectedLocation?.city || 'Vizag'}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-              </button>
-            )}
+            {/* Interactive Live Delivery Location Button (Swiggy / Zomato Style) */}
+            <button
+              onClick={() => setIsLocationModalOpen(true)}
+              className="hidden md:flex items-center gap-2 text-xs text-slate-700 bg-slate-50 hover:bg-orange-50/80 px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-orange-300 transition-all font-bold group cursor-pointer shadow-xs"
+              title="Change Delivery Location (Live GPS Map)"
+            >
+              <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0 group-hover:scale-110 transition-transform" />
+              <span className="font-extrabold text-slate-900 truncate max-w-[130px] sm:max-w-[190px]">
+                {selectedLocation?.area || 'Locate Me'}
+              </span>
+              <span className="text-slate-400 font-medium">| {selectedLocation?.city || 'Vizag'}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:translate-y-0.5 transition-transform" />
+            </button>
           </div>
 
           {/* Compact Role Switcher Selector */}
@@ -173,11 +190,17 @@ export const Navbar = () => {
               <span className="hidden xl:inline">About</span>
             </button>
 
-            {/* User Profile Button */}
+            {/* User Profile / Sign In Button */}
             <button
-              onClick={() => setIsLoginModalOpen(true)}
+              onClick={() => {
+                if (user) {
+                  setIsProfileModalOpen(true);
+                } else {
+                  setIsLoginModalOpen(true);
+                }
+              }}
               className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
-              title="Switch Account / Login"
+              title={user ? "View Profile & Past Orders" : "Sign In to ZapBite"}
             >
               {user ? (
                 <>
@@ -234,94 +257,11 @@ export const Navbar = () => {
 
     </header>
 
-    {/* Interactive Location Selector Modal */}
-    {isLocationModalOpen && (
-      <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
-        <div className="bg-white rounded-3xl max-w-xl w-full max-h-[85vh] flex flex-col p-6 border border-slate-200 shadow-2xl space-y-4 relative overflow-hidden">
-          
-          {/* Close Button */}
-          <button
-            onClick={() => setIsLocationModalOpen(false)}
-            className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 bg-slate-100 p-2 rounded-full border border-slate-200 transition-colors z-10"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          {/* Header */}
-          <div className="shrink-0 pr-10">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-rose-500" />
-              <h3 className="text-lg font-extrabold text-slate-900">Select Delivery Location</h3>
-            </div>
-            <p className="text-xs text-slate-500 mt-1 font-medium">Choose your city & locality across India for ultra-fast food delivery</p>
-          </div>
-
-          {/* GPS Live Geolocation Button */}
-          <button
-            onClick={async () => {
-              const loc = await detectGPSLocation();
-              if (loc) setIsLocationModalOpen(false);
-            }}
-            className="w-full bg-gradient-to-r from-rose-500 via-orange-500 to-amber-500 hover:from-rose-600 hover:to-orange-600 text-white font-extrabold text-xs py-3 rounded-2xl shadow-md shadow-orange-500/20 flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer border border-orange-300/40"
-          >
-            <Compass className="w-4 h-4 text-amber-200 animate-spin-slow" />
-            <span>🎯 Use Current Device Location (Live GPS)</span>
-          </button>
-
-          {/* Search Input */}
-          <div className="relative shrink-0">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={citySearch}
-              onChange={(e) => setCitySearch(e.target.value)}
-              placeholder="Search your city or area (e.g. Banjara Hills, Koramangala)..."
-              className="w-full bg-slate-50 text-slate-900 text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:border-orange-500 font-medium"
-            />
-          </div>
-
-
-          {/* Cities & Localities Scrollable List */}
-          <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
-            {filteredCities.map((cObj) => (
-              <div key={cObj.name} className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-slate-800 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 sticky top-0 z-10 backdrop-blur-md">
-                  <span>{cObj.icon}</span>
-                  <span>{cObj.name}</span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pl-1">
-                  {cObj.areas.map((areaName) => {
-                    const isSelected = selectedLocation?.area === areaName && selectedLocation?.city === cObj.shortName;
-
-                    return (
-                      <button
-                        key={areaName}
-                        onClick={() => handleSelectLocality(areaName, cObj.shortName)}
-                        className={`p-2.5 rounded-xl text-xs text-left font-bold border transition-all flex items-center justify-between ${
-                          isSelected
-                            ? 'bg-rose-50 border-rose-400 text-rose-700 shadow-xs'
-                            : 'bg-white hover:bg-orange-50 border-slate-200 text-slate-700 hover:border-orange-300'
-                        }`}
-                      >
-                        <span className="truncate">{areaName}</span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-rose-600 shrink-0" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Footer Notice */}
-          <div className="pt-3 border-t border-slate-100 text-[11px] text-slate-400 text-center font-medium shrink-0">
-            💡 Selecting a location updates live delivery rider SLAs and restaurant dispatch distances.
-          </div>
-
-        </div>
-      </div>
-    )}
+    {/* Live Interactive Map Location Selector Modal */}
+    <LocationPickerModal 
+      isOpen={isLocationModalOpen} 
+      onClose={() => setIsLocationModalOpen(false)} 
+    />
     </>
   );
 };

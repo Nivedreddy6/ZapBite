@@ -180,7 +180,7 @@ export const PaymentModal = ({ isOpen, onClose, orderData, onPaymentSuccess }) =
               <div className="mt-6 space-y-4">
                 <div className="bg-rose-50 border border-rose-200 p-4 rounded-2xl text-xs text-rose-900 space-y-1">
                   <span className="font-extrabold block">Bank One-Time Password Sent!</span>
-                  <span>An SMS containing a 6-digit OTP has been sent to your registered mobile number <span className="font-mono font-bold">+91 ••••• ••112</span>.</span>
+                  <span>An SMS containing a 6-digit OTP has been sent to your registered mobile number <span className="font-mono font-bold">+91 ••••• ••{(orderData?.customerPhone || '7702618534').slice(-3)}</span>.</span>
                 </div>
 
                 <div className="space-y-2">

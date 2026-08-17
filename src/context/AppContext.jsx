@@ -21,8 +21,11 @@ export const AppProvider = ({ children }) => {
 
   const [user, setUserState] = useState(() => {
     const saved = localStorage.getItem('zapbite_user');
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+    if (saved && saved !== 'null' && saved !== 'undefined') {
+      try { 
+        const parsed = JSON.parse(saved); 
+        if (parsed && typeof parsed === 'object') return parsed;
+      } catch (e) {}
     }
     return null;
   });
@@ -45,11 +48,24 @@ export const AppProvider = ({ children }) => {
   });
 
   const [isLandingPageOpen, setIsLandingPageOpen] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState({
-    area: 'MVP Colony',
-    city: 'Vizag',
-    isGPS: false
+  const [selectedLocation, setSelectedLocationState] = useState(() => {
+    const saved = localStorage.getItem('zapbite_location');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return {
+      area: 'Madhapur',
+      city: 'Hyderabad',
+      isGPS: false
+    };
   });
+
+  const setSelectedLocation = (loc) => {
+    setSelectedLocationState(loc);
+    if (loc) {
+      localStorage.setItem('zapbite_location', JSON.stringify(loc));
+    }
+  };
 
   const [savedAddress, setSavedAddressState] = useState(() => {
     const saved = localStorage.getItem('zapbite_saved_address');
@@ -57,10 +73,10 @@ export const AppProvider = ({ children }) => {
       try { return JSON.parse(saved); } catch (e) {}
     }
     return {
-      houseNo: 'Flat 402, Sea Breeze Apartments',
-      street: 'Beach Road, MVP Colony',
-      landmark: 'Near Siripuram Circle',
-      city: 'Vizag'
+      houseNo: 'Flat 402, High-Tech Tower',
+      street: 'Hitec City Main Road',
+      landmark: 'Near Cyber Towers',
+      city: 'Hyderabad'
     };
   });
 
@@ -77,34 +93,93 @@ export const AppProvider = ({ children }) => {
         return;
       }
 
-      showNotification('Fetching live GPS coordinates from your device...', 'info');
+      showNotification('🛰️ Pinpointing live GPS coordinates...', 'info');
 
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          
-          // Estimate location based on lat/lng or lock to device area
+          let detectedArea = 'MVP Colony';
+          let detectedCity = 'Vizag';
+          let detectedStreet = '';
+
+          try {
+            // 1. Try OpenStreetMap Nominatim with detailed address breakdown
+            const nomRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`);
+            if (nomRes.ok) {
+              const nomData = await nomRes.json();
+              const addr = nomData.address || {};
+              
+              detectedStreet = addr.road || addr.pedestrian || addr.street || '';
+              const locality = addr.suburb || addr.neighbourhood || addr.residential || addr.subdistrict || addr.quarter || '';
+              const city = addr.city || addr.town || addr.municipality || addr.state_district || 'Vizag';
+
+              if (locality && locality.toLowerCase() !== city.toLowerCase()) {
+                detectedArea = detectedStreet ? `${detectedStreet}, ${locality}` : locality;
+              } else if (detectedStreet) {
+                detectedArea = detectedStreet;
+              } else {
+                detectedArea = addr.county || 'Main Area';
+              }
+
+              detectedCity = city.replace(/district/gi, '').trim() || 'Vizag';
+            }
+          } catch (e) {
+            try {
+              // 2. Fallback to BigDataCloud
+              const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+              if (res.ok) {
+                const data = await res.json();
+                detectedArea = data.locality || (data.localityInfo?.administrative?.[3]?.name) || 'MVP Colony';
+                detectedCity = data.city || data.principalSubdivision || 'Vizag';
+              }
+            } catch (err) {}
+          }
+
+          // If area is same as city (e.g. Visakhapatnam | Visakhapatnam), make area more specific
+          if (detectedArea.toLowerCase() === detectedCity.toLowerCase()) {
+            detectedArea = 'Beach Road & Central';
+          }
+
           const gpsLoc = {
-            area: 'Live GPS Location',
-            city: 'Vizag',
+            area: detectedArea,
+            city: detectedCity,
             lat,
             lng,
             isGPS: true
           };
 
           setSelectedLocation(gpsLoc);
-          showNotification(`🎯 GPS Locked! Location set to ${gpsLoc.area} (${lat.toFixed(3)}, ${lng.toFixed(3)})`, 'success');
+          showNotification(`🎯 GPS Locked! Location: ${detectedArea}, ${detectedCity}`, 'success');
           resolve(gpsLoc);
         },
-        (error) => {
+        async (error) => {
           console.log('GPS error:', error);
-          showNotification('Could not retrieve GPS location. Defaulting to MVP Colony, Vizag.', 'info');
-          const fallback = { area: 'MVP Colony', city: 'Vizag', isGPS: false };
+          // Try IP-based location estimation
+          try {
+            const ipRes = await fetch('https://ipapi.co/json/');
+            if (ipRes.ok) {
+              const ipData = await ipRes.json();
+              const ipLoc = {
+                area: ipData.city || 'Central Area',
+                city: ipData.region || ipData.city || 'Hyderabad',
+                lat: ipData.latitude,
+                lng: ipData.longitude,
+                isGPS: false
+              };
+              setSelectedLocation(ipLoc);
+              showNotification(`📍 Estimated Location: ${ipLoc.area}, ${ipLoc.city}`, 'info');
+              resolve(ipLoc);
+              return;
+            }
+          } catch (err) {}
+
+          const fallback = { area: 'Madhapur', city: 'Hyderabad', isGPS: false };
           setSelectedLocation(fallback);
+          showNotification('Could not access GPS. Please choose location manually.', 'info');
           resolve(fallback);
         },
-        { timeout: 8000, enableHighAccuracy: true }
+        { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
       );
     });
   };
@@ -118,6 +193,7 @@ export const AppProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isBiteBotOpen, setIsBiteBotOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [notification, setNotification] = useState(null);
   const [isBackendConnected, setIsBackendConnected] = useState(false);
 
@@ -412,6 +488,21 @@ export const AppProvider = ({ children }) => {
     );
   };
 
+  const rateOrder = (orderId, ratingObj) => {
+    setOrders((prev) =>
+      prev.map((o) => {
+        if (o.id === orderId) {
+          return {
+            ...o,
+            foodRating: ratingObj.foodRating !== undefined ? ratingObj.foodRating : o.foodRating,
+            deliveryRating: ratingObj.deliveryRating !== undefined ? ratingObj.deliveryRating : o.deliveryRating,
+          };
+        }
+        return o;
+      })
+    );
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -442,6 +533,9 @@ export const AppProvider = ({ children }) => {
         setIsBiteBotOpen,
         isLoginModalOpen,
         setIsLoginModalOpen,
+        isProfileModalOpen,
+        setIsProfileModalOpen,
+        rateOrder,
         notification,
         showNotification,
         toggleMenuItemStock,

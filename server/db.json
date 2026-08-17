@@ -314,8 +314,8 @@
       "vehicle": "Honda Activa 6G (AP 31 BH 4092)",
       "rating": 4.9,
       "deliveriesCount": 485,
-      "status": "Available",
-      "activeOrderId": null,
+      "status": "On Delivery",
+      "activeOrderId": "ORD-7709",
       "location": {
         "lat": 17.7289,
         "lng": 83.3031,
@@ -373,6 +373,42 @@
     }
   ],
   "orders": [
+    {
+      "id": "ORD-7709",
+      "customerName": "Nived Reddy Tamma",
+      "customerPhone": "+91 77026 18534",
+      "deliveryAddress": "Flat 402, Sea Breeze Apartments, Beach Road, MVP Colony (Landmark: Near Siripuram Circle), Visakhapatnam, Visakhapatnam",
+      "restaurantId": "rest-2",
+      "restaurantName": "Burger Craft & Co.",
+      "items": [
+        {
+          "id": "item-203",
+          "restaurantId": "rest-2",
+          "name": "Loaded Peri-Peri Crinkle Fries",
+          "price": 140,
+          "quantity": 1,
+          "isVeg": true
+        }
+      ],
+      "totalAmount": 182,
+      "subtotal": 140,
+      "deliveryFee": 35,
+      "taxes": 7,
+      "discount": 0,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Placed",
+      "createdAt": "2026-08-17T18:15:47.317Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "11:45 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹0)"
+        }
+      ]
+    },
     {
       "id": "ORD-7077",
       "customerName": "Rahul Malhotra",
@@ -553,6 +589,16 @@
     }
   ],
   "users": [
+    {
+      "id": "user-1786985726260",
+      "name": "Nived Tamma",
+      "email": "nivedreddy442@gmail.com",
+      "phone": "+91 77026 18534",
+      "role": "customer",
+      "password": "123456",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80",
+      "createdAt": "2026-08-17T16:55:26.260Z"
+    },
     {
       "id": "cust-101",
       "name": "Rahul Malhotra",

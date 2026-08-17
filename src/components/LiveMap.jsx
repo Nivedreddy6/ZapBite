@@ -29,19 +29,21 @@ const FULL_ROUTE_POINTS = [
 
 const TILE_SERVERS = {
   swiggy: {
-    name: 'Swiggy Clean',
-    url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap'
+    name: 'Google Maps',
+    url: 'https://{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}',
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    attribution: '&copy; Google Maps'
+  },
+  satellite: {
+    name: 'Google Satellite',
+    url: 'https://{s}.google.com/vt/lyrs=s,h&hl=en&x={x}&y={y}&z={z}',
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    attribution: '&copy; Google Maps'
   },
   dark: {
     name: 'Cyber Dark',
     url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap'
-  },
-  streets: {
-    name: 'OSM Standard',
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
   }
 };
 

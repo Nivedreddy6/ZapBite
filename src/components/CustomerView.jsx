@@ -296,9 +296,13 @@ export const CustomerView = () => {
                 >
                   <div className="relative h-40 overflow-hidden">
                     <img
-                      src={rest.image}
+                      src={rest.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80'}
                       alt={rest.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80';
+                      }}
                     />
                     <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-xl text-[10px] font-extrabold text-slate-900 shadow-xs border border-slate-200">
                       {rest.tag}
@@ -374,9 +378,13 @@ export const CustomerView = () => {
                     {/* Item Image */}
                     <div className="relative h-44 overflow-hidden bg-slate-100">
                       <img
-                        src={item.image}
+                        src={item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80'}
                         alt={item.name}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80';
+                        }}
                       />
                       <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-lg text-[10px] font-extrabold text-slate-900 border border-slate-200">
                         {item.tag}
