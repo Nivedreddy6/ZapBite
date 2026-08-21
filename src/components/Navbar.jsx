@@ -38,20 +38,6 @@ export const Navbar = () => {
   return (
     <>
       <header className="sticky top-0 z-40 bg-[#070b14]/90 backdrop-blur-xl text-slate-100 border-b border-emerald-500/20 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all font-sans">
-        
-        {/* Top Telemetry Beacon Banner */}
-        <div className="bg-gradient-to-r from-emerald-950 via-[#0d1f2d] to-indigo-950 text-[11px] font-black px-4 py-1 text-center text-emerald-300 flex items-center justify-center gap-3 border-b border-emerald-500/20">
-          <span className="flex items-center gap-1 text-emerald-400">
-            <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-400" />
-            <span className="font-mono">ZAPBITE AI OS ACTIVE</span>
-          </span>
-          <span className="hidden sm:inline text-slate-400">|</span>
-          <span className="hidden sm:inline text-slate-300 font-medium">⚡ Hyper-Speed Autonomous Culinary Logistics & AI Vault</span>
-          <span className="bg-emerald-500/20 border border-emerald-400/40 px-2 py-0.2 rounded-full text-[10px] uppercase font-mono tracking-wider text-emerald-200">
-            {user ? `NODE: ${user.role.toUpperCase()}` : 'GLOBAL NETWORK ONLINE'}
-          </span>
-        </div>
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
