@@ -374,6 +374,42 @@
   ],
   "orders": [
     {
+      "id": "ORD-6552",
+      "customerName": "Nived Reddy Tamma",
+      "customerPhone": "+91 77026 18534",
+      "deliveryAddress": "Bindra Nagar, Bindra Nagar, Pontinamallayyapalem (Landmark: Near Bindra Nagar), Bindra Nagar, Andhra Pradesh",
+      "restaurantId": "rest-1",
+      "restaurantName": "Spicy Junction",
+      "items": [
+        {
+          "id": "item-102",
+          "restaurantId": "rest-1",
+          "name": "Paneer Butter Masala Biryani",
+          "price": 240,
+          "quantity": 1,
+          "isVeg": true
+        }
+      ],
+      "totalAmount": 187,
+      "subtotal": 240,
+      "deliveryFee": 35,
+      "taxes": 12,
+      "discount": 100,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Placed",
+      "createdAt": "2026-08-21T08:12:00.412Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": null,
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "01:42 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        }
+      ]
+    },
+    {
       "id": "ORD-6987",
       "customerName": "Rahul Malhotra",
       "customerPhone": "+91 98765 00112",

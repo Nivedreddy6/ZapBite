@@ -44,23 +44,26 @@ export const OrderTracker = () => {
   const currentStageIdx = activeOrder ? getStageIndex(activeOrder.status) : 0;
   const isOrderAccepted = activeOrder && activeOrder.status !== 'Placed';
 
-  // Live ETA calculation based on stage
+  // Live dynamic ETA timer that updates every minute based on 30-35 mins delivery estimate
   useEffect(() => {
     if (!activeOrder) return;
     if (activeOrder.status === 'Delivered') {
       setEtaRemainingMins(0);
-    } else if (activeOrder.status === 'Out for Delivery') {
-      setEtaRemainingMins(8);
-    } else if (activeOrder.status === 'Ready') {
-      setEtaRemainingMins(14);
-    } else if (activeOrder.status === 'Preparing') {
-      setEtaRemainingMins(18);
-    } else if (activeOrder.status === 'Accepted') {
-      setEtaRemainingMins(22);
-    } else {
-      setEtaRemainingMins(25);
+      return;
     }
-  }, [activeOrder?.status]);
+
+    const updateEta = () => {
+      const createdTime = new Date(activeOrder.createdAt).getTime();
+      const elapsedMins = Math.floor((Date.now() - createdTime) / 60000);
+      const totalMins = activeOrder.estimatedDeliveryMins || 32;
+      const remaining = Math.max(1, totalMins - elapsedMins);
+      setEtaRemainingMins(remaining);
+    };
+
+    updateEta();
+    const interval = setInterval(updateEta, 60000); // Live update every 1 minute
+    return () => clearInterval(interval);
+  }, [activeOrder?.createdAt, activeOrder?.status, activeOrder?.estimatedDeliveryMins]);
 
   if (!activeOrder) {
     return (
@@ -72,8 +75,13 @@ export const OrderTracker = () => {
     );
   }
 
-  // Progress percentage (0 to 100)
-  const progressPercent = Math.round(((currentStageIdx) / (stages.length - 1)) * 100);
+  // Smooth live delivery progress calculation
+  const totalMins = activeOrder.estimatedDeliveryMins || 32;
+  const createdTime = new Date(activeOrder.createdAt).getTime();
+  const elapsedMins = Math.max(0, (Date.now() - createdTime) / 60000);
+  const progressPercent = activeOrder.status === 'Delivered'
+    ? 100
+    : Math.min(95, Math.max(10, Math.round((elapsedMins / totalMins) * 100)));
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100 font-sans space-y-6">

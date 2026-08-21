@@ -280,47 +280,66 @@ export const AppProvider = ({ children }) => {
     fetchBackendData();
   }, []);
 
-  // Automatic Real-Time Order Progression (simulating real-time live restaurant & rider dispatch)
+  // Realistic 30-35 Minute Real-Time Order Lifecycle
   useEffect(() => {
-    const statusFlow = ['Placed', 'Accepted', 'Preparing', 'Ready', 'Out for Delivery', 'Delivered'];
-    const statusMessages = {
-      Accepted: '👨‍🍳 Restaurant confirmed your order! Kitchen is preparing.',
-      Preparing: '🍳 Chef started cooking your fresh meal.',
-      Ready: '📦 Food is packed & sealed! Waiting for delivery partner pickup.',
-      'Out for Delivery': '🛵 Delivery partner picked up your order and is on the way!',
-      Delivered: '🎉 Order delivered! Enjoy your meal.'
-    };
+    const checkOrderProgress = () => {
+      const statusMessages = {
+        Accepted: '👨‍🍳 Restaurant confirmed your order! Kitchen is preparing.',
+        Preparing: '🍳 Chef started cooking your fresh meal.',
+        Ready: '📦 Food is packed & sealed! Delivery partner is picking it up.',
+        'Out for Delivery': '🛵 Delivery partner picked up your food and is on the way!',
+        Delivered: '🎉 Order delivered to your doorstep! Enjoy your meal.'
+      };
 
-    const interval = setInterval(() => {
       setOrders((prevOrders) => {
         let hasChanges = false;
         const updated = prevOrders.map((ord) => {
-          if (ord.status !== 'Delivered') {
-            const currentIdx = statusFlow.indexOf(ord.status);
-            if (currentIdx !== -1 && currentIdx < statusFlow.length - 1) {
-              const nextStatus = statusFlow[currentIdx + 1];
-              hasChanges = true;
-              showNotification(statusMessages[nextStatus] || `Order ${ord.id}: ${nextStatus}`, 'success');
-              return {
-                ...ord,
-                status: nextStatus,
-                history: [
-                  ...(ord.history || []),
-                  {
-                    status: nextStatus,
-                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    note: statusMessages[nextStatus] || nextStatus
-                  }
-                ]
-              };
-            }
+          if (ord.status === 'Delivered') return ord;
+
+          const createdTime = new Date(ord.createdAt).getTime();
+          const elapsedMins = Math.max(0, (Date.now() - createdTime) / 60000);
+          const totalMins = ord.estimatedDeliveryMins || 32;
+
+          let targetStatus = ord.status;
+
+          if (elapsedMins >= totalMins) {
+            targetStatus = 'Delivered';
+          } else if (elapsedMins >= totalMins * 0.45) { // ~14-16 mins
+            targetStatus = 'Out for Delivery';
+          } else if (elapsedMins >= totalMins * 0.35) { // ~11-12 mins
+            targetStatus = 'Ready';
+          } else if (elapsedMins >= totalMins * 0.1) {  // ~3-4 mins
+            targetStatus = 'Preparing';
+          } else if (elapsedMins >= 1) {               // ~1-2 mins
+            targetStatus = 'Accepted';
           }
+
+          if (targetStatus !== ord.status) {
+            hasChanges = true;
+            showNotification(statusMessages[targetStatus] || `Order ${ord.id}: ${targetStatus}`, 'success');
+            return {
+              ...ord,
+              status: targetStatus,
+              history: [
+                ...(ord.history || []),
+                {
+                  status: targetStatus,
+                  timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                  note: statusMessages[targetStatus] || targetStatus
+                }
+              ]
+            };
+          }
+
           return ord;
         });
+
         return hasChanges ? updated : prevOrders;
       });
-    }, 12000);
+    };
 
+    // Check progress every 60 seconds (1 minute update)
+    const interval = setInterval(checkOrderProgress, 60000);
     return () => clearInterval(interval);
   }, []);
 
