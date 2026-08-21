@@ -1,5 +1,8 @@
 # ⚡ ZapBite — Next-Gen AI Food Delivery & Smart Restaurant Logistics Platform
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-zap--bite.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://zap-bite.vercel.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Nivedreddy6%2FZapBite-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Nivedreddy6/ZapBite)
+
 [![React](https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
@@ -7,10 +10,10 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Google Maps](https://img.shields.io/badge/Google_Maps-API-4285F4?logo=googlemaps&logoColor=white)](https://maps.google.com/)
 [![Chart.js](https://img.shields.io/badge/Chart.js-Analytics-FF6384?logo=chartdotjs&logoColor=white)](https://www.chartjs.org/)
-[![GitHub](https://img.shields.io/badge/GitHub-Nivedreddy6%2FZapBite-181717?logo=github&logoColor=white)](https://github.com/Nivedreddy6/ZapBite)
 
 **ZapBite** is a full-stack, AI-powered food delivery and restaurant logistics ecosystem. Built with a cyber-luxe dark glassmorphic design system, real-time Google Maps GPS telemetry, automated realistic 30–35 minute delivery lifecycles, live multi-role portals, SMS OTP verification, and an intelligent food concierge (**BiteBot AI**).
 
+🚀 **Live Deployment**: [https://zap-bite.vercel.app](https://zap-bite.vercel.app)  
 📂 **GitHub Repository**: [https://github.com/Nivedreddy6/ZapBite](https://github.com/Nivedreddy6/ZapBite)  
 🌐 **Local Dev Server**: `http://localhost:5173`
 
