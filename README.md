@@ -1,55 +1,57 @@
-# ⚡ ZapBite.ai — Smart Food Ordering & Delivery Logistics OS
+# ⚡ ZapBite — Next-Gen AI Food Delivery & Smart Restaurant Logistics Platform
 
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![Express](https://img.shields.io/badge/Express-5-000000?logo=express)](https://expressjs.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs)](https://nodejs.org/)
-[![Deployment](https://img.shields.io/badge/Vercel-Live_Demo-black?logo=vercel)](https://zap-bite.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-Nivedreddy6%2FZapBite-181717?logo=github)](https://github.com/Nivedreddy6/ZapBite)
 
-**ZapBite.ai** is an ultra-modern, full-stack AI-powered food ordering and restaurant logistics ecosystem. Built with real-time GPS telemetry mapping, Google Maps layers, multi-role portal interfaces, live OTP SMS verification, automated AI payment savings, and an embedded conversational concierge (**BiteBot**).
+**ZapBite** is a full-stack, AI-powered food delivery and restaurant logistics ecosystem. Built with a cyber-luxe dark glassmorphic design system, real-time Google Maps GPS telemetry, automated realistic 30–35 minute delivery lifecycles, live multi-role portals, SMS OTP verification, and an intelligent food concierge (**BiteBot AI**).
 
-🌐 **Live Demo**: [https://zap-bite.vercel.app/](https://zap-bite.vercel.app/)  
-📂 **GitHub Repository**: [https://github.com/Nivedreddy6/ZapBite](https://github.com/Nivedreddy6/ZapBite)
+📂 **GitHub Repository**: [https://github.com/Nivedreddy6/ZapBite](https://github.com/Nivedreddy6/ZapBite)  
+🌐 **Local Dev Server**: `http://localhost:5173`
 
 ---
 
-## 🚀 Key Features & System Modules
+## 🌟 Key Features & Ecosystem Modules
 
-### 🗺️ 1. Google Maps & Precision Live Geocoding
-* **Google Maps Road & Satellite Tile Engine**: High-fidelity Google Maps visual layers for both address selection and live delivery driver route tracking.
-* **Google Places Suggest & Multi-API Search**: Real-time autocomplete and street resolution powered by Google Suggest, Komoot Photon, and OpenStreetMap Nominatim.
-* **Interactive Tap-to-Pin & GPS Geolocation**: Snap delivery pins anywhere on Earth with browser GPS or direct map clicking with live reverse-geocoding.
-* **Custom Location Locking**: Directly apply and remember custom apartment, shop, or colony names.
+### 🗺️ 1. Google Maps & Precision GPS Telemetry
+* **Google Maps High-Fidelity Tile Engine**: Seamlessly switch between Google Maps **Street Vector**, **Satellite HUD**, and **Cyber Dark** map layers.
+* **Synchronized Real-Time Rider Telemetry**: Rider position along street coordinates is directly synchronized with the order's actual delivery timeline (30–35 mins) and live speedometer (30–38 km/h).
+* **Two-Phase GPS Journey**:
+  * *Phase 1 (Accepted / Cooking)*: Rider moves to the restaurant to collect the hot meal.
+  * *Phase 2 (Food Packed / Out for Delivery)*: Rider glides along the street route towards the customer's doorstep with dynamic polyline trailing.
+* **Interactive Address Pinning**: Snap delivery pins anywhere on Earth with browser GPS calibration or direct map clicking with live reverse-geocoding.
 
-### 🤖 2. AI-Powered Smart Suite
-* **BiteBot AI Floating Chatbot**: Interactive conversational assistant providing dish recommendations, instant promo codes, dietary filters, and live order support.
-* **ZapPay AI Payment Shield & Savings Engine**: Automatically calculates optimal coupon savings, provides mock bank gateway authorization, and verifies phone OTP.
+### 🍕 2. Authentic Real-Time Food Delivery Lifecycle
+* **Minute-by-Minute Live Countdown**: Real-time arrival ETA ticks down every 60 seconds (e.g. `32 Mins` ➔ `31 Mins` ➔ `30 Mins` ... ➔ `Delivered 🎉`).
+* **Clean 6-Stage Milestone Progress**:
+  1. 🛍️ **Order Placed** — Sent to restaurant
+  2. ✅ **Order Confirmed** — Restaurant confirmed order
+  3. 👨‍🍳 **Preparing Food** — Chef cooking fresh meal
+  4. 📦 **Food Packed** — Ready for rider pickup
+  5. 🛵 **On the Way** — Rider heading to your doorstep
+  6. 🎉 **Delivered** — Handed over with rating feedback and instant "Order More Food" reset
+* **Zero Artificial Simulation**: The customer status screen is 100% read-only and automatically advances in real time or via Restaurant / Rider portal actions.
 
-### 📱 3. Real SMS Gateway Integration
-* **2Factor.in & Fast2SMS Gateway Integration**: Real-time SMS delivery for customer authentication and payment verification across India.
-* **Automated Fallback & In-App OTP Simulator**: Seamless fallback mechanism ensuring checkout never blocks even during network carrier delays.
+### 🎨 3. Cyber-Luxe Aesthetics & SVG Micro-Animations
+* **Bespoke Vector SVG Suite**:
+  * *Diner Hologram*: Interactive mobile cloche with glowing neon food badges.
+  * *Kitchen Plasma Reactor*: Sizzling chef wok with rising steam paths and heat glow.
+  * *Rider Telemetry*: Scooter following live dashed GPS vectors with pulsating radar beacons.
+  * *Analytics Matrix*: 3D oscillating bar chart columns with real-time revenue curves.
+* **Polished Dark Glassmorphism**: Obsidian backgrounds (`#070b14`), emerald/cyan laser accents, and buttery 60fps micro-interactions.
 
-### ✨ 4. Animated Vector Ecosystem Suite
-* **Diner Experience**: Interactive mobile device mockup with floating food items, sound waves, and AI order triggers.
-* **Kitchen Operating System**: Sizzling chef pan with animated rising steam paths, heat glow, and digital cooking timers.
-* **Rider Fleet Dispatch**: Animated delivery scooter following dashed GPS vectors with pulsating destination radar beacons.
-* **Platform Intelligence**: Dynamic oscillating bar chart columns with trend curves and real-time revenue badges.
+### 🤖 4. AI-Powered Smart Suite
+* **BiteBot AI Concierge**: Embedded conversational assistant offering dish recommendations, spicy/veg dietary filters, and live order assistance.
+* **ZapPay AI Payment Shield & Savings Engine**: Automatic coupon optimization, simulated 256-bit quantum encryption, UPI (PhonePe / GPay / Paytm), Card, and 3D Secure OTP verification.
 
-### 👥 5. Multi-Role Ecosystem
-* 🛒 **Customer Experience**:
-  * Rich menu browsing with category filters, dietary tags (Veg/Non-Veg), spice levels, dynamic search, and live cart drawer.
-  * Live stage-by-stage HUD order tracking with live telemetry progress and Google Maps visualization.
-  * User profile modal with saved addresses, phone number manager, and past order history.
-* 🍕 **Restaurant Kitchen Display (KDS)**:
-  * Real-time kitchen order queue with one-click status transitions (Accept → Preparing → Ready).
-  * Instant dish stock inventory toggle and custom dish creator.
-* 🛵 **Delivery Fleet Portal**:
-  * Live rider dispatch view with active order assignments and navigation telemetry.
-  * Status toggles for rider availability and OTP customer handoff.
-* 📊 **Admin Command Center**:
-  * Real-time platform metrics (Total Revenue, Active Fleet, Order Counts, Avg Delivery Time).
-  * Graphical analytics powered by Chart.js (Order Breakdown, Fleet Status).
+### 👥 5. Multi-Role Ecosystem Portals
+* 🛒 **Customer Hub**: Filter by categories (Biryani, Pizzas, Desserts, South Indian, Fast Food), live search, cart vault, and order tracking.
+* 🍳 **Restaurant Kitchen Display (KDS)**: Real-time kitchen queue, live status toggles, and dish stock management.
+* 🛵 **Delivery Fleet Portal**: Rider availability toggles, active pickup assignments, and navigation metrics.
+* 📊 **Admin Analytics Matrix**: Live revenue curves, fleet utilization charts, and performance KPIs powered by Chart.js.
 
 ---
 
@@ -57,59 +59,56 @@
 
 | Layer | Technologies Used |
 | :--- | :--- |
-| **Frontend Framework** | React 19, Vite 8 |
+| **Frontend** | React 19, Vite 8, React Context API |
 | **Styling & Animations** | Tailwind CSS v4, Custom SVG Animations, Lucide React, Canvas Confetti |
-| **Maps & Geolocation** | Leaflet, Google Maps Tiles, Google Places Suggest, Komoot Photon, OSM Nominatim |
-| **Data Visualization** | Chart.js, React-ChartJS-2 |
-| **Backend API** | Node.js, Express 5, LowDB |
-| **SMS Gateway** | 2Factor.in, Fast2SMS REST APIs |
-| **State Management** | React Context API (`AppContext.jsx`) with LocalStorage Persistence |
+| **Maps & Geolocation** | Leaflet, Google Maps Tiles, Komoot Photon, OpenStreetMap Nominatim |
+| **Charts & Analytics** | Chart.js, React-ChartJS-2 |
+| **Backend Server** | Node.js, Express 5, LowDB |
+| **State & Persistence** | React Context (`AppContext.jsx`) with LocalStorage & SessionStorage |
 
 ---
 
-## 📂 Project Architecture
+## 📂 Project Structure
 
 ```
-zapbite-ai-platform/
+ZapBite/
 ├── server/
 │   ├── .env.example          # Sample environment variables
-│   ├── db.json               # Persistent LowDB database store
+│   ├── db.json               # LowDB persistent JSON store
 │   └── index.js              # Express REST API Server (Port 5000)
 ├── src/
-│   ├── components/           # Multi-role UI components & views
-│   │   ├── AdminView.jsx     # Admin Analytics & Fleet Management
-│   │   ├── AnimatedFoodBanner.jsx # Hero carousel with dynamic food badges
+│   ├── components/           # UI Components & Role Portals
+│   │   ├── AdminView.jsx     # Admin Analytics & Fleet Overview
+│   │   ├── AnimatedFoodBanner.jsx # Dynamic Food Hero Carousel
 │   │   ├── BiteBotChatbot.jsx# AI Assistant Floating Widget
-│   │   ├── CartDrawer.jsx    # Slide-out interactive cart drawer
-│   │   ├── CustomerView.jsx  # Customer Menu, Search & Dish Cards
+│   │   ├── CartDrawer.jsx    # Slide-out Cart Vault Drawer
+│   │   ├── CustomerView.jsx  # Customer Menu & Restaurant Hub
 │   │   ├── DeliveryView.jsx  # Rider Fleet Portal
 │   │   ├── EcosystemSvgAnimations.jsx # Custom SVG micro-animations
-│   │   ├── LandingPage.jsx   # Role launcher & architecture showcase
-│   │   ├── LiveMap.jsx       # Google Maps live delivery telemetry tracker
-│   │   ├── LocationPickerModal.jsx # Google Maps interactive pin picker
-│   │   ├── LoginPage.jsx     # Authentication & Quick Demo Login
-│   │   ├── Navbar.jsx        # Navigation, location badge & role selector
-│   │   ├── OrderTracker.jsx  # Live Visual Order Tracker
-│   │   ├── PaymentModal.jsx  # ZapPay gateway & OTP verification modal
-│   │   ├── RestaurantView.jsx# Kitchen Operating System
-│   │   └── UserProfileModal.jsx # Customer profile & saved addresses
+│   │   ├── LandingPage.jsx   # Role launcher & Ecosystem Showcase
+│   │   ├── LiveMap.jsx       # Google Maps Live Delivery Telemetry
+│   │   ├── LocationPickerModal.jsx # Google Maps Interactive Pin Picker
+│   │   ├── LoginPage.jsx     # Auth Modal with Quick Demo Logins
+│   │   ├── Navbar.jsx        # Top Navigation & Role Switcher
+│   │   ├── OrderTracker.jsx  # Real-Time Order Tracking HUD
+│   │   ├── PaymentModal.jsx  # ZapPay AI Gateway & OTP Verification
+│   │   ├── RestaurantView.jsx# Kitchen Display System (KDS)
+│   │   └── UserProfileModal.jsx # Profile & Address Manager
 │   ├── context/
-│   │   └── AppContext.jsx    # Global State & LocalStorage Controller
+│   │   └── AppContext.jsx    # Global State & Real-Time Lifecycle Controller
 │   ├── data/
-│   │   └── mockData.js       # Preloaded Restaurants, Items, Orders
-│   ├── utils/
-│   │   └── aiPayments.js     # ZapPay AI Engine Algorithms
-│   ├── App.jsx               # Main Application Root
+│   │   └── mockData.js       # Preloaded Restaurants, Dishes & Riders
+│   ├── App.jsx               # Main Application Component
 │   ├── index.css             # Tailwind v4 Base Styles & Keyframes
 │   └── main.jsx              # React Entry Point
-├── package.json              # Project Dependencies & NPM Scripts
-├── vite.config.js            # Vite Bundler Setup
-└── README.md                 # Complete Documentation
+├── package.json              # NPM Dependencies & Scripts
+├── vite.config.js            # Vite Bundler Setup (with db watcher ignore)
+└── README.md                 # Project Documentation
 ```
 
 ---
 
-## 🚦 Getting Started
+## 🚦 Getting Started Locally
 
 ### Prerequisites
 Make sure you have [Node.js](https://nodejs.org/) (v18 or higher) and `npm` installed.
@@ -129,9 +128,9 @@ Make sure you have [Node.js](https://nodejs.org/) (v18 or higher) and `npm` inst
 
 ---
 
-## ⚡ Running the Platform Locally
+## ⚡ Running the Platform
 
-To experience the full features with backend API integration, run both the backend server and frontend client.
+To experience full functionality with persistent backend API synchronization, run both servers:
 
 ### 1. Launch Backend Server (Port 5000)
 ```bash
@@ -157,16 +156,16 @@ npm run dev
 
 ---
 
-## 🔑 Demo Access Credentials
+## 🔑 Quick Demo Login Credentials
 
 You can test any role instantly using the built-in quick login modal:
 
 | Role | Email / ID | Demo Focus |
 | :--- | :--- | :--- |
-| **Customer** | `rahul@zapbite.ai` | Ordering, Google Maps Location, AI Cart |
-| **Restaurant Kitchen** | `kitchen@spicyjunction.com` | Live Kitchen Orders & Stock Control |
-| **Delivery Driver** | `rahul.rider@zapbite.ai` | Fleet Dispatch & Route Completion |
-| **Admin** | `admin@zapbite.ai` | System Analytics & Fleet Overview |
+| **Customer** | `rahul@zapbite.ai` | Ordering, Live Google Maps GPS Tracking, AI Cart |
+| **Restaurant Kitchen** | `kitchen@spicyjunction.com` | Live Kitchen Display (KDS) & Menu Stock |
+| **Delivery Driver** | `rahul.rider@zapbite.ai` | Fleet Dispatch & Route Navigation |
+| **Admin** | `admin@zapbite.ai` | Platform Revenue, Chart.js Visuals & Fleet Metrics |
 
 ---
 
