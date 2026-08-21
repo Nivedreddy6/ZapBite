@@ -313,9 +313,9 @@
       "phone": "+91 98765 43210",
       "vehicle": "Honda Activa 6G (AP 31 BH 4092)",
       "rating": 4.9,
-      "deliveriesCount": 485,
+      "deliveriesCount": 486,
       "status": "On Delivery",
-      "activeOrderId": "ORD-7709",
+      "activeOrderId": "ORD-9036",
       "location": {
         "lat": 17.7289,
         "lng": 83.3031,
@@ -346,8 +346,8 @@
       "vehicle": "Ather 450X EV (AP 31 EV 2041)",
       "rating": 4.95,
       "deliveriesCount": 560,
-      "status": "Available",
-      "activeOrderId": null,
+      "status": "On Delivery",
+      "activeOrderId": "ORD-6020",
       "location": {
         "lat": 17.731,
         "lng": 83.298,
@@ -374,6 +374,103 @@
   ],
   "orders": [
     {
+      "id": "ORD-9036",
+      "customerName": "Nived Reddy Tamma",
+      "customerPhone": "+91 77026 18534",
+      "deliveryAddress": "Bindra Nagar, Bindra Nagar, Pontinamallayyapalem (Landmark: Near Bindra Nagar), Bindra Nagar, Andhra Pradesh",
+      "restaurantId": "rest-4",
+      "restaurantName": "Pizza Express & Slice",
+      "items": [
+        {
+          "id": "item-401",
+          "restaurantId": "rest-4",
+          "name": "Supreme Pepperoni & Sausage Pizza (12\")",
+          "price": 490,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 450,
+      "subtotal": 490,
+      "deliveryFee": 35,
+      "taxes": 25,
+      "discount": 100,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Preparing",
+      "createdAt": "2026-08-21T07:53:17.756Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "01:23 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "01:23 PM",
+          "note": "Kitchen accepted order"
+        }
+      ]
+    },
+    {
+      "id": "ORD-6020",
+      "customerName": "Rahul Malhotra",
+      "customerPhone": "+91 98765 00112",
+      "deliveryAddress": "Bindra Nagar, Bindra Nagar, Pontinamallayyapalem (Landmark: Near Bindra Nagar), Bindra Nagar, Andhra Pradesh",
+      "restaurantId": "rest-1",
+      "restaurantName": "Spicy Junction",
+      "items": [
+        {
+          "id": "item-103",
+          "restaurantId": "rest-1",
+          "name": "Tandoori Chicken Tikka (8 Pcs)",
+          "price": 320,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 271,
+      "subtotal": 320,
+      "deliveryFee": 35,
+      "taxes": 16,
+      "discount": 100,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Delivered",
+      "createdAt": "2026-08-21T06:25:51.416Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "11:55 AM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "11:56 AM",
+          "note": "Kitchen accepted order"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "11:56 AM",
+          "note": "Packed & ready for pickup"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "11:56 AM",
+          "note": "Rider picked up order from kitchen"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "11:57 AM",
+          "note": "Order successfully handed over to customer"
+        }
+      ]
+    },
+    {
       "id": "ORD-8907",
       "customerName": "Rahul Malhotra",
       "customerPhone": "+91 98765 00112",
@@ -397,15 +494,30 @@
       "discount": 100,
       "paymentMode": "UPI (PhonePe)",
       "paymentStatus": "Paid (ZapPay AI Verified)",
-      "status": "Placed",
+      "status": "Out for Delivery",
       "createdAt": "2026-08-21T05:57:40.754Z",
       "estimatedDeliveryMins": 25,
-      "deliveryPartnerId": "partner-2",
+      "deliveryPartnerId": "partner-1",
       "history": [
         {
           "status": "Placed",
           "timestamp": "11:27 AM",
           "note": "Order placed via ZapPay AI (Saved ₹100)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "11:56 AM",
+          "note": "Kitchen accepted order"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "11:56 AM",
+          "note": "Packed & ready for pickup"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "11:57 AM",
+          "note": "Rider picked up order from kitchen"
         }
       ]
     },
@@ -433,7 +545,7 @@
       "discount": 0,
       "paymentMode": "UPI (PhonePe)",
       "paymentStatus": "Paid (ZapPay AI Verified)",
-      "status": "Placed",
+      "status": "Out for Delivery",
       "createdAt": "2026-08-17T18:15:47.317Z",
       "estimatedDeliveryMins": 25,
       "deliveryPartnerId": "partner-1",
@@ -442,6 +554,21 @@
           "status": "Placed",
           "timestamp": "11:45 PM",
           "note": "Order placed via ZapPay AI (Saved ₹0)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "11:56 AM",
+          "note": "Kitchen accepted order"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "11:56 AM",
+          "note": "Packed & ready for pickup"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "11:57 AM",
+          "note": "Rider picked up order from kitchen"
         }
       ]
     },

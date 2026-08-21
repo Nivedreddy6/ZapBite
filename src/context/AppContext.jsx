@@ -47,7 +47,20 @@ export const AppProvider = ({ children }) => {
     return [];
   });
 
-  const [isLandingPageOpen, setIsLandingPageOpen] = useState(true);
+  const [isLandingPageOpen, setIsLandingPageOpenState] = useState(() => {
+    return sessionStorage.getItem('zapbite_landing_dismissed') !== 'true';
+  });
+
+  const setIsLandingPageOpen = (isOpen) => {
+    setIsLandingPageOpenState(isOpen);
+    if (!isOpen) {
+      sessionStorage.setItem('zapbite_landing_dismissed', 'true');
+    } else {
+      sessionStorage.removeItem('zapbite_landing_dismissed');
+    }
+  };
+
+  const [customerSubTab, setCustomerSubTab] = useState('menu');
   const [selectedLocation, setSelectedLocationState] = useState(() => {
     const saved = localStorage.getItem('zapbite_location');
     if (saved) {
@@ -374,6 +387,7 @@ export const AppProvider = ({ children }) => {
         setOrders((prev) => [createdOrder, ...prev]);
         clearCart();
         setActiveTrackingOrderId(createdOrder.id);
+        setCustomerSubTab('track');
         setIsCartOpen(false);
         showNotification(`🎉 Order ${createdOrder.id} placed! Waiting for kitchen to accept...`, 'success');
         return createdOrder.id;
@@ -409,6 +423,7 @@ export const AppProvider = ({ children }) => {
     setOrders((prev) => [newOrder, ...prev]);
     clearCart();
     setActiveTrackingOrderId(newOrderId);
+    setCustomerSubTab('track');
     setIsCartOpen(false);
     showNotification(`🎉 Order ${newOrderId} placed! Waiting for kitchen to accept...`, 'success');
     return newOrderId;
@@ -510,6 +525,8 @@ export const AppProvider = ({ children }) => {
         setCurrentRole,
         isLandingPageOpen,
         setIsLandingPageOpen,
+        customerSubTab,
+        setCustomerSubTab,
         user,
         setUser,
         logout,

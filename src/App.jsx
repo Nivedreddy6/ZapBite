@@ -24,10 +24,10 @@ const MainAppContent = () => {
     isProfileModalOpen,
     setIsProfileModalOpen,
     isLandingPageOpen,
-    setIsLandingPageOpen
+    setIsLandingPageOpen,
+    customerSubTab,
+    setCustomerSubTab
   } = useApp();
-  
-  const [customerSubTab, setCustomerSubTab] = useState('menu');
 
   if (isLandingPageOpen) {
     return (
