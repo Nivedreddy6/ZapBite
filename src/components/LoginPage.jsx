@@ -19,11 +19,12 @@ import {
   CheckCircle2,
   ArrowLeft,
   Smartphone,
-  MessageSquare,
   MapPin,
   Home,
   Building2,
-  X
+  X,
+  Radio,
+  Cpu
 } from 'lucide-react';
 
 export const LoginPage = ({ onLoginSuccess, onClose }) => {
@@ -46,10 +47,9 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
   const [userOtpInput, setUserOtpInput] = useState(['', '', '', '']);
   const [timerSeconds, setTimerSeconds] = useState(30);
   const [canResend, setCanResend] = useState(false);
-  const [smsPushNotification, setSmsPushNotification] = useState(null);
   const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  // Sign Up State (Empty by default for manual entry)
+  // Sign Up State
   const [signUpName, setSignUpName] = useState('');
   const [signUpEmail, setSignUpEmail] = useState('');
   const [signUpPhone, setSignUpPhone] = useState('');
@@ -59,7 +59,7 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
   const [signUpStreet, setSignUpStreet] = useState('');
   const [signUpArea, setSignUpArea] = useState('');
   const [signUpCity, setSignUpCity] = useState('');
-  const [signUpOtpStep, setSignUpOtpStep] = useState('details'); // 'details' | 'verify_otp'
+  const [signUpOtpStep, setSignUpOtpStep] = useState('details');
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -82,7 +82,7 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
     },
     delivery: {
       id: 'partner-1',
-      name: 'Rahul Sharma (Rider)',
+      name: 'Rahul Sharma (Drone Pilot)',
       email: 'rahul.rider@zapbite.ai',
       phone: '+91 98765 43210',
       role: 'delivery',
@@ -248,50 +248,19 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
       return;
     }
     if (!signUpEmail.trim()) {
-      showNotification('Please enter your email address', 'error');
+      showNotification('Please enter your email', 'error');
       return;
     }
 
     const cleanPhone = signUpPhone.replace(/\D/g, '');
-    if (!cleanPhone || cleanPhone.length !== 10) {
-      setPhoneError('Please enter a valid 10-digit mobile number');
-      showNotification('Mobile number must be exactly 10 digits', 'error');
+    if (cleanPhone.length !== 10) {
+      setPhoneError('Please enter a valid 10-digit Indian phone number.');
+      showNotification('Please enter a valid 10-digit mobile number.', 'error');
       return;
     }
 
     if (!signUpCity) {
-      showNotification('Please select your city for delivery', 'error');
-      return;
-    }
-
-    // Move to OTP verification for Sign Up
-    if (signUpOtpStep === 'details') {
-      const newOtp = Math.floor(1000 + Math.random() * 9000).toString();
-      setGeneratedOtp(newOtp);
-      setUserOtpInput(['', '', '', '']);
-      setSignUpOtpStep('verify_otp');
-
-      setSmsPushNotification({
-        phone: `+91 ${cleanPhone.slice(-10)}`,
-        otp: newOtp
-      });
-
-      try {
-        await fetch('http://localhost:5000/api/auth/send-sms-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: cleanPhone, otp: newOtp })
-        });
-      } catch (err) {}
-
-      showNotification(`💬 Registration SMS OTP sent to +91 ${cleanPhone}!`, 'success');
-      return;
-    }
-
-    // Verify Sign Up OTP
-    const enteredOtp = userOtpInput.join('');
-    if (enteredOtp !== generatedOtp && enteredOtp !== '1234') {
-      showNotification(`❌ Invalid OTP code. Please check your SMS and try again.`, 'error');
+      showNotification('Please select your city for delivery logistics', 'error');
       return;
     }
 
@@ -324,7 +293,7 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
       });
 
       setIsLoading(false);
-      showNotification(`🎉 Verified & Registered! Welcome to ZapBite.ai, ${registered.name}`, 'success');
+      showNotification(`🎉 Verified & Registered! Welcome to ZapBite, ${registered.name}`, 'success');
       if (onLoginSuccess) onLoginSuccess();
     } catch (err) {
       setIsLoading(false);
@@ -333,16 +302,16 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
   };
 
   return (
-    <div className="bg-[#0b0f19] rounded-3xl p-6 sm:p-7 border border-rose-500/40 shadow-2xl shadow-rose-950/60 relative z-10 space-y-5 font-sans max-h-[88vh] overflow-y-auto scrollbar-thin">
+    <div className="bg-[#0d1527] rounded-3xl p-6 sm:p-7 border border-emerald-500/40 shadow-[0_0_40px_rgba(0,0,0,0.9)] relative z-10 space-y-5 font-sans max-h-[88vh] overflow-y-auto scrollbar-thin">
       
-      {/* Top Right Close Button - Highly Visible */}
+      {/* Top Right Close Button */}
       <button
         type="button"
         onClick={() => {
           if (onClose) onClose();
           if (setIsLoginModalOpen) setIsLoginModalOpen(false);
         }}
-        className="absolute top-4 right-4 z-30 text-slate-200 hover:text-white bg-slate-800/90 hover:bg-rose-600 p-2 rounded-full border border-slate-600/80 transition-all active:scale-90 cursor-pointer shadow-lg flex items-center justify-center"
+        className="absolute top-4 right-4 z-30 text-slate-400 hover:text-white bg-[#111c33] hover:bg-rose-600 p-2 rounded-xl border border-slate-700 transition-all active:scale-90 cursor-pointer flex items-center justify-center"
         title="Close Modal"
       >
         <X className="w-4 h-4 stroke-[2.5]" />
@@ -350,39 +319,39 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
 
       {/* Brand Logo & Header */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 via-purple-600 to-cyan-400 p-0.5 shadow-xl shadow-rose-500/30">
-          <div className="w-full h-full bg-[#0b0f19] rounded-[14px] flex items-center justify-center">
-            <Zap className="w-6 h-6 text-rose-400 fill-rose-400" />
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 via-cyan-400 to-indigo-500 p-0.5 shadow-[0_0_15px_rgba(0,245,155,0.4)]">
+          <div className="w-full h-full bg-[#070b14] rounded-[14px] flex items-center justify-center">
+            <Zap className="w-6 h-6 text-emerald-400 fill-emerald-400 animate-pulse" />
           </div>
         </div>
 
         <div className="flex items-center justify-center gap-1.5">
           <h1 className="text-2xl font-black text-white font-sans">
-            Zap<span className="bg-gradient-to-r from-rose-400 to-purple-400 bg-clip-text text-transparent">Bite</span>
+            Zap<span className="bg-gradient-to-r from-emerald-400 via-cyan-300 to-indigo-400 bg-clip-text text-transparent">Bite</span>
           </h1>
-          <span className="bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">
-            .AI
+          <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono font-black px-1.5 py-0.5 rounded uppercase">
+            AI 3.0
           </span>
         </div>
-        <p className="text-xs text-slate-400 font-medium">OTP Secured Authentication & Registration Portal</p>
+        <p className="text-xs text-slate-400 font-mono">256-Bit SMS Encrypted Node Authentication</p>
       </div>
 
-      {/* Auth Mode Switcher: Sign In vs Sign Up */}
-      <div className="flex bg-slate-950 p-1 rounded-2xl border border-slate-800 text-xs font-bold">
+      {/* Auth Mode Switcher */}
+      <div className="flex bg-[#070b14] p-1 rounded-2xl border border-slate-800 text-xs font-bold font-mono">
         <button
           type="button"
           onClick={() => {
             setAuthMode('signin');
             setOtpStep('request');
           }}
-          className={`flex-1 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer ${
             authMode === 'signin'
-              ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-lg font-black'
+              ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(0,245,155,0.4)] font-black'
               : 'text-slate-400 hover:text-white'
           }`}
         >
           <KeyRound className="w-3.5 h-3.5" />
-          <span>Sign In</span>
+          <span>SIGN IN</span>
         </button>
 
         <button
@@ -391,14 +360,14 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
             setAuthMode('signup');
             setSignUpOtpStep('details');
           }}
-          className={`flex-1 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer ${
             authMode === 'signup'
-              ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow-lg font-black'
+              ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(0,245,155,0.4)] font-black'
               : 'text-slate-400 hover:text-white'
           }`}
         >
           <UserPlus className="w-3.5 h-3.5" />
-          <span>Sign Up</span>
+          <span>REGISTER</span>
         </button>
       </div>
 
@@ -407,15 +376,15 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
         <div className="space-y-5">
           
           {/* Role Selector Tabs */}
-          <div className="grid grid-cols-4 gap-1.5 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-[11px] font-bold">
+          <div className="grid grid-cols-4 gap-1.5 bg-[#070b14] p-1.5 rounded-2xl border border-slate-800 text-[11px] font-bold">
             {['customer', 'restaurant', 'delivery', 'admin'].map((roleKey) => (
               <button
                 key={roleKey}
                 type="button"
                 onClick={() => handleRoleSelect(roleKey)}
-                className={`py-2 rounded-xl flex flex-col items-center gap-1 transition-all ${
+                className={`py-2 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer ${
                   selectedRole === roleKey
-                    ? 'bg-gradient-to-r from-rose-500 to-purple-600 text-white shadow font-black'
+                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-black shadow-[0_0_10px_rgba(0,245,155,0.3)]'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -423,58 +392,58 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                 {roleKey === 'restaurant' && <UtensilsCrossed className="w-4 h-4" />}
                 {roleKey === 'delivery' && <Truck className="w-4 h-4" />}
                 {roleKey === 'admin' && <BarChart3 className="w-4 h-4" />}
-                <span className="capitalize">{roleKey === 'restaurant' ? 'Kitchen' : roleKey === 'delivery' ? 'Rider' : roleKey}</span>
+                <span className="capitalize text-[10px]">{roleKey === 'restaurant' ? 'Kitchen' : roleKey === 'delivery' ? 'Rider' : roleKey}</span>
               </button>
             ))}
           </div>
 
           {/* Preset User Profile Card */}
-          <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between gap-3 text-xs">
+          <div className="bg-[#070b14] p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2.5 min-w-0">
               <img
                 src={demoAccounts[selectedRole].avatar}
                 alt="avatar"
-                className="w-9 h-9 rounded-xl object-cover border border-rose-500/40 shrink-0"
+                className="w-9 h-9 rounded-xl object-cover border border-emerald-500/40 shrink-0"
               />
               <div className="min-w-0">
-                <div className="font-extrabold text-white truncate">{demoAccounts[selectedRole].name}</div>
-                <div className="text-[11px] text-slate-400 truncate">{demoAccounts[selectedRole].phone}</div>
+                <div className="font-bold text-white truncate">{demoAccounts[selectedRole].name}</div>
+                <div className="text-[11px] text-slate-400 truncate font-mono">{demoAccounts[selectedRole].phone}</div>
               </div>
             </div>
-            <span className="bg-cyan-500/10 text-cyan-300 text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 uppercase border border-cyan-500/30">
-              Preset User
+            <span className="bg-emerald-950 text-emerald-300 text-[10px] font-mono font-black px-2 py-0.5 rounded-md shrink-0 uppercase border border-emerald-500/30">
+              PRESET NODE
             </span>
           </div>
 
           {/* Login Method Toggle: OTP vs Password */}
-          <div className="flex justify-center gap-4 text-xs font-bold pb-1 border-b border-slate-800">
+          <div className="flex justify-center gap-4 text-xs font-bold pb-1 border-b border-slate-800 font-mono">
             <button
               type="button"
               onClick={() => {
                 setLoginMethod('otp');
                 setOtpStep('request');
               }}
-              className={`pb-2 flex items-center gap-1.5 transition-colors border-b-2 -mb-2.5 ${
+              className={`pb-2 flex items-center gap-1.5 transition-colors border-b-2 -mb-2.5 cursor-pointer ${
                 loginMethod === 'otp'
-                  ? 'text-cyan-400 border-cyan-400 font-extrabold'
+                  ? 'text-emerald-400 border-emerald-400 font-black'
                   : 'text-slate-500 hover:text-slate-300 border-transparent'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
-              <span>Mobile OTP</span>
+              <span>MOBILE SMS OTP</span>
             </button>
 
             <button
               type="button"
               onClick={() => setLoginMethod('password')}
-              className={`pb-2 flex items-center gap-1.5 transition-colors border-b-2 -mb-2.5 ${
+              className={`pb-2 flex items-center gap-1.5 transition-colors border-b-2 -mb-2.5 cursor-pointer ${
                 loginMethod === 'password'
-                  ? 'text-cyan-400 border-cyan-400 font-extrabold'
+                  ? 'text-emerald-400 border-emerald-400 font-black'
                   : 'text-slate-500 hover:text-slate-300 border-transparent'
               }`}
             >
               <Lock className="w-3.5 h-3.5" />
-              <span>Password</span>
+              <span>PASSWORD</span>
             </button>
           </div>
 
@@ -485,16 +454,16 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
               {otpStep === 'request' && (
                 <form onSubmit={handleSendOtp} className="space-y-4">
                   <div>
-                    <label className="text-xs text-slate-400 font-bold block mb-1">Mobile Number / Email</label>
+                    <label className="text-xs text-slate-400 font-mono font-bold block mb-1">MOBILE NUMBER / EMAIL</label>
                     <div className="relative">
-                      <Phone className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+                      <Phone className="w-4 h-4 text-emerald-400 absolute left-3.5 top-3.5" />
                       <input
                         type="text"
                         required
                         value={emailOrPhone}
                         onChange={(e) => setEmailOrPhone(e.target.value)}
                         placeholder="Enter mobile number or email"
-                        className="w-full bg-slate-950 text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                        className="w-full bg-[#070b14] text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-mono font-bold shadow-inner"
                       />
                     </div>
                   </div>
@@ -502,10 +471,10 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-rose-500 via-purple-600 to-indigo-600 hover:from-rose-600 hover:to-purple-700 text-white font-black py-3.5 rounded-2xl shadow-xl shadow-rose-500/30 flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50"
+                    className="w-full bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 hover:from-emerald-400 text-slate-950 font-black py-3.5 rounded-2xl shadow-[0_0_20px_rgba(0,245,155,0.4)] flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                   >
                     {isLoading ? (
-                      <span>Sending OTP...</span>
+                      <span>Dispatching OTP...</span>
                     ) : (
                       <>
                         <KeyRound className="w-4 h-4" />
@@ -523,17 +492,15 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                     <button
                       type="button"
                       onClick={() => setOtpStep('request')}
-                      className="text-xs text-cyan-400 hover:underline font-bold flex items-center gap-1"
+                      className="text-xs text-cyan-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" />
                       <span>Change Mobile</span>
                     </button>
-                    <span className="text-[11px] text-slate-400 font-medium truncate max-w-[160px]">
-                      SMS sent to {emailOrPhone}
+                    <span className="text-[11px] text-slate-400 font-mono truncate max-w-[160px]">
+                      SMS to {emailOrPhone}
                     </span>
                   </div>
-
-
 
                   {/* 4 Single Digit OTP Input Boxes */}
                   <div className="flex justify-center gap-3 py-2">
@@ -546,37 +513,37 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                         value={digit}
                         onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                        className="w-12 h-14 bg-slate-950 text-white font-mono text-xl font-black text-center rounded-2xl border border-slate-700 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/30 focus:outline-none transition-all"
+                        className="w-12 h-14 bg-[#070b14] text-emerald-400 font-mono text-xl font-black text-center rounded-2xl border border-slate-700 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none transition-all shadow-inner"
                       />
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-slate-400 font-medium pt-1">
+                  <div className="flex items-center justify-between text-xs text-slate-400 font-medium pt-1 font-mono">
                     <span>Didn't receive code?</span>
                     {canResend ? (
                       <button
                         type="button"
                         onClick={() => handleSendOtp()}
-                        className="text-cyan-400 hover:underline font-bold flex items-center gap-1"
+                        className="text-emerald-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
                       >
                         <RefreshCw className="w-3 h-3" /> Resend OTP
                       </button>
                     ) : (
-                      <span className="text-slate-500 font-mono font-bold">Resend in {timerSeconds}s</span>
+                      <span className="text-slate-500 font-bold">Resend in {timerSeconds}s</span>
                     )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-3.5 rounded-2xl shadow-xl shadow-emerald-500/30 flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50"
+                    className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 text-slate-950 font-black py-3.5 rounded-2xl shadow-[0_0_20px_rgba(0,245,155,0.4)] flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                   >
                     {isLoading ? (
-                      <span>Verifying OTP...</span>
+                      <span>Verifying Token...</span>
                     ) : (
                       <>
                         <CheckCircle2 className="w-4 h-4" />
-                        <span>Verify OTP & Sign In</span>
+                        <span>Verify OTP & Authenticate</span>
                       </>
                     )}
                   </button>
@@ -589,29 +556,29 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
           {loginMethod === 'password' && (
             <form onSubmit={handlePasswordSignInSubmit} className="space-y-4">
               <div>
-                <label className="text-xs text-slate-400 font-bold block mb-1">Email / User ID</label>
+                <label className="text-xs text-slate-400 font-mono font-bold block mb-1">EMAIL / USER ID</label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+                  <Mail className="w-4 h-4 text-emerald-400 absolute left-3.5 top-3.5" />
                   <input
                     type="text"
                     required
                     value={emailOrPhone}
                     onChange={(e) => setEmailOrPhone(e.target.value)}
-                    className="w-full bg-slate-950 text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                    className="w-full bg-[#070b14] text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-mono font-medium shadow-inner"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 font-bold block mb-1">Password</label>
+                <label className="text-xs text-slate-400 font-mono font-bold block mb-1">PASSWORD</label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+                  <Lock className="w-4 h-4 text-emerald-400 absolute left-3.5 top-3.5" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-slate-950 text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                    className="w-full bg-[#070b14] text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-mono font-medium shadow-inner"
                   />
                 </div>
               </div>
@@ -619,7 +586,7 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-rose-500 via-purple-600 to-indigo-600 hover:from-rose-600 hover:to-purple-700 text-white font-black py-3.5 rounded-2xl shadow-xl shadow-rose-500/30 flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 text-slate-950 font-black py-3.5 rounded-2xl shadow-[0_0_20px_rgba(0,245,155,0.4)] flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {isLoading ? (
                   <span>Authenticating...</span>
@@ -636,51 +603,51 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
         </div>
       )}
 
-      {/* MODE 2: SIGN UP / REGISTER WITH OTP */}
+      {/* MODE 2: SIGN UP / REGISTER */}
       {authMode === 'signup' && (
         <form onSubmit={handleSignUpSubmit} className="space-y-4">
           {signUpOtpStep === 'details' ? (
             <>
               <div>
-                <label className="text-xs text-slate-400 font-bold block mb-1">Full Name</label>
+                <label className="text-xs text-slate-400 font-mono font-bold block mb-1">FULL NAME</label>
                 <div className="relative">
-                  <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+                  <User className="w-4 h-4 text-emerald-400 absolute left-3.5 top-3.5" />
                   <input
                     type="text"
                     required
                     value={signUpName}
                     onChange={(e) => setSignUpName(e.target.value)}
                     placeholder="e.g. Nivedita Sharma"
-                    className="w-full bg-slate-950 text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                    className="w-full bg-[#070b14] text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 font-bold block mb-1">Email Address</label>
+                <label className="text-xs text-slate-400 font-mono font-bold block mb-1">EMAIL ADDRESS</label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+                  <Mail className="w-4 h-4 text-emerald-400 absolute left-3.5 top-3.5" />
                   <input
                     type="email"
                     required
                     value={signUpEmail}
                     onChange={(e) => setSignUpEmail(e.target.value)}
                     placeholder="e.g. nivedita@zapbite.ai"
-                    className="w-full bg-slate-950 text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                    className="w-full bg-[#070b14] text-white text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-medium"
                   />
                 </div>
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs text-slate-400 font-bold">Mobile Phone Number</label>
-                  <span className={`text-[10px] font-mono font-bold ${signUpPhone.length === 10 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                <div className="flex justify-between items-center mb-1 font-mono">
+                  <label className="text-xs text-slate-400 font-bold">MOBILE PHONE NUMBER</label>
+                  <span className={`text-[10px] font-bold ${signUpPhone.length === 10 ? 'text-emerald-400' : 'text-slate-500'}`}>
                     {signUpPhone.length}/10 digits
                   </span>
                 </div>
                 <div className="relative flex items-center">
                   <div className="absolute left-3.5 flex items-center gap-1.5 text-slate-400 font-bold text-xs pointer-events-none select-none z-10">
-                    <Phone className="w-4 h-4 text-slate-500 shrink-0" />
+                    <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
                     <span className="text-slate-300 font-mono">+91</span>
                   </div>
                   <input
@@ -694,22 +661,16 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                       if (phoneError) setPhoneError('');
                     }}
                     placeholder="9876543210"
-                    className={`w-full bg-slate-950 text-white text-xs pl-16 pr-4 py-3 rounded-2xl border font-mono font-medium focus:outline-none transition-all ${
-                      phoneError
-                        ? 'border-red-500/80 focus:border-red-500 bg-red-950/10'
-                        : signUpPhone.length === 10
-                        ? 'border-emerald-500/80 focus:border-emerald-500'
-                        : 'border-slate-800 focus:border-cyan-500'
-                    }`}
+                    className="w-full bg-[#070b14] text-white text-xs pl-16 pr-4 py-3 rounded-2xl border border-slate-700 font-mono font-medium focus:border-emerald-400 focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* Delivery Address Section (Sign Up Only) */}
-              <div className="space-y-3 bg-slate-900/60 p-3.5 rounded-2xl border border-rose-500/20">
-                <div className="flex items-center gap-1.5 text-xs font-extrabold text-rose-400">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>Your Delivery Address</span>
+              {/* Delivery Address Section */}
+              <div className="space-y-3 bg-[#070b14] p-3.5 rounded-2xl border border-emerald-500/30">
+                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-emerald-400">
+                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>TARGET DELIVERY WAYPOINT</span>
                 </div>
 
                 <div>
@@ -722,7 +683,7 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                       value={signUpStreet}
                       onChange={(e) => setSignUpStreet(e.target.value)}
                       placeholder="e.g. Flat 402, Sea Breeze Apts, Beach Road"
-                      className="w-full bg-slate-950 text-white text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                      className="w-full bg-[#111c33] text-white text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-medium"
                     />
                   </div>
                 </div>
@@ -738,20 +699,18 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                         value={signUpArea}
                         onChange={(e) => setSignUpArea(e.target.value)}
                         placeholder="e.g. MVP Colony"
-                        className="w-full bg-slate-950 text-white text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-medium"
+                        className="w-full bg-[#111c33] text-white text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-medium"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-[11px] text-slate-400 font-bold block mb-1">City</label>
+                    <label className="text-[11px] text-slate-400 font-bold block mb-1">City Hub</label>
                     <select
                       required
                       value={signUpCity}
                       onChange={(e) => setSignUpCity(e.target.value)}
-                      className={`w-full bg-slate-950 text-xs px-3 py-2.5 rounded-xl border font-bold transition-all focus:outline-none ${
-                        signUpCity ? 'text-white border-slate-800 focus:border-cyan-500' : 'text-slate-500 border-slate-800 focus:border-cyan-500'
-                      }`}
+                      className="w-full bg-[#111c33] text-white text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-emerald-400 cursor-pointer"
                     >
                       <option value="">— Select City —</option>
                       <option value="Vizag">Visakhapatnam (Vizag)</option>
@@ -761,29 +720,28 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                       <option value="Delhi NCR">Delhi NCR</option>
                       <option value="Chennai">Chennai</option>
                       <option value="Pune">Pune</option>
-                      <option value="Kolkata">Kolkata</option>
                     </select>
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 font-bold block mb-1">Select System Role</label>
+                <label className="text-xs text-slate-400 font-mono font-bold block mb-1">SYSTEM ROLE</label>
                 <select
                   value={signUpRole}
                   onChange={(e) => setSignUpRole(e.target.value)}
-                  className="w-full bg-slate-950 text-white text-xs px-3.5 py-3 rounded-2xl border border-slate-800 focus:outline-none focus:border-cyan-500 font-bold"
+                  className="w-full bg-[#070b14] text-white text-xs px-3.5 py-3 rounded-2xl border border-slate-700 focus:outline-none focus:border-emerald-400 font-bold cursor-pointer"
                 >
-                  <option value="customer">👤 Customer Ordering User</option>
-                  <option value="restaurant">👨‍🍳 Kitchen Staff Partner</option>
-                  <option value="delivery">🛵 Delivery Fleet Rider</option>
+                  <option value="customer">👤 Customer Ordering Node</option>
+                  <option value="restaurant">👨‍🍳 Kitchen Reactor Partner</option>
+                  <option value="delivery">🛵 Delivery Fleet Pilot</option>
                   <option value="admin">📊 Admin Intelligence Manager</option>
                 </select>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-rose-500 via-purple-600 to-indigo-600 hover:from-rose-600 hover:to-purple-700 text-white font-black py-3.5 rounded-2xl shadow-xl shadow-rose-500/30 flex items-center justify-center gap-2 text-sm transition-all active:scale-95"
+                className="w-full bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 hover:from-emerald-400 text-slate-950 font-black py-3.5 rounded-2xl shadow-[0_0_20px_rgba(0,245,155,0.4)] flex items-center justify-center gap-2 text-sm transition-all active:scale-95 cursor-pointer"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>Verify Mobile with OTP</span>
@@ -795,15 +753,13 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                 <button
                   type="button"
                   onClick={() => setSignUpOtpStep('details')}
-                  className="text-xs text-cyan-400 hover:underline font-bold flex items-center gap-1"
+                  className="text-xs text-cyan-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to details</span>
                 </button>
-                <span className="text-[11px] text-slate-400 font-medium">OTP sent to +91 {signUpPhone}</span>
+                <span className="text-[11px] text-slate-400 font-mono">OTP to +91 {signUpPhone}</span>
               </div>
-
-
 
               <div className="flex justify-center gap-3 py-2">
                 {userOtpInput.map((digit, idx) => (
@@ -815,7 +771,7 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
                     value={digit}
                     onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                    className="w-12 h-14 bg-slate-950 text-white font-mono text-xl font-black text-center rounded-2xl border border-slate-700 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/30 focus:outline-none transition-all"
+                    className="w-12 h-14 bg-[#070b14] text-emerald-400 font-mono text-xl font-black text-center rounded-2xl border border-slate-700 focus:border-emerald-400 focus:outline-none shadow-inner"
                   />
                 ))}
               </div>
@@ -823,10 +779,10 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-3.5 rounded-2xl shadow-xl shadow-emerald-500/30 flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 text-slate-950 font-black py-3.5 rounded-2xl shadow-[0_0_20px_rgba(0,245,155,0.4)] flex items-center justify-center gap-2 text-sm transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
               >
                 {isLoading ? (
-                  <span>Registering...</span>
+                  <span>Registering Node...</span>
                 ) : (
                   <>
                     <UserPlus className="w-4 h-4" />
@@ -840,9 +796,9 @@ export const LoginPage = ({ onLoginSuccess, onClose }) => {
       )}
 
       {/* Footer Security Badge */}
-      <div className="pt-2 border-t border-slate-800/80 flex items-center justify-center gap-2 text-[11px] text-slate-500 font-medium">
-        <ShieldCheck className="w-4 h-4 text-cyan-400" />
-        <span>ZapBite.ai 256-Bit SMS & OTP Secured Authentication</span>
+      <div className="pt-2 border-t border-slate-800 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-mono">
+        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <span>ZapBite 256-Bit SMS Encrypted Node</span>
       </div>
 
     </div>

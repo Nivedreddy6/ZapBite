@@ -1,86 +1,185 @@
 @import "tailwindcss";
 
 :root {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #fcfbf9;
-  color: #0f172a;
+  font-family: 'Plus Jakarta Sans', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #070b14;
+  color: #f1f5f9;
+  color-scheme: dark;
 }
 
 body {
-  background-color: #fcfbf9;
-  color: #0f172a;
+  background-color: #070b14;
+  color: #f1f5f9;
   min-height: 100vh;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(0, 245, 155, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.03) 0%, transparent 60%);
+  background-attachment: fixed;
 }
 
 @layer utilities {
-  /* Warm Gourmet Glassmorphic Cards */
-  .glass-card-warm {
-    background: rgba(255, 255, 255, 0.92);
+  /* Ultra-Futuristic Cyber Glassmorphism */
+  .glass-cyber {
+    background: rgba(13, 21, 39, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 245, 155, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .glass-cyber-card {
+    background: rgba(15, 23, 42, 0.65);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .warm-shadow {
-    box-shadow: 0 10px 30px -5px rgba(249, 115, 22, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  .glass-cyber-card:hover {
+    border-color: rgba(0, 245, 155, 0.35);
+    box-shadow: 0 12px 36px -4px rgba(0, 245, 155, 0.15), 0 0 15px 0 rgba(0, 245, 155, 0.1);
+    transform: translateY(-3px);
   }
 
-  .warm-shadow-lg {
-    box-shadow: 0 20px 40px -10px rgba(225, 29, 72, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
+  .glass-cyber-interactive {
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 210, 255, 0.2);
   }
 
-  /* Shimmer metallic sweep effect */
-  .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.6) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2.5s infinite;
+  /* Neon Glow Utilities */
+  .neon-glow-emerald {
+    box-shadow: 0 0 20px -2px rgba(0, 245, 155, 0.35), 0 0 6px 0 rgba(0, 245, 155, 0.5);
   }
 
-  /* Floating animation */
-  .animate-float {
-    animation: float 4s ease-in-out infinite;
+  .neon-glow-cyan {
+    box-shadow: 0 0 20px -2px rgba(6, 182, 212, 0.35), 0 0 6px 0 rgba(6, 182, 212, 0.5);
   }
 
-  .animate-float-delayed {
-    animation: float 4s ease-in-out 2s infinite;
+  .neon-glow-violet {
+    box-shadow: 0 0 20px -2px rgba(139, 92, 246, 0.35), 0 0 6px 0 rgba(139, 92, 246, 0.5);
   }
 
-  /* Slow Spin */
+  .neon-glow-crimson {
+    box-shadow: 0 0 20px -2px rgba(255, 51, 102, 0.35), 0 0 6px 0 rgba(255, 51, 102, 0.5);
+  }
+
+  .text-glow-emerald {
+    text-shadow: 0 0 12px rgba(0, 245, 155, 0.6);
+  }
+
+  .text-glow-cyan {
+    text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+  }
+
+  /* Laser Border Effect */
+  .laser-border-emerald {
+    position: relative;
+    border: 1px solid rgba(0, 245, 155, 0.3);
+  }
+
+  .laser-border-emerald::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 245, 155, 0.8), transparent);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .laser-border-emerald:hover::after {
+    opacity: 1;
+    animation: laserSweep 2s linear infinite;
+  }
+
+  /* Floating animations */
+  .animate-float-cyber {
+    animation: floatCyber 4s ease-in-out infinite;
+  }
+
+  .animate-float-cyber-delayed {
+    animation: floatCyber 4s ease-in-out 2s infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-radar-ping {
+    animation: radarWave 2.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  }
+
+  .animate-laser-sweep {
+    animation: laserSweep 3s linear infinite;
+  }
+
   .animate-spin-slow {
-    animation: spinSlow 18s linear infinite;
+    animation: spinSlow 20s linear infinite;
   }
 
-  /* Fade In Up Entrance */
-  .animate-fade-in-up {
-    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  .animate-holo-scan {
+    animation: holoScan 4s ease-in-out infinite;
   }
 }
 
-/* Custom Animation Keyframes */
-@keyframes float {
+/* Custom Keyframe Animations */
+@keyframes floatCyber {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-8px) rotate(1deg);
   }
 }
 
-@keyframes shimmer {
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes radarWave {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes laserSweep {
   0% {
     background-position: -200% 0;
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+@keyframes holoScan {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
   }
 }
 
@@ -93,32 +192,23 @@ body {
   }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Gourmet Soft Scrollbar */
+/* Futuristic Cyber Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #070b14;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 9999px;
+  border: 1px solid rgba(0, 245, 155, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  background: #00f59b;
+  box-shadow: 0 0 8px #00f59b;
 }

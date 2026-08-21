@@ -8,8 +8,7 @@ import {
   Maximize2
 } from 'lucide-react';
 
-
-// Default mock coordinates (Vizag City Hub -> Beach Road Sector 4)
+// Default coordinates (Vizag Node -> Beach Road Sector 4)
 const KITCHEN_COORDS = [17.7231, 83.3012];
 const DOORSTEP_COORDS = [17.7395, 83.3168];
 
@@ -28,22 +27,22 @@ const FULL_ROUTE_POINTS = [
 ];
 
 const TILE_SERVERS = {
-  swiggy: {
-    name: 'Google Maps',
-    url: 'https://{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}',
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-    attribution: '&copy; Google Maps'
+  dark: {
+    name: 'Cyber Dark',
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; CARTO'
   },
   satellite: {
-    name: 'Google Satellite',
+    name: 'Satellite HUD',
     url: 'https://{s}.google.com/vt/lyrs=s,h&hl=en&x={x}&y={y}&z={z}',
     subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
     attribution: '&copy; Google Maps'
   },
-  dark: {
-    name: 'Cyber Dark',
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+  standard: {
+    name: 'Street Vector',
+    url: 'https://{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}',
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    attribution: '&copy; Google Maps'
   }
 };
 
@@ -55,20 +54,20 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
   const completedPolylineRef = useRef(null);
   const remainingPolylineRef = useRef(null);
 
-  const [activeTheme, setActiveTheme] = useState('swiggy');
+  const [activeTheme, setActiveTheme] = useState('standard');
   const [currentProgress, setCurrentProgress] = useState(0.5); // 0 to 1
   const [riderCoords, setRiderCoords] = useState(FULL_ROUTE_POINTS[0]);
-  const [telemetrySpeed, setTelemetrySpeed] = useState(32);
+  const [telemetrySpeed, setTelemetrySpeed] = useState(34);
   const [distanceLeftKm, setDistanceLeftKm] = useState('1.4');
 
   // Compute progress ratio based on order status
   useEffect(() => {
     let targetProgress = 0.05;
     if (orderStatus === 'Placed') targetProgress = 0.05;
-    else if (orderStatus === 'Accepted') targetProgress = 0.12;
-    else if (orderStatus === 'Preparing') targetProgress = 0.20;
-    else if (orderStatus === 'Ready') targetProgress = 0.30;
-    else if (orderStatus === 'Out for Delivery') targetProgress = 0.65;
+    else if (orderStatus === 'Accepted') targetProgress = 0.15;
+    else if (orderStatus === 'Preparing') targetProgress = 0.30;
+    else if (orderStatus === 'Ready') targetProgress = 0.45;
+    else if (orderStatus === 'Out for Delivery') targetProgress = 0.70;
     else if (orderStatus === 'Delivered') targetProgress = 1.0;
 
     setCurrentProgress(targetProgress);
@@ -81,7 +80,7 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
       animationInterval = setInterval(() => {
         setCurrentProgress((prev) => {
           if (prev >= 0.95) return 0.95;
-          return prev + 0.012;
+          return prev + 0.015;
         });
         setTelemetrySpeed(Math.floor(28 + Math.random() * 8));
       }, 2000);
@@ -116,7 +115,7 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
     const remDist = (totalDist * (1 - currentProgress)).toFixed(1);
     setDistanceLeftKm(remDist > 0 ? remDist : '0.0');
 
-    // Update marker on Leaflet map if initialized
+    // Update marker on Leaflet map
     if (riderMarkerRef.current) {
       riderMarkerRef.current.setLatLng(newRiderPos);
     }
@@ -148,19 +147,22 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
 
     // Add Tile Layer
     const tileConfig = TILE_SERVERS[activeTheme];
-    const tileLayer = L.tileLayer(tileConfig.url, { maxZoom: 19 }).addTo(map);
+    const tileLayer = L.tileLayer(tileConfig.url, { 
+      maxZoom: 19,
+      subdomains: tileConfig.subdomains || 'abc'
+    }).addTo(map);
     tileLayerRef.current = tileLayer;
 
     // Custom DivIcon for Kitchen Hub
     const kitchenIcon = L.divIcon({
       className: 'custom-leaflet-marker',
       html: `
-        <div class="relative flex flex-col items-center group">
-          <div class="w-10 h-10 rounded-2xl bg-rose-600 border-2 border-white shadow-xl flex items-center justify-center text-white font-extrabold text-sm animate-pulse">
-            🏪
+        <div class="relative flex flex-col items-center">
+          <div class="w-10 h-10 rounded-2xl bg-[#070b14] border-2 border-emerald-400 shadow-[0_0_15px_rgba(0,245,155,0.6)] flex items-center justify-center text-emerald-400 font-extrabold text-sm animate-pulse">
+            👨‍🍳
           </div>
-          <div class="mt-1 bg-slate-900/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-md border border-slate-700 whitespace-nowrap">
-            ${restaurantName || 'Kitchen Hub'}
+          <div class="mt-1 bg-[#070b14]/90 text-emerald-300 text-[10px] font-mono font-black px-2 py-0.5 rounded-md shadow-md border border-emerald-500/40 whitespace-nowrap">
+            ${restaurantName || 'Kitchen Reactor'}
           </div>
         </div>
       `,
@@ -172,12 +174,12 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
     const doorstepIcon = L.divIcon({
       className: 'custom-leaflet-marker',
       html: `
-        <div class="relative flex flex-col items-center group">
-          <div class="w-10 h-10 rounded-2xl bg-emerald-500 border-2 border-white shadow-xl flex items-center justify-center text-white font-extrabold text-sm">
+        <div class="relative flex flex-col items-center">
+          <div class="w-10 h-10 rounded-2xl bg-[#070b14] border-2 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.6)] flex items-center justify-center text-cyan-300 font-extrabold text-sm">
             📍
           </div>
-          <div class="mt-1 bg-slate-900/90 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-md border border-emerald-500/40 whitespace-nowrap">
-            Doorstep Delivery
+          <div class="mt-1 bg-[#070b14]/90 text-cyan-300 text-[10px] font-mono font-black px-2 py-0.5 rounded-md shadow-md border border-cyan-500/40 whitespace-nowrap">
+            Target Waypoint
           </div>
         </div>
       `,
@@ -185,22 +187,22 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
       iconAnchor: [20, 45]
     });
 
-    // Custom DivIcon for Rider
+    // Custom DivIcon for Cyber Rider
     const riderIcon = L.divIcon({
       className: 'custom-leaflet-marker',
       html: `
-        <div class="relative flex flex-col items-center group">
-          <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 via-orange-500 to-amber-400 p-0.5 shadow-2xl animate-bounce">
-            <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center text-amber-400 text-lg border border-white/20">
+        <div class="relative flex flex-col items-center">
+          <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-emerald-500 via-cyan-400 to-indigo-500 p-0.5 shadow-[0_0_20px_rgba(0,245,155,0.7)] animate-bounce">
+            <div class="w-full h-full bg-[#070b14] rounded-full flex items-center justify-center text-emerald-400 text-lg border border-emerald-400/40">
               🛵
             </div>
             <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
+              <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-400"></span>
             </span>
           </div>
-          <div class="mt-1 bg-orange-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap border border-orange-300">
-            ${partnerName || 'ZapRider'} • Live GPS
+          <div class="mt-1 bg-[#070b14] text-emerald-300 text-[10px] font-mono font-black px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap border border-emerald-500/50">
+            ${partnerName || 'ZapDrone-1'} • 34 km/h
           </div>
         </div>
       `,
@@ -211,34 +213,34 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
     // Add Kitchen Marker
     L.marker(KITCHEN_COORDS, { icon: kitchenIcon })
       .addTo(map)
-      .bindPopup(`<b>${restaurantName || 'Kitchen Hub'}</b><br/>Order verified & dispatched here.`);
+      .bindPopup(`<b>${restaurantName || 'Kitchen Reactor'}</b><br/>Order verified & dispatched.`);
 
     // Add Doorstep Marker
     L.marker(DOORSTEP_COORDS, { icon: doorstepIcon })
       .addTo(map)
-      .bindPopup(`<b>Destination</b><br/>${deliveryAddress || 'Customer Doorstep'}`);
+      .bindPopup(`<b>Destination Waypoint</b><br/>${deliveryAddress || 'Customer Doorstep'}`);
 
     // Add Live Rider Marker
     const riderMarker = L.marker(FULL_ROUTE_POINTS[0], { icon: riderIcon, zIndexOffset: 1000 }).addTo(map);
     riderMarker.bindPopup(`<b>${partnerName || 'Delivery Rider'}</b><br/>Live GPS Telemetry Active.`);
     riderMarkerRef.current = riderMarker;
 
-    // Completed Route Polyline (Solid Vibrant Rose/Orange)
+    // Completed Route Polyline (Laser Cyber Emerald)
     const completedPolyline = L.polyline([FULL_ROUTE_POINTS[0]], {
-      color: '#f97316',
+      color: '#00f59b',
       weight: 6,
-      opacity: 0.9,
+      opacity: 0.95,
       lineCap: 'round',
       lineJoin: 'round'
     }).addTo(map);
     completedPolylineRef.current = completedPolyline;
 
-    // Remaining Route Polyline (Dashed Light Grey/Rose)
+    // Remaining Route Polyline (Dashed Neon Cyan)
     const remainingPolyline = L.polyline(FULL_ROUTE_POINTS, {
-      color: '#94a3b8',
-      weight: 5,
+      color: '#00d2ff',
+      weight: 4,
       dashArray: '8, 8',
-      opacity: 0.6,
+      opacity: 0.55,
       lineCap: 'round'
     }).addTo(map);
     remainingPolylineRef.current = remainingPolyline;
@@ -260,7 +262,10 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
     if (!mapInstanceRef.current || !tileLayerRef.current) return;
     const config = TILE_SERVERS[activeTheme];
     mapInstanceRef.current.removeLayer(tileLayerRef.current);
-    tileLayerRef.current = L.tileLayer(config.url, { maxZoom: 19 }).addTo(mapInstanceRef.current);
+    tileLayerRef.current = L.tileLayer(config.url, { 
+      maxZoom: 19,
+      subdomains: config.subdomains || 'abc'
+    }).addTo(mapInstanceRef.current);
   }, [activeTheme]);
 
   // Center on Rider action
@@ -279,7 +284,7 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
   };
 
   return (
-    <div className="relative w-full h-[420px] rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-900 group">
+    <div className="relative w-full h-[420px] rounded-3xl overflow-hidden border border-emerald-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] bg-[#070b14] group">
 
       {/* Leaflet Map Canvas */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
@@ -288,46 +293,46 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
       <div className="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
         
         {/* Left Status Badge */}
-        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-slate-700/80 shadow-lg text-white flex items-center gap-2.5">
+        <div className="pointer-events-auto bg-[#070b14]/90 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-emerald-500/40 shadow-lg text-white flex items-center gap-2.5">
           <div className="relative flex items-center justify-center">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping absolute" />
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 uppercase font-black tracking-wider">Live Swiggy Telemetry</div>
-            <div className="text-xs font-extrabold text-white flex items-center gap-1.5">
+            <div className="text-[10px] text-emerald-400 uppercase font-mono font-black tracking-wider">LIVE TELEMETRY HUD</div>
+            <div className="text-xs font-black text-white flex items-center gap-1.5 font-mono">
               <span>{orderStatus}</span>
               <span className="text-slate-500">•</span>
-              <span className="text-amber-400 font-mono">{distanceLeftKm} km to doorstep</span>
+              <span className="text-cyan-300 font-bold">{distanceLeftKm} km to doorstep</span>
             </div>
           </div>
         </div>
 
         {/* Right Telemetry Stats Pill */}
-        <div className="pointer-events-auto bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-2xl border border-slate-700/80 shadow-lg flex items-center gap-4 text-white font-mono text-xs">
+        <div className="pointer-events-auto bg-[#070b14]/90 backdrop-blur-md px-3 py-2 rounded-2xl border border-emerald-500/40 shadow-lg flex items-center gap-4 text-white font-mono text-xs">
           <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
             <Gauge className="w-4 h-4 text-emerald-400" />
             <span>{telemetrySpeed} km/h</span>
           </div>
           <div className="hidden sm:flex items-center gap-1.5 text-cyan-300">
             <Activity className="w-4 h-4" />
-            <span>GPS 99%</span>
+            <span>GPS 99.8%</span>
           </div>
         </div>
       </div>
 
-      {/* Map Control Buttons Overlay (Bottom Right) */}
+      {/* Map Control Buttons Overlay */}
       <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-2">
         
         {/* Theme Switcher Toggle */}
-        <div className="bg-slate-900/90 backdrop-blur-md p-1 rounded-2xl border border-slate-700/80 shadow-xl flex items-center gap-1">
+        <div className="bg-[#070b14]/90 backdrop-blur-md p-1 rounded-2xl border border-emerald-500/30 shadow-xl flex items-center gap-1">
           {Object.keys(TILE_SERVERS).map((themeKey) => (
             <button
               key={themeKey}
               onClick={() => setActiveTheme(themeKey)}
-              className={`px-2.5 py-1 rounded-xl text-[10px] font-extrabold transition-all ${
+              className={`px-2.5 py-1 rounded-xl text-[10px] font-mono font-black transition-all cursor-pointer ${
                 activeTheme === themeKey
-                  ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-xs'
+                  ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow-[0_0_8px_rgba(0,245,155,0.4)]'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -340,35 +345,35 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
         <div className="flex items-center justify-end gap-2">
           <button
             onClick={handleRecenterRider}
-            className="bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md text-orange-400 p-2.5 rounded-2xl border border-slate-700/80 shadow-xl flex items-center gap-1.5 text-xs font-bold transition-all active:scale-95"
+            className="bg-[#070b14]/90 hover:bg-[#111c33] backdrop-blur-md text-emerald-400 p-2.5 rounded-2xl border border-emerald-500/40 shadow-xl flex items-center gap-1.5 text-xs font-black transition-all active:scale-95 cursor-pointer"
             title="Recenter on Rider"
           >
-            <Locate className="w-4 h-4 text-orange-400" />
-            <span className="hidden sm:inline">Track Rider</span>
+            <Locate className="w-4 h-4 text-emerald-400" />
+            <span className="hidden sm:inline font-mono">Lock Rider</span>
           </button>
 
           <button
             onClick={handleFitRoute}
-            className="bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md text-slate-300 p-2.5 rounded-2xl border border-slate-700/80 shadow-xl transition-all active:scale-95"
+            className="bg-[#070b14]/90 hover:bg-[#111c33] backdrop-blur-md text-cyan-300 p-2.5 rounded-2xl border border-cyan-500/40 shadow-xl transition-all active:scale-95 cursor-pointer"
             title="Fit Full Route"
           >
-            <Maximize2 className="w-4 h-4 text-slate-300" />
+            <Maximize2 className="w-4 h-4 text-cyan-300" />
           </button>
         </div>
       </div>
 
-      {/* Bottom Floating Route Info Bar (Bottom Left) */}
-      <div className="absolute bottom-4 left-4 z-10 max-w-[280px] sm:max-w-xs bg-slate-900/90 backdrop-blur-md p-3 rounded-2xl border border-slate-700/80 shadow-xl text-white text-xs space-y-1">
-        <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-          <span>Route Trajectory</span>
-          <span className="text-orange-400 font-mono">{Math.round(currentProgress * 100)}% Progress</span>
+      {/* Bottom Floating Route Info Bar */}
+      <div className="absolute bottom-4 left-4 z-10 max-w-[280px] sm:max-w-xs bg-[#070b14]/90 backdrop-blur-md p-3 rounded-2xl border border-emerald-500/30 shadow-xl text-white text-xs space-y-1">
+        <div className="flex items-center justify-between text-[10px] text-emerald-400 font-mono font-bold uppercase tracking-wider">
+          <span>VECTOR TRAJECTORY</span>
+          <span className="text-cyan-300 font-mono">{Math.round(currentProgress * 100)}% COMPLETED</span>
         </div>
-        <div className="flex items-center gap-2 text-slate-200 font-semibold truncate text-xs">
-          <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-          <span className="truncate">{restaurantName || 'Kitchen Hub'}</span>
-          <span className="text-slate-500 font-mono">→</span>
-          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-          <span className="truncate">{deliveryAddress || 'Doorstep'}</span>
+        <div className="flex items-center gap-2 text-slate-200 font-mono text-xs truncate">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+          <span className="truncate">{restaurantName || 'Kitchen Reactor'}</span>
+          <span className="text-cyan-400">→</span>
+          <span className="w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
+          <span className="truncate">{deliveryAddress || 'Target Waypoint'}</span>
         </div>
       </div>
 

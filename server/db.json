@@ -330,8 +330,8 @@
       "vehicle": "TVS Jupiter 125 (AP 31 CH 9102)",
       "rating": 4.8,
       "deliveriesCount": 310,
-      "status": "Available",
-      "activeOrderId": null,
+      "status": "On Delivery",
+      "activeOrderId": "ORD-8907",
       "location": {
         "lat": 17.7123,
         "lng": 83.315,
@@ -373,6 +373,42 @@
     }
   ],
   "orders": [
+    {
+      "id": "ORD-8907",
+      "customerName": "Rahul Malhotra",
+      "customerPhone": "+91 98765 00112",
+      "deliveryAddress": "McDonald's, McDonald's, Anakapalli - Visakhapatnam - Anandapuram Main Road - Old NH16 Road (Landmark: Near McDonald's), McDonald's, Andhra Pradesh",
+      "restaurantId": "rest-1",
+      "restaurantName": "Spicy Junction",
+      "items": [
+        {
+          "id": "item-101",
+          "restaurantId": "rest-1",
+          "name": "Hyderabadi Dum Chicken Biryani",
+          "price": 290,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 240,
+      "subtotal": 290,
+      "deliveryFee": 35,
+      "taxes": 15,
+      "discount": 100,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Placed",
+      "createdAt": "2026-08-21T05:57:40.754Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-2",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "11:27 AM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        }
+      ]
+    },
     {
       "id": "ORD-7709",
       "customerName": "Nived Reddy Tamma",

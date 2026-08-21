@@ -20,7 +20,8 @@ import {
   DollarSign, 
   ShoppingBag, 
   Activity,
-  Cpu
+  Cpu,
+  Radio
 } from 'lucide-react';
 
 ChartJS.register(
@@ -50,8 +51,8 @@ export const AdminView = () => {
       {
         label: 'Orders Processed',
         data: [28, 45, 18, 62, 89, 42],
-        backgroundColor: 'rgba(249, 115, 22, 0.85)',
-        borderColor: '#f97316',
+        backgroundColor: 'rgba(0, 245, 155, 0.85)',
+        borderColor: '#00f59b',
         borderWidth: 1.5,
         borderRadius: 8,
       },
@@ -64,16 +65,26 @@ export const AdminView = () => {
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#0f172a',
-        titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
-        bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
+        backgroundColor: '#070b14',
+        titleColor: '#00f59b',
+        bodyColor: '#f1f5f9',
+        borderColor: 'rgba(0, 245, 155, 0.3)',
+        borderWidth: 1,
+        titleFont: { family: 'Space Grotesk', size: 12, weight: 'bold' },
+        bodyFont: { family: 'Space Grotesk', size: 12 },
         padding: 10,
         cornerRadius: 8
       }
     },
     scales: {
-      x: { grid: { display: false }, ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10, weight: 'bold' } } },
-      y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10 } } }
+      x: { 
+        grid: { display: false }, 
+        ticks: { color: '#64748b', font: { family: 'monospace', size: 10, weight: 'bold' } } 
+      },
+      y: { 
+        grid: { color: 'rgba(30, 41, 59, 0.5)' }, 
+        ticks: { color: '#64748b', font: { family: 'monospace', size: 10 } } 
+      }
     }
   };
 
@@ -97,11 +108,11 @@ export const AdminView = () => {
         ],
         backgroundColor: [
           '#f59e0b',
-          '#f97316',
-          '#06b6d4',
-          '#10b981',
+          '#ff3366',
+          '#00d2ff',
+          '#00f59b',
         ],
-        borderColor: '#ffffff',
+        borderColor: '#070b14',
         borderWidth: 2,
       },
     ],
@@ -114,8 +125,8 @@ export const AdminView = () => {
       legend: {
         position: 'bottom',
         labels: {
-          color: '#334155',
-          font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
+          color: '#cbd5e1',
+          font: { family: 'monospace', size: 11, weight: 'bold' },
           padding: 14,
           usePointStyle: true,
         }
@@ -124,23 +135,23 @@ export const AdminView = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 text-slate-900 font-sans space-y-6">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 text-slate-100 font-sans space-y-6">
       
       {/* Top Banner & Control Strip */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-[#0d1527]/90 rounded-3xl p-6 border border-violet-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-xl">
         <div>
           <div className="flex items-center gap-2">
-            <span className="bg-orange-50 text-orange-600 border border-orange-200 text-xs font-extrabold px-3 py-1 rounded-xl">
-              System Admin HUD
+            <span className="bg-[#111c33] text-violet-300 border border-violet-500/40 text-xs font-mono font-black px-3 py-1 rounded-xl">
+              SYSTEM COMMAND MATRIX
             </span>
-            <h2 className="text-xl font-extrabold text-slate-900">Platform Analytics Command Center</h2>
+            <h2 className="text-xl font-black text-white">Quantum Analytics HUD</h2>
           </div>
-          <p className="text-xs text-slate-500 mt-1 font-medium">Real-time revenue monitoring & delivery fleet logistics matrix</p>
+          <p className="text-xs text-slate-400 mt-1 font-mono">Real-time revenue telemetry & autonomous drone logistics matrix</p>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700">
-          <Activity className="w-4 h-4 text-emerald-600 animate-pulse" />
-          <span>System Status: 100% Operational</span>
+        <div className="flex items-center gap-2 bg-[#070b14] px-3.5 py-2 rounded-xl border border-emerald-500/30 text-xs font-mono font-bold text-emerald-400">
+          <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
+          <span>SYSTEM STATUS: 100% OPERATIONAL</span>
         </div>
       </div>
 
@@ -148,51 +159,51 @@ export const AdminView = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         
         {/* Metric 1 */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+        <div className="bg-[#0d1527]/80 p-5 rounded-3xl border border-emerald-500/20 shadow-xl flex items-center justify-between backdrop-blur-md hover:border-emerald-500/40 transition-colors">
           <div>
-            <div className="text-xs text-slate-500 font-bold">Total Platform Revenue</div>
-            <div className="text-2xl font-extrabold text-slate-900 mt-1">₹{totalRevenue.toLocaleString()}</div>
-            <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold mt-1">
-              <TrendingUp className="w-3.5 h-3.5" /> +18.4% vs last week
+            <div className="text-xs text-slate-400 font-mono font-bold">TOTAL PLATFORM REVENUE</div>
+            <div className="text-2xl font-black text-emerald-400 mt-1 font-mono">₹{totalRevenue.toLocaleString()}</div>
+            <div className="flex items-center gap-1 text-[11px] text-emerald-400 font-bold mt-1">
+              <TrendingUp className="w-3.5 h-3.5" /> +18.4% this cycle
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-950 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shadow-[0_0_12px_rgba(0,245,155,0.2)]">
             <DollarSign className="w-6 h-6" />
           </div>
         </div>
 
         {/* Metric 2 */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+        <div className="bg-[#0d1527]/80 p-5 rounded-3xl border border-cyan-500/20 shadow-xl flex items-center justify-between backdrop-blur-md hover:border-cyan-500/40 transition-colors">
           <div>
-            <div className="text-xs text-slate-500 font-bold">Total Orders Placed</div>
-            <div className="text-2xl font-extrabold text-slate-900 mt-1">{totalOrdersCount} Orders</div>
-            <div className="text-[11px] text-slate-500 font-bold mt-1">Live DB Persistent</div>
+            <div className="text-xs text-slate-400 font-mono font-bold">ORDERS DISPATCHED</div>
+            <div className="text-2xl font-black text-cyan-300 mt-1 font-mono">{totalOrdersCount} Orders</div>
+            <div className="text-[11px] text-cyan-400 font-mono mt-1">Live DB Persistent</div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-cyan-950 text-cyan-400 border border-cyan-500/40 flex items-center justify-center shadow-[0_0_12px_rgba(6,182,212,0.2)]">
             <ShoppingBag className="w-6 h-6" />
           </div>
         </div>
 
         {/* Metric 3 */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+        <div className="bg-[#0d1527]/80 p-5 rounded-3xl border border-amber-500/20 shadow-xl flex items-center justify-between backdrop-blur-md hover:border-amber-500/40 transition-colors">
           <div>
-            <div className="text-xs text-slate-500 font-bold">Avg Delivery SLA</div>
-            <div className="text-2xl font-extrabold text-slate-900 mt-1">{avgDeliveryTime} Mins</div>
-            <div className="text-[11px] text-emerald-600 font-bold mt-1">Under 25m target</div>
+            <div className="text-xs text-slate-400 font-mono font-bold">AVG DELIVERY SLA</div>
+            <div className="text-2xl font-black text-amber-300 mt-1 font-mono">{avgDeliveryTime} Mins</div>
+            <div className="text-[11px] text-amber-400 font-mono mt-1">Target: Under 25 Mins</div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 border border-orange-200 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-amber-950 text-amber-400 border border-amber-500/40 flex items-center justify-center shadow-[0_0_12px_rgba(245,158,11,0.2)]">
             <Clock className="w-6 h-6" />
           </div>
         </div>
 
         {/* Metric 4 */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+        <div className="bg-[#0d1527]/80 p-5 rounded-3xl border border-violet-500/20 shadow-xl flex items-center justify-between backdrop-blur-md hover:border-violet-500/40 transition-colors">
           <div>
-            <div className="text-xs text-slate-500 font-bold">Active Fleet Riders</div>
-            <div className="text-2xl font-extrabold text-slate-900 mt-1">{activePartnersCount} / {deliveryPartners.length}</div>
-            <div className="text-[11px] text-slate-500 font-bold mt-1">Available for dispatch</div>
+            <div className="text-xs text-slate-400 font-mono font-bold">ACTIVE DRONE PILOTS</div>
+            <div className="text-2xl font-black text-violet-300 mt-1 font-mono">{activePartnersCount} / {deliveryPartners.length}</div>
+            <div className="text-[11px] text-violet-400 font-mono mt-1">Available on channel</div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 border border-cyan-200 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-violet-950 text-violet-400 border border-violet-500/40 flex items-center justify-center shadow-[0_0_12px_rgba(139,92,246,0.2)]">
             <Truck className="w-6 h-6" />
           </div>
         </div>
@@ -203,13 +214,13 @@ export const AdminView = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Chart 1: Bar Chart */}
-        <div className="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-          <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+        <div className="lg:col-span-2 bg-[#0d1527]/90 rounded-3xl p-6 border border-emerald-500/30 shadow-xl space-y-4 backdrop-blur-xl">
+          <div className="flex justify-between items-center pb-2 border-b border-slate-800">
             <div>
-              <h3 className="font-extrabold text-base text-slate-900">Peak Hour Order Volume</h3>
-              <p className="text-xs text-slate-500">Hourly order processing load across Vizag hubs</p>
+              <h3 className="font-black text-base text-white">Peak Hour Culinary Load</h3>
+              <p className="text-xs text-slate-400 font-mono">Hourly processing throughput across sector hubs</p>
             </div>
-            <span className="text-xs font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-200">
+            <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-500/40">
               Peak: 8 PM (89 Orders)
             </span>
           </div>
@@ -220,10 +231,10 @@ export const AdminView = () => {
         </div>
 
         {/* Chart 2: Doughnut */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-          <div className="pb-2 border-b border-slate-100">
-            <h3 className="font-extrabold text-base text-slate-900">Live Order Lifecycle</h3>
-            <p className="text-xs text-slate-500">Real-time status breakdown</p>
+        <div className="bg-[#0d1527]/90 rounded-3xl p-6 border border-cyan-500/30 shadow-xl space-y-4 backdrop-blur-xl">
+          <div className="pb-2 border-b border-slate-800">
+            <h3 className="font-black text-base text-white">Order Pipeline Lifecycle</h3>
+            <p className="text-xs text-slate-400 font-mono">Real-time status breakdown</p>
           </div>
 
           <div className="h-64 flex items-center justify-center">
@@ -234,44 +245,44 @@ export const AdminView = () => {
       </div>
 
       {/* Delivery Fleet Status Table */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <h3 className="font-extrabold text-base text-slate-900">Delivery Fleet Telemetry Overview</h3>
-          <span className="text-xs text-slate-500 font-bold">{deliveryPartners.length} Active Drivers</span>
+      <div className="bg-[#0d1527]/90 rounded-3xl p-6 border border-slate-800 shadow-xl space-y-4 backdrop-blur-xl">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <h3 className="font-black text-base text-white">Delivery Fleet Telemetry Overview</h3>
+          <span className="text-xs font-mono font-bold text-emerald-400">{deliveryPartners.length} Active Drivers</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs font-mono">
             <thead>
-              <tr className="border-b border-slate-200 text-slate-500 font-extrabold uppercase text-[10px]">
-                <th className="py-2.5 px-3">Rider Name</th>
+              <tr className="border-b border-slate-800 text-slate-400 font-black uppercase text-[10px]">
+                <th className="py-2.5 px-3">Pilot Name</th>
                 <th className="py-2.5 px-3">Vehicle Details</th>
                 <th className="py-2.5 px-3">Current Status</th>
                 <th className="py-2.5 px-3">Completed Trips</th>
                 <th className="py-2.5 px-3">Rating</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-800/80">
               {deliveryPartners.map((partner) => (
-                <tr key={partner.id} className="hover:bg-slate-50/80">
-                  <td className="py-3 px-3 flex items-center gap-2 font-extrabold text-slate-900">
-                    <img src={partner.avatar} alt={partner.name} className="w-7 h-7 rounded-full object-cover border border-slate-200" />
+                <tr key={partner.id} className="hover:bg-[#111c33]/60 transition-colors">
+                  <td className="py-3 px-3 flex items-center gap-2 font-bold text-white">
+                    <img src={partner.avatar} alt={partner.name} className="w-7 h-7 rounded-full object-cover border border-emerald-400" />
                     {partner.name}
                   </td>
-                  <td className="py-3 px-3 text-slate-600 font-medium">{partner.vehicle}</td>
+                  <td className="py-3 px-3 text-slate-400">{partner.vehicle}</td>
                   <td className="py-3 px-3">
-                    <span className={`px-2.5 py-0.5 rounded-full font-extrabold text-[10px] ${
+                    <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] ${
                       partner.status === 'Offline'
-                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                        ? 'bg-rose-950 text-rose-300 border border-rose-500/40'
                         : partner.status === 'On Delivery'
-                        ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
+                        : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
                     }`}>
                       {partner.status}
                     </span>
                   </td>
-                  <td className="py-3 px-3 font-extrabold text-slate-900">{partner.deliveriesCount} trips</td>
-                  <td className="py-3 px-3 font-extrabold text-amber-600">★ {partner.rating}</td>
+                  <td className="py-3 px-3 font-bold text-white">{partner.deliveriesCount} trips</td>
+                  <td className="py-3 px-3 font-bold text-amber-400">★ {partner.rating}</td>
                 </tr>
               ))}
             </tbody>

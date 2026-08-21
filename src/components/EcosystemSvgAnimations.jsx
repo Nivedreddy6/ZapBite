@@ -1,373 +1,332 @@
 import React from 'react';
 
-// 1. Diner Experience & AI Concierge Animated SVG
+// 1. Quantum Diner & AI Concierge Holographic Synthesizer
 export const DinerExperienceSvg = () => (
-  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-rose-50/80 via-white to-rose-100/50 border border-rose-100/80 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-inner">
+  <div className="w-full h-36 rounded-2xl bg-gradient-to-br from-[#0d1527] via-[#090e1c] to-[#040711] border border-emerald-500/30 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-[0_0_25px_rgba(0,245,155,0.08)]">
     <style>{`
-      @keyframes floatSlow {
+      @keyframes floatCyberDiner {
         0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-5px) rotate(2deg); }
+        50% { transform: translateY(-6px) rotate(1.5deg); }
       }
-      @keyframes pulseAura {
-        0%, 100% { transform: scale(1); opacity: 0.4; }
-        50% { transform: scale(1.15); opacity: 0.8; }
+      @keyframes pulseNeonRing {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.18); opacity: 0.8; }
       }
-      @keyframes radarPing {
-        0% { transform: scale(0.6); opacity: 0.9; }
-        100% { transform: scale(1.6); opacity: 0; }
-      }
-      @keyframes sparklePop {
-        0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.4; }
-        50% { transform: scale(1.2) rotate(45deg); opacity: 1; }
-      }
-      @keyframes waveStream {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-20px); }
-      }
-      .anim-float { animation: floatSlow 3.5s ease-in-out infinite; }
-      .anim-aura { animation: pulseAura 2.8s ease-in-out infinite; }
-      .anim-radar { transform-origin: center; animation: radarPing 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
-      .anim-sparkle { transform-origin: center; animation: sparklePop 2s ease-in-out infinite; }
-    `}</style>
-
-    <svg viewBox="0 0 240 120" className="w-full h-full max-w-[240px]">
-      <defs>
-        <radialGradient id="roseGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="phoneGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="100%" stopColor="#ffe4e6" />
-        </linearGradient>
-        <linearGradient id="aiWaveGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#f43f5e" />
-          <stop offset="50%" stopColor="#fb7185" />
-          <stop offset="100%" stopColor="#f43f5e" />
-        </linearGradient>
-      </defs>
-
-      {/* Background Pulsing Auras */}
-      <circle cx="120" cy="60" r="50" fill="url(#roseGlow)" className="anim-aura" />
-      <circle cx="120" cy="60" r="38" fill="none" stroke="#f43f5e" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
-
-      {/* AI Voice Radar Waves */}
-      <circle cx="120" cy="60" r="30" fill="none" stroke="#f43f5e" strokeWidth="1.5" className="anim-radar" />
-      <circle cx="120" cy="60" r="45" fill="none" stroke="#fb7185" strokeWidth="1" className="anim-radar" style={{ animationDelay: '0.7s' }} />
-
-      {/* Central Phone Mockup */}
-      <g className="anim-float">
-        <rect x="94" y="22" width="52" height="76" rx="10" fill="url(#phoneGrad)" stroke="#f43f5e" strokeWidth="2" filter="drop-shadow(0 4px 6px rgba(244,63,94,0.15))" />
-        
-        {/* Phone Notch & Screen Header */}
-        <rect x="108" y="26" width="24" height="3" rx="1.5" fill="#fda4af" />
-        <circle cx="102" cy="36" r="3" fill="#f43f5e" />
-        <rect x="108" y="34" width="28" height="4" rx="2" fill="#fecdd3" />
-
-        {/* AI Concierge Sound Wave Banner */}
-        <rect x="98" y="44" width="44" height="18" rx="5" fill="#fff1f2" stroke="#fda4af" strokeWidth="0.8" />
-        <path d="M103 53 Q107 47 111 53 T119 53 T127 53 T135 53" fill="none" stroke="url(#aiWaveGrad)" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="137" cy="53" r="1.5" fill="#f43f5e" />
-
-        {/* Mini Food Recommendation Pill */}
-        <rect x="98" y="66" width="44" height="14" rx="4" fill="#f43f5e" />
-        <text x="120" y="76" fontSize="7" fill="#ffffff" fontWeight="bold" textAnchor="middle">✨ AI Order</text>
-
-        {/* Home Button Pill */}
-        <rect x="112" y="88" width="16" height="2" rx="1" fill="#fda4af" />
-      </g>
-
-      {/* Floating Interactive Food Elements */}
-      {/* 1. Burger / Dish Left */}
-      <g transform="translate(36, 38)" className="anim-float" style={{ animationDelay: '0.4s' }}>
-        <circle cx="16" cy="16" r="16" fill="#ffffff" stroke="#fecdd3" strokeWidth="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-        <path d="M9 16 C9 11 23 11 23 16 Z" fill="#fb923c" />
-        <rect x="8" y="17" width="16" height="3" rx="1" fill="#22c55e" />
-        <rect x="8" y="21" width="16" height="3" rx="1.5" fill="#f97316" />
-      </g>
-
-      {/* 2. Pizza / Ramen Right */}
-      <g transform="translate(172, 38)" className="anim-float" style={{ animationDelay: '0.8s' }}>
-        <circle cx="16" cy="16" r="16" fill="#ffffff" stroke="#fecdd3" strokeWidth="1.5" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-        <path d="M16 8 L24 22 L8 22 Z" fill="#facc15" stroke="#f59e0b" strokeWidth="1" />
-        <circle cx="15" cy="17" r="2" fill="#ef4444" />
-        <circle cx="18" cy="14" r="1.5" fill="#ef4444" />
-      </g>
-
-      {/* Sparkles */}
-      <path d="M68 25 L70 29 L74 31 L70 33 L68 37 L66 33 L62 31 L66 29 Z" fill="#f43f5e" className="anim-sparkle" />
-      <path d="M178 84 L180 87 L183 88 L180 89 L178 92 L176 89 L173 88 L176 87 Z" fill="#fb7185" className="anim-sparkle" style={{ animationDelay: '1s' }} />
-    </svg>
-  </div>
-);
-
-// 2. Kitchen Operating System Animated SVG
-export const KitchenOsSvg = () => (
-  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-orange-50/80 via-white to-amber-100/50 border border-orange-100/80 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-inner">
-    <style>{`
-      @keyframes riseSteam {
-        0% { transform: translateY(0) scaleX(1); opacity: 0.8; }
-        50% { transform: translateY(-8px) scaleX(1.1); opacity: 0.5; }
-        100% { transform: translateY(-16px) scaleX(1.2); opacity: 0; }
-      }
-      @keyframes rotateTimer {
+      @keyframes radarSweepScan {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-      @keyframes flameFlicker {
-        0%, 100% { transform: scale(1); opacity: 0.85; }
-        50% { transform: scale(1.12, 1.08); opacity: 1; }
+      @keyframes soundBarOscillate {
+        0%, 100% { height: 6px; }
+        50% { height: 18px; }
       }
-      @keyframes panSizzle {
-        0%, 100% { transform: translateY(0px); }
-        25% { transform: translateY(-2px) rotate(-1deg); }
-        75% { transform: translateY(1px) rotate(1deg); }
-      }
-      .anim-steam-1 { animation: riseSteam 2.2s infinite linear; }
-      .anim-steam-2 { animation: riseSteam 2.2s infinite linear 0.7s; }
-      .anim-steam-3 { animation: riseSteam 2.2s infinite linear 1.4s; }
-      .anim-flame { transform-origin: 120px 88px; animation: flameFlicker 1.8s ease-in-out infinite; }
-      .anim-clock { transform-origin: 180px 40px; animation: rotateTimer 8s linear infinite; }
-      .anim-pan { animation: panSizzle 2s ease-in-out infinite; }
+      .anim-diner-float { animation: floatCyberDiner 3.6s ease-in-out infinite; }
+      .anim-neon-pulse { animation: pulseNeonRing 3s ease-in-out infinite; }
+      .anim-radar-sweep { transform-origin: 120px 60px; animation: radarSweepScan 4s linear infinite; }
     `}</style>
 
     <svg viewBox="0 0 240 120" className="w-full h-full max-w-[240px]">
       <defs>
-        <radialGradient id="orangeAura" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#f97316" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+        <radialGradient id="cyberEmeraldGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#00f59b" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#00f59b" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="panGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#334155" />
-          <stop offset="100%" stopColor="#1e293b" />
+        <linearGradient id="cyberDeviceGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#1e293b" />
+          <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
-        <linearGradient id="ticketGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="100%" stopColor="#fff7ed" />
+        <linearGradient id="neonLaserGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#00f59b" />
+          <stop offset="50%" stopColor="#00d2ff" />
+          <stop offset="100%" stopColor="#8b5cf6" />
         </linearGradient>
+        <filter id="neonBlur">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
-      {/* Warm Background Heat Aura */}
-      <circle cx="120" cy="65" r="55" fill="url(#orangeAura)" />
+      {/* Cyber Background Grid & Pulse Auras */}
+      <circle cx="120" cy="60" r="54" fill="url(#cyberEmeraldGlow)" className="anim-neon-pulse" />
+      <circle cx="120" cy="60" r="44" fill="none" stroke="#00f59b" strokeWidth="1" strokeDasharray="4 4" opacity="0.4" />
+      
+      {/* Rotating Radar Scanner Line */}
+      <line x1="120" y1="60" x2="160" y2="60" stroke="#00f59b" strokeWidth="1.5" opacity="0.6" className="anim-radar-sweep" />
 
-      {/* Burner Flame Glow */}
-      <g className="anim-flame">
-        <path d="M102 92 Q120 76 138 92 Q120 86 102 92 Z" fill="#ea580c" opacity="0.9" />
-        <path d="M110 92 Q120 80 130 92 Q120 87 110 92 Z" fill="#facc15" />
-      </g>
-
-      {/* Sizzling Chef Wok / Skillet */}
-      <g className="anim-pan">
-        {/* Pan Body */}
-        <path d="M85 64 Q120 90 155 64 Z" fill="url(#panGrad)" stroke="#ea580c" strokeWidth="1.5" />
-        <ellipse cx="120" cy="64" rx="35" ry="7" fill="#475569" stroke="#cbd5e1" strokeWidth="1" />
+      {/* Central Quantum Telemetry Terminal */}
+      <g className="anim-diner-float">
+        <rect x="92" y="18" width="56" height="84" rx="12" fill="url(#cyberDeviceGrad)" stroke="#00f59b" strokeWidth="1.8" filter="url(#neonBlur)" />
         
-        {/* Pan Handle */}
-        <path d="M154 65 Q182 60 190 62" fill="none" stroke="#1e293b" strokeWidth="4" strokeLinecap="round" />
+        {/* Top Camera & Sensor */}
+        <circle cx="120" cy="24" r="2" fill="#00d2ff" />
         
-        {/* Food Sizzle Contents */}
-        <ellipse cx="120" cy="64" rx="28" ry="4" fill="#ea580c" opacity="0.6" />
-        <circle cx="112" cy="64" r="2.5" fill="#22c55e" />
-        <circle cx="125" cy="63" r="2" fill="#facc15" />
-        <circle cx="132" cy="65" r="2" fill="#ef4444" />
+        {/* Holographic Waveform Screen */}
+        <rect x="98" y="32" width="44" height="24" rx="6" fill="#070b14" stroke="#00d2ff" strokeWidth="0.8" />
+        
+        {/* AI Audio Soundbars */}
+        <g fill="#00f59b">
+          <rect x="103" y="40" width="2" height="8" rx="1">
+            <animate attributeName="height" values="4;14;6;16;4" dur="1.2s" repeatCount="indefinite" />
+          </rect>
+          <rect x="108" y="38" width="2" height="12" rx="1" fill="#00d2ff">
+            <animate attributeName="height" values="8;16;4;12;8" dur="1s" repeatCount="indefinite" />
+          </rect>
+          <rect x="113" y="36" width="2" height="16" rx="1" fill="#8b5cf6">
+            <animate attributeName="height" values="12;6;16;8;12" dur="1.4s" repeatCount="indefinite" />
+          </rect>
+          <rect x="118" y="38" width="2" height="12" rx="1" fill="#00f59b">
+            <animate attributeName="height" values="6;16;8;14;6" dur="0.9s" repeatCount="indefinite" />
+          </rect>
+          <rect x="123" y="40" width="2" height="8" rx="1" fill="#00d2ff">
+            <animate attributeName="height" values="4;12;6;14;4" dur="1.1s" repeatCount="indefinite" />
+          </rect>
+          <rect x="128" y="39" width="2" height="10" rx="1" fill="#8b5cf6">
+            <animate attributeName="height" values="8;4;14;6;8" dur="1.3s" repeatCount="indefinite" />
+          </rect>
+          <rect x="133" y="42" width="2" height="6" rx="1" fill="#00f59b">
+            <animate attributeName="height" values="4;10;5;12;4" dur="1s" repeatCount="indefinite" />
+          </rect>
+        </g>
+
+        {/* AI Sensory Synthesis Capsule Button */}
+        <rect x="98" y="62" width="44" height="16" rx="6" fill="url(#neonLaserGrad)" />
+        <text x="120" y="73" fontSize="6.5" fill="#070b14" fontWeight="900" textAnchor="middle" letterSpacing="0.5">⚡ AI SYNTH</text>
+        
+        {/* Bottom Biometric Sensor */}
+        <circle cx="120" cy="89" r="4" fill="none" stroke="#00f59b" strokeWidth="1.2" opacity="0.8" />
+        <circle cx="120" cy="89" r="1.5" fill="#00d2ff" />
       </g>
 
-      {/* Rising Sizzle Steam Paths */}
-      <g>
-        <path d="M110 54 Q106 44 112 36 T108 24" fill="none" stroke="#ea580c" strokeWidth="1.8" strokeLinecap="round" className="anim-steam-1" />
-        <path d="M120 52 Q124 40 118 30 T122 18" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" className="anim-steam-2" />
-        <path d="M130 54 Q134 44 128 34 T132 22" fill="none" stroke="#fb923c" strokeWidth="1.8" strokeLinecap="round" className="anim-steam-3" />
+      {/* Floating Holographic Flavor Orbs */}
+      <g transform="translate(30, 32)" className="anim-diner-float" style={{ animationDelay: '0.4s' }}>
+        <circle cx="16" cy="16" r="15" fill="#0f172a" stroke="#00d2ff" strokeWidth="1.5" />
+        <circle cx="16" cy="16" r="10" fill="none" stroke="#00f59b" strokeWidth="1" strokeDasharray="3 2" />
+        <text x="16" y="20" fontSize="11" textAnchor="middle">🍕</text>
       </g>
 
-      {/* Live Order Queue Ticket Left */}
-      <g transform="translate(24, 26)" className="anim-pan" style={{ animationDelay: '0.5s' }}>
-        <rect x="0" y="0" width="48" height="64" rx="6" fill="url(#ticketGrad)" stroke="#fdba74" strokeWidth="1.5" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.06))" />
-        <rect x="6" y="8" width="36" height="5" rx="2" fill="#f97316" />
-        <rect x="6" y="18" width="28" height="3" rx="1.5" fill="#cbd5e1" />
-        <rect x="6" y="25" width="34" height="3" rx="1.5" fill="#cbd5e1" />
-        <rect x="6" y="32" width="20" height="3" rx="1.5" fill="#cbd5e1" />
-        
-        {/* Cooking Status Tag */}
-        <rect x="6" y="44" width="36" height="12" rx="3" fill="#ffedd5" stroke="#f97316" strokeWidth="0.8" />
-        <text x="24" y="53" fontSize="6.5" fill="#ea580c" fontWeight="bold" textAnchor="middle">🔥 PREPARING</text>
+      <g transform="translate(178, 32)" className="anim-diner-float" style={{ animationDelay: '0.8s' }}>
+        <circle cx="16" cy="16" r="15" fill="#0f172a" stroke="#8b5cf6" strokeWidth="1.5" />
+        <circle cx="16" cy="16" r="10" fill="none" stroke="#00d2ff" strokeWidth="1" strokeDasharray="3 2" />
+        <text x="16" y="20" fontSize="11" textAnchor="middle">🍜</text>
       </g>
 
-      {/* Digital Speed Clock Right */}
-      <g transform="translate(170, 24)">
-        <circle cx="16" cy="16" r="16" fill="#ffffff" stroke="#f97316" strokeWidth="2" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-        <circle cx="16" cy="16" r="2" fill="#ea580c" />
-        {/* Clock Hands */}
-        <line x1="16" y1="16" x2="16" y2="6" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" className="anim-clock" />
-        <line x1="16" y1="16" x2="23" y2="16" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" />
-        
-        <rect x="-4" y="36" width="40" height="12" rx="3" fill="#ea580c" />
-        <text x="16" y="45" fontSize="7" fill="#ffffff" fontWeight="bold" textAnchor="middle">12:00 MIN</text>
-      </g>
+      {/* Holographic Sparkle Stars */}
+      <path d="M64 22 L66 26 L70 28 L66 30 L64 34 L62 30 L58 28 L62 26 Z" fill="#00f59b" filter="url(#neonBlur)" opacity="0.8" />
+      <path d="M176 86 L178 89 L181 90 L178 91 L176 94 L174 91 L171 90 L174 89 Z" fill="#00d2ff" filter="url(#neonBlur)" opacity="0.8" />
     </svg>
   </div>
 );
 
-// 3. Rider Fleet Dispatch Animated SVG
-export const RiderFleetSvg = () => (
-  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-amber-50/80 via-white to-yellow-100/50 border border-amber-100/80 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-inner">
+// 2. Kitchen Operating System & Plasma Reactor SVG
+export const KitchenOsSvg = () => (
+  <div className="w-full h-36 rounded-2xl bg-gradient-to-br from-[#0d1527] via-[#090e1c] to-[#040711] border border-amber-500/30 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-[0_0_25px_rgba(245,158,11,0.08)]">
     <style>{`
-      @keyframes dashMove {
-        to { stroke-dashoffset: -40; }
+      @keyframes plasmaFlameOscillate {
+        0%, 100% { transform: scaleY(1) scaleX(1); }
+        50% { transform: scaleY(1.25) scaleX(0.92); }
       }
-      @keyframes scooterBob {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-3px) rotate(1deg); }
+      @keyframes steamRiseCycle {
+        0% { transform: translateY(0px); opacity: 0.8; }
+        100% { transform: translateY(-16px); opacity: 0; }
       }
-      @keyframes spinWheel {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      @keyframes beaconPing {
-        0% { transform: scale(0.6); opacity: 1; }
-        100% { transform: scale(2); opacity: 0; }
-      }
-      .anim-dash { stroke-dasharray: 6 4; animation: dashMove 1.5s linear infinite; }
-      .anim-scooter { animation: scooterBob 1.8s ease-in-out infinite; }
-      .anim-wheel { transform-origin: center; animation: spinWheel 1.2s linear infinite; }
-      .anim-beacon { transform-origin: 196px 74px; animation: beaconPing 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+      .anim-plasma-flame { transform-origin: 120px 88px; animation: plasmaFlameOscillate 0.6s ease-in-out infinite alternate; }
+      .anim-steam-rise { animation: steamRiseCycle 2s linear infinite; }
     `}</style>
 
     <svg viewBox="0 0 240 120" className="w-full h-full max-w-[240px]">
       <defs>
-        <radialGradient id="amberGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.25" />
+        <linearGradient id="plasmaFlameGrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stopColor="#ff3366" />
+          <stop offset="50%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#00f59b" />
+        </linearGradient>
+        <radialGradient id="amberReactorGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.3" />
           <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="scooterBody" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#d97706" />
-        </linearGradient>
       </defs>
 
-      {/* Map Grid Vector Background */}
-      <circle cx="120" cy="60" r="55" fill="url(#amberGlow)" />
-      <path d="M20 90 L80 40 L160 85 L220 35" fill="none" stroke="#fde68a" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
-      
-      {/* Animated Glowing GPS Vector Path */}
-      <path d="M20 90 L80 40 L160 85 L220 35" fill="none" stroke="#d97706" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className="anim-dash" />
+      {/* Plasma Reactor Glow */}
+      <circle cx="120" cy="65" r="50" fill="url(#amberReactorGlow)" />
 
-      {/* Start Point Radar Beacon */}
-      <circle cx="20" cy="90" r="5" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" />
+      {/* Kitchen HUD Status Ring */}
+      <circle cx="120" cy="60" r="48" fill="none" stroke="#f59e0b" strokeWidth="1" strokeDasharray="6 4" opacity="0.3" />
 
-      {/* Destination Doorstep Ping */}
-      <g>
-        <circle cx="218" cy="36" r="14" fill="none" stroke="#ef4444" strokeWidth="1.5" className="anim-beacon" style={{ transformOrigin: '218px 36px' }} />
-        <circle cx="218" cy="36" r="7" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
-        {/* Destination Pin Icon */}
-        <path d="M218 24 C213 24 210 28 210 32 C210 37 218 45 218 45 C218 45 226 37 226 32 C226 28 223 24 218 24 Z" fill="#ef4444" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.2))" />
-        <circle cx="218" cy="31" r="2.5" fill="#ffffff" />
+      {/* Animated Rising Cyber Steam */}
+      <g stroke="#00f59b" strokeWidth="2" strokeLinecap="round" opacity="0.8" className="anim-steam-rise">
+        <path d="M106 48 Q102 36 108 26 T104 14" fill="none" />
+        <path d="M120 44 Q126 32 120 22 T124 10" fill="none" style={{ animationDelay: '0.5s' }} />
+        <path d="M134 48 Q130 36 136 26 T132 14" fill="none" style={{ animationDelay: '1s' }} />
       </g>
 
-      {/* Animated Electric Delivery Scooter */}
-      <g transform="translate(100, 48)" className="anim-scooter">
-        {/* Headlight Beam */}
-        <polygon points="34,16 54,8 54,24" fill="#fef08a" opacity="0.6" />
+      {/* Plasma Flames */}
+      <g className="anim-plasma-flame">
+        <path d="M102 88 Q110 66 114 74 Q120 54 126 74 Q130 66 138 88 Z" fill="url(#plasmaFlameGrad)" />
+      </g>
 
-        {/* Scooter Chassis & Thermal Delivery Box */}
-        <rect x="0" y="4" width="16" height="16" rx="3" fill="#ea580c" stroke="#ffffff" strokeWidth="1" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.15))" />
-        <text x="8" y="15" fontSize="7" fill="#ffffff" fontWeight="bold" textAnchor="middle">⚡</text>
+      {/* Cyber Induction Wok Pan */}
+      <path d="M88 64 C88 92 152 92 152 64 Z" fill="#0f172a" stroke="#00d2ff" strokeWidth="2" />
+      <line x1="80" y1="64" x2="88" y2="64" stroke="#ff3366" strokeWidth="4" strokeLinecap="round" />
+      <line x1="152" y1="64" x2="160" y2="64" stroke="#ff3366" strokeWidth="4" strokeLinecap="round" />
 
-        {/* Scooter Main Body Frame */}
-        <path d="M12 18 L24 18 L28 10 L34 10" fill="none" stroke="url(#scooterBody)" strokeWidth="3" strokeLinecap="round" />
+      {/* Digital HUD Cooking Timer Badge */}
+      <g transform="translate(94, 20)">
+        <rect x="0" y="0" width="52" height="15" rx="4" fill="#070b14" stroke="#00f59b" strokeWidth="1" />
+        <circle cx="8" cy="7.5" r="2.5" fill="#00f59b" />
+        <text x="30" y="11" fontSize="7" fill="#00f59b" fontWeight="bold" fontFamily="monospace" textAnchor="middle">READY 98%</text>
+      </g>
+
+      {/* Sizzling Particle Sparks */}
+      <circle cx="108" cy="56" r="1.5" fill="#ffd166">
+        <animate attributeName="cy" values="56;40;56" dur="1s" repeatCount="indefinite" />
+        <animate attributeName="cx" values="108;104;108" dur="1s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="128" cy="54" r="1.5" fill="#00f59b">
+        <animate attributeName="cy" values="54;38;54" dur="1.2s" repeatCount="indefinite" />
+        <animate attributeName="cx" values="128;132;128" dur="1.2s" repeatCount="indefinite" />
+      </circle>
+    </svg>
+  </div>
+);
+
+// 3. Cyber Rider & Drone Fleet Telemetry SVG
+export const RiderFleetSvg = () => (
+  <div className="w-full h-36 rounded-2xl bg-gradient-to-br from-[#0d1527] via-[#090e1c] to-[#040711] border border-cyan-500/30 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-[0_0_25px_rgba(6,182,212,0.08)]">
+    <style>{`
+      @keyframes cyberDriveGrid {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-30px); }
+      }
+      @keyframes droneHoverCycle {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-5px) rotate(-1deg); }
+      }
+      @keyframes thrusterGlowPulse {
+        0%, 100% { opacity: 0.6; transform: scaleX(1); }
+        50% { opacity: 1; transform: scaleX(1.4); }
+      }
+      .anim-drone-hover { animation: droneHoverCycle 2.4s ease-in-out infinite; }
+      .anim-thruster { transform-origin: 86px 62px; animation: thrusterGlowPulse 0.4s ease-in-out infinite alternate; }
+      .anim-road-grid { animation: cyberDriveGrid 0.8s linear infinite; }
+    `}</style>
+
+    <svg viewBox="0 0 240 120" className="w-full h-full max-w-[240px]">
+      <defs>
+        <radialGradient id="cyanRadarGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#00d2ff" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#00d2ff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Radar Pulse Background */}
+      <circle cx="190" cy="55" r="35" fill="url(#cyanRadarGlow)" />
+      <circle cx="190" cy="55" r="25" fill="none" stroke="#00d2ff" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+      <circle cx="190" cy="55" r="4" fill="#00f59b" />
+
+      {/* Cyber Neon Road Lanes */}
+      <line x1="10" y1="92" x2="230" y2="92" stroke="#00d2ff" strokeWidth="2" opacity="0.6" />
+      <g className="anim-road-grid">
+        <line x1="20" y1="98" x2="45" y2="98" stroke="#00f59b" strokeWidth="2" />
+        <line x1="65" y1="98" x2="90" y2="98" stroke="#00f59b" strokeWidth="2" />
+        <line x1="110" y1="98" x2="135" y2="98" stroke="#00f59b" strokeWidth="2" />
+        <line x1="155" y1="98" x2="180" y2="98" stroke="#00f59b" strokeWidth="2" />
+        <line x1="200" y1="98" x2="225" y2="98" stroke="#00f59b" strokeWidth="2" />
+        <line x1="245" y1="98" x2="270" y2="98" stroke="#00f59b" strokeWidth="2" />
+      </g>
+
+      {/* Cyber Hover-Drone & Smart Delivery Vehicle */}
+      <g className="anim-drone-hover">
+        {/* Thruster Jet Flame */}
+        <polygon points="86,60 62,62 86,64" fill="#00f59b" className="anim-thruster" />
+        <polygon points="86,61 70,62 86,63" fill="#00d2ff" />
+
+        {/* Chassis Body */}
+        <path d="M88 64 L102 48 L142 48 L156 64 L146 76 L96 76 Z" fill="#0f172a" stroke="#00d2ff" strokeWidth="1.8" />
         
-        {/* Rider Helmet */}
-        <circle cx="18" cy="4" r="5" fill="#1e293b" />
-        <path d="M18 4 L22 5" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" />
+        {/* Cockpit Visor / Glass */}
+        <polygon points="106,50 134,50 144,62 100,62" fill="#00f59b" opacity="0.3" stroke="#00f59b" strokeWidth="1" />
+        
+        {/* Cyber Wheels / Repulsor Discs */}
+        <circle cx="102" cy="78" r="10" fill="#070b14" stroke="#00f59b" strokeWidth="2" />
+        <circle cx="102" cy="78" r="5" fill="#00d2ff" />
+        <circle cx="144" cy="78" r="10" fill="#070b14" stroke="#00f59b" strokeWidth="2" />
+        <circle cx="144" cy="78" r="5" fill="#00d2ff" />
 
-        {/* Left Wheel */}
-        <g transform="translate(6, 22)">
-          <circle cx="0" cy="0" r="6" fill="#334155" stroke="#ffffff" strokeWidth="1" />
-          <circle cx="0" cy="0" r="2.5" fill="#94a3b8" />
-        </g>
-
-        {/* Right Wheel */}
-        <g transform="translate(26, 22)">
-          <circle cx="0" cy="0" r="6" fill="#334155" stroke="#ffffff" strokeWidth="1" />
-          <circle cx="0" cy="0" r="2.5" fill="#94a3b8" />
-        </g>
+        {/* Insulated Food Pod Box */}
+        <rect x="88" y="38" width="22" height="18" rx="3" fill="#1e293b" stroke="#8b5cf6" strokeWidth="1.5" />
+        <text x="99" y="50" fontSize="7" fill="#8b5cf6" fontWeight="bold" textAnchor="middle">ZAP</text>
+        
+        {/* Headlight Laser Beam */}
+        <polygon points="156,62 205,48 205,74 156,66" fill="#00d2ff" opacity="0.18" />
       </g>
 
-      {/* Floating 25-Min SLA Badge */}
-      <g transform="translate(42, 14)">
-        <rect x="0" y="0" width="56" height="16" rx="4" fill="#ffffff" stroke="#f59e0b" strokeWidth="1" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" />
-        <circle cx="8" cy="8" r="4" fill="#22c55e" />
-        <text x="32" y="11" fontSize="7.5" fill="#b45309" fontWeight="bold" textAnchor="middle">⚡ 25m SLA</text>
+      {/* Target Destination Radar Pin */}
+      <g transform="translate(190, 32)">
+        <polygon points="0,0 8,18 0,14 -8,18" fill="#ff3366" />
+        <circle cx="0" cy="0" r="3" fill="#ffffff" />
       </g>
     </svg>
   </div>
 );
 
-// 4. Analytics & Operations Animated SVG
+// 4. Quantum Analytics & Neural Platform OS SVG
 export const AnalyticsOpsSvg = () => (
-  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-emerald-50/80 via-white to-teal-100/50 border border-emerald-100/80 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-inner">
+  <div className="w-full h-36 rounded-2xl bg-gradient-to-br from-[#0d1527] via-[#090e1c] to-[#040711] border border-violet-500/30 p-2 relative overflow-hidden flex items-center justify-center group mb-4 shadow-[0_0_25px_rgba(139,92,246,0.08)]">
     <style>{`
-      @keyframes barGrow1 { 0%, 100% { height: 26px; y: 64px; } 50% { height: 42px; y: 48px; } }
-      @keyframes barGrow2 { 0%, 100% { height: 46px; y: 44px; } 50% { height: 28px; y: 62px; } }
-      @keyframes barGrow3 { 0%, 100% { height: 34px; y: 56px; } 50% { height: 52px; y: 38px; } }
-      @keyframes barGrow4 { 0%, 100% { height: 56px; y: 34px; } 50% { height: 40px; y: 50px; } }
-      @keyframes nodePulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.4); opacity: 1; } }
-      .anim-bar-1 { animation: barGrow1 3s ease-in-out infinite; }
-      .anim-bar-2 { animation: barGrow2 3s ease-in-out infinite 0.4s; }
-      .anim-bar-3 { animation: barGrow3 3s ease-in-out infinite 0.8s; }
-      .anim-bar-4 { animation: barGrow4 3s ease-in-out infinite 1.2s; }
-      .anim-node { transform-origin: center; animation: nodePulse 2s ease-in-out infinite; }
+      @keyframes barMatrixOscillate {
+        0%, 100% { transform: scaleY(1); }
+        50% { transform: scaleY(1.3); }
+      }
+      .anim-bar-1 { transform-origin: 70px 90px; animation: barMatrixOscillate 1.8s ease-in-out infinite; }
+      .anim-bar-2 { transform-origin: 95px 90px; animation: barMatrixOscillate 2.2s ease-in-out infinite 0.3s; }
+      .anim-bar-3 { transform-origin: 120px 90px; animation: barMatrixOscillate 1.6s ease-in-out infinite 0.6s; }
+      .anim-bar-4 { transform-origin: 145px 90px; animation: barMatrixOscillate 2s ease-in-out infinite 0.9s; }
+      .anim-bar-5 { transform-origin: 170px 90px; animation: barMatrixOscillate 1.7s ease-in-out infinite 1.2s; }
     `}</style>
 
     <svg viewBox="0 0 240 120" className="w-full h-full max-w-[240px]">
       <defs>
-        <radialGradient id="emeraldGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#10b981" />
-          <stop offset="100%" stopColor="#059669" />
+        <linearGradient id="barNeonGrad1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#00f59b" />
+          <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
-        <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#34d399" />
-          <stop offset="100%" stopColor="#10b981" />
+        <linearGradient id="barNeonGrad2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#00d2ff" />
+          <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
-        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+        <linearGradient id="barNeonGrad3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#8b5cf6" />
+          <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
       </defs>
 
-      {/* Emerald Background Glow */}
-      <circle cx="120" cy="60" r="55" fill="url(#emeraldGlow)" />
-
       {/* Grid Lines */}
-      <line x1="30" y1="35" x2="210" y2="35" stroke="#e2e8f0" strokeWidth="0.8" strokeDasharray="3 3" />
-      <line x1="30" y1="60" x2="210" y2="60" stroke="#e2e8f0" strokeWidth="0.8" strokeDasharray="3 3" />
-      <line x1="30" y1="90" x2="210" y2="90" stroke="#cbd5e1" strokeWidth="1.2" />
+      <line x1="40" y1="30" x2="200" y2="30" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="40" y1="60" x2="200" y2="60" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="40" y1="90" x2="200" y2="90" stroke="#334155" strokeWidth="1.5" />
 
-      {/* Animated Growing Bar Chart Columns */}
-      <rect x="50" y="64" width="14" height="26" rx="3" fill="url(#barGrad2)" className="anim-bar-1" />
-      <rect x="74" y="44" width="14" height="46" rx="3" fill="url(#barGrad1)" className="anim-bar-2" />
-      <rect x="98" y="56" width="14" height="34" rx="3" fill="url(#barGrad2)" className="anim-bar-3" />
-      <rect x="122" y="34" width="14" height="56" rx="3" fill="url(#barGrad1)" className="anim-bar-4" />
-      <rect x="146" y="48" width="14" height="42" rx="3" fill="url(#barGrad2)" className="anim-bar-2" />
+      {/* 3D Isometric Neon Bars */}
+      <rect x="62" y="55" width="16" height="35" rx="3" fill="url(#barNeonGrad1)" stroke="#00f59b" strokeWidth="1" className="anim-bar-1" />
+      <rect x="87" y="42" width="16" height="48" rx="3" fill="url(#barNeonGrad2)" stroke="#00d2ff" strokeWidth="1" className="anim-bar-2" />
+      <rect x="112" y="28" width="16" height="62" rx="3" fill="url(#barNeonGrad3)" stroke="#8b5cf6" strokeWidth="1" className="anim-bar-3" />
+      <rect x="137" y="46" width="16" height="44" rx="3" fill="url(#barNeonGrad1)" stroke="#00f59b" strokeWidth="1" className="anim-bar-4" />
+      <rect x="162" y="34" width="16" height="56" rx="3" fill="url(#barNeonGrad2)" stroke="#00d2ff" strokeWidth="1" className="anim-bar-5" />
 
-      {/* Trend Area Curve & Polyline */}
-      <path d="M57 74 Q81 48 105 60 T153 38 L153 90 L57 90 Z" fill="url(#areaGrad)" />
-      <path d="M57 74 Q81 48 105 60 T153 38" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Growth Trend Vector Curve */}
+      <path d="M50 82 Q85 68 112 36 T180 24" fill="none" stroke="#00f59b" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="180" cy="24" r="4" fill="#00f59b" />
+      <circle cx="180" cy="24" r="8" fill="none" stroke="#00f59b" strokeWidth="1" opacity="0.6">
+        <animate attributeName="r" values="4;12;4" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite" />
+      </circle>
 
-      {/* Glowing Dynamic Data Nodes */}
-      <circle cx="57" cy="74" r="3.5" fill="#ffffff" stroke="#059669" strokeWidth="2" />
-      <circle cx="105" cy="60" r="3.5" fill="#ffffff" stroke="#059669" strokeWidth="2" />
-      <circle cx="153" cy="38" r="4.5" fill="#10b981" stroke="#ffffff" strokeWidth="2" className="anim-node" />
-
-      {/* Floating Revenue Ticker Badge */}
-      <g transform="translate(145, 14)">
-        <rect x="0" y="0" width="70" height="22" rx="6" fill="#ffffff" stroke="#10b981" strokeWidth="1.5" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.08))" />
-        <circle cx="11" cy="11" r="5" fill="#d1fae5" />
-        <path d="M8 12 L11 8 L14 12" stroke="#059669" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        <text x="42" y="14" fontSize="8" fill="#047857" fontWeight="extrabold" textAnchor="middle">+48.2%</text>
+      {/* Metric Badge */}
+      <g transform="translate(142, 10)">
+        <rect x="0" y="0" width="56" height="14" rx="4" fill="#070b14" stroke="#00f59b" strokeWidth="1" />
+        <text x="28" y="10" fontSize="7.5" fill="#00f59b" fontWeight="900" fontFamily="monospace" textAnchor="middle">▲ 99.4% SLA</text>
       </g>
     </svg>
   </div>
