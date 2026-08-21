@@ -265,10 +265,21 @@ export const AppProvider = ({ children }) => {
           setMenuItems(await resMenu.json());
         }
         if (resOrders.ok) {
-          const o = await resOrders.json();
-          setOrders(o);
-          const active = o.find(item => item.status !== 'Delivered');
-          if (active) setActiveTrackingOrderId(active.id);
+          const rawOrders = await resOrders.json();
+          // Automatically archive past orders whose delivery duration has already passed
+          const normalizedOrders = rawOrders.map((ord) => {
+            const createdTime = new Date(ord.createdAt).getTime();
+            const elapsedMins = (Date.now() - createdTime) / 60000;
+            const totalMins = ord.estimatedDeliveryMins || 32;
+            if (ord.status !== 'Delivered' && elapsedMins >= totalMins) {
+              return { ...ord, status: 'Delivered' };
+            }
+            return ord;
+          });
+
+          setOrders(normalizedOrders);
+          const active = normalizedOrders.find((item) => item.status !== 'Delivered');
+          setActiveTrackingOrderId(active ? active.id : null);
         }
         if (resPartners.ok) setDeliveryPartners(await resPartners.json());
         setIsBackendConnected(true);
@@ -339,8 +350,9 @@ export const AppProvider = ({ children }) => {
       });
     };
 
-    // Check progress every 60 seconds (1 minute update)
-    const interval = setInterval(checkOrderProgress, 60000);
+    // Run check immediately on mount, then every 30 seconds
+    checkOrderProgress();
+    const interval = setInterval(checkOrderProgress, 30000);
     return () => clearInterval(interval);
   }, []);
 
