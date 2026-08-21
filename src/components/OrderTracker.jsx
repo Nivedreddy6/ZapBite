@@ -5,14 +5,14 @@ import {
   Clock, 
   MapPin, 
   Phone, 
-  Zap, 
-  ShoppingBag,
-  Navigation,
-  Activity,
-  Radio,
-  Gauge,
+  ShoppingBag, 
+  Navigation, 
+  Radio, 
   AlertCircle,
-  Cpu
+  ChefHat,
+  Package,
+  Bike,
+  Sparkles
 } from 'lucide-react';
 import { LiveMap } from './LiveMap';
 
@@ -21,54 +21,67 @@ export const OrderTracker = () => {
     orders, 
     activeTrackingOrderId, 
     setActiveTrackingOrderId, 
-    deliveryPartners, 
-    fastForwardOrder 
+    deliveryPartners
   } = useApp();
 
-  const [telemetrySpeed, setTelemetrySpeed] = useState(34);
-  const [signalStrength, setSignalStrength] = useState(99);
+  const [etaRemainingMins, setEtaRemainingMins] = useState(22);
 
-  // Dynamic telemetry pulse animation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTelemetrySpeed(Math.floor(28 + Math.random() * 10));
-      setSignalStrength(Math.floor(98 + Math.random() * 2));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
+  // Active Order & Partner details
   const activeOrder = orders.find((o) => o.id === activeTrackingOrderId) || orders[0];
   const partner = deliveryPartners.find((p) => p.id === activeOrder?.deliveryPartnerId) || deliveryPartners[0];
 
+  // Authentic Food Delivery Milestones
   const stages = [
-    { key: 'Placed', label: 'Order Queued', desc: 'Received in Quantum DB' },
-    { key: 'Accepted', label: 'Reactor Locked', desc: 'Verified by Chef' },
-    { key: 'Preparing', label: 'Thermal Synthesis', desc: 'Active Kitchen Prep' },
-    { key: 'Ready', label: 'Thermal Sealed', desc: 'Staged at Dispatch' },
-    { key: 'Out for Delivery', label: 'Hyper Transit', desc: 'Drone & Rider En Route' },
-    { key: 'Delivered', label: 'Doorstep Handoff', desc: 'Enjoy Fresh Meal!' }
+    { key: 'Placed', label: 'Order Placed', desc: 'Sent to restaurant', icon: ShoppingBag },
+    { key: 'Accepted', label: 'Order Confirmed', desc: 'Restaurant accepted', icon: CheckCircle2 },
+    { key: 'Preparing', label: 'Preparing Food', desc: 'Chef is cooking your meal', icon: ChefHat },
+    { key: 'Ready', label: 'Food Packed', desc: 'Ready for rider pickup', icon: Package },
+    { key: 'Out for Delivery', label: 'On the Way', desc: 'Rider heading to your location', icon: Bike },
+    { key: 'Delivered', label: 'Delivered', desc: 'Enjoy your delicious meal!', icon: Sparkles }
   ];
 
   const getStageIndex = (status) => stages.findIndex((s) => s.key === status);
   const currentStageIdx = activeOrder ? getStageIndex(activeOrder.status) : 0;
   const isOrderAccepted = activeOrder && activeOrder.status !== 'Placed';
 
+  // Live ETA calculation based on stage
+  useEffect(() => {
+    if (!activeOrder) return;
+    if (activeOrder.status === 'Delivered') {
+      setEtaRemainingMins(0);
+    } else if (activeOrder.status === 'Out for Delivery') {
+      setEtaRemainingMins(8);
+    } else if (activeOrder.status === 'Ready') {
+      setEtaRemainingMins(14);
+    } else if (activeOrder.status === 'Preparing') {
+      setEtaRemainingMins(18);
+    } else if (activeOrder.status === 'Accepted') {
+      setEtaRemainingMins(22);
+    } else {
+      setEtaRemainingMins(25);
+    }
+  }, [activeOrder?.status]);
+
   if (!activeOrder) {
     return (
-      <div className="p-12 text-center text-slate-400">
+      <div className="p-16 text-center text-slate-400 font-sans">
         <ShoppingBag className="w-12 h-12 text-slate-600 mx-auto mb-2" />
-        <p className="font-bold text-slate-400">No active orders queued in telemetry.</p>
+        <p className="font-bold text-slate-300">No active orders placed yet.</p>
+        <p className="text-xs text-slate-500 mt-1">Browse the menu and place an order to track it live!</p>
       </div>
     );
   }
 
+  // Progress percentage (0 to 100)
+  const progressPercent = Math.round(((currentStageIdx) / (stages.length - 1)) * 100);
+
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100 font-sans">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100 font-sans space-y-6">
 
       {/* Multiple Orders Selector Tabs */}
       {orders.length > 1 && (
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none">
-          <span className="text-xs text-slate-400 font-mono font-bold shrink-0">ACTIVE NODES:</span>
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <span className="text-xs text-slate-400 font-mono font-bold shrink-0">ACTIVE ORDERS:</span>
           {orders.map((ord) => (
             <button
               key={ord.id}
@@ -85,10 +98,10 @@ export const OrderTracker = () => {
         </div>
       )}
 
-      {/* Main Container Card */}
+      {/* Main Order Card */}
       <div className="bg-[#0d1527]/90 rounded-3xl p-6 border border-emerald-500/30 shadow-[0_0_30px_rgba(0,0,0,0.8)] space-y-6 backdrop-blur-xl">
 
-        {/* Top Header */}
+        {/* Top Header & Status Banner */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
@@ -96,40 +109,29 @@ export const OrderTracker = () => {
                 {activeOrder.id}
               </span>
               <h2 className="text-xl font-black text-white">{activeOrder.restaurantName}</h2>
-              <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2 py-0.5 rounded-md font-mono font-black border border-emerald-500/40 flex items-center gap-1">
+              <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-md font-mono font-black border border-emerald-500/40 flex items-center gap-1.5">
                 <Radio className="w-3 h-3 text-emerald-400 animate-ping" />
-                LIVE GPS HUD
+                LIVE GPS TRACKING
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-1 font-mono">
-              Queued at {new Date(activeOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {activeOrder.paymentMode} ({activeOrder.paymentStatus})
+              Ordered at {new Date(activeOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {activeOrder.paymentMode} ({activeOrder.paymentStatus})
             </p>
           </div>
 
-          {/* ETA & Simulator Controls */}
-          <div className="flex items-center gap-3">
-            <div className="bg-[#070b14] px-4 py-2.5 rounded-2xl border border-emerald-500/30 text-right">
-              <div className="text-[10px] text-slate-400 uppercase font-mono font-bold tracking-wider">ESTIMATED ETA</div>
-              <div className="text-lg font-black text-emerald-400 font-mono flex items-center gap-1.5 justify-end">
-                <Clock className="w-4 h-4 text-cyan-400 animate-spin-slow" />
-                {activeOrder.status === 'Delivered' ? 'Delivered 🎉' : `${activeOrder.estimatedDeliveryMins} Mins`}
-              </div>
+          {/* Real-Time ETA Card */}
+          <div className="bg-[#070b14] px-5 py-3 rounded-2xl border border-emerald-500/30 text-right shrink-0">
+            <div className="text-[10px] text-slate-400 uppercase font-mono font-bold tracking-wider">
+              {activeOrder.status === 'Delivered' ? 'STATUS' : 'ESTIMATED ARRIVAL'}
             </div>
-
-            {activeOrder.status !== 'Delivered' && (
-              <button
-                onClick={() => fastForwardOrder(activeOrder.id)}
-                className="bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 hover:from-emerald-400 text-slate-950 font-black text-xs px-3.5 py-2.5 rounded-2xl shadow-[0_0_15px_rgba(0,245,155,0.3)] flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer"
-                title="Simulate Next Dispatch Step"
-              >
-                <Zap className="w-3.5 h-3.5 fill-slate-950" />
-                Simulate Step
-              </button>
-            )}
+            <div className="text-xl font-black text-emerald-400 font-mono flex items-center gap-1.5 justify-end mt-0.5">
+              <Clock className="w-4 h-4 text-cyan-400 animate-spin-slow" />
+              {activeOrder.status === 'Delivered' ? 'Delivered 🎉' : `${etaRemainingMins} Mins`}
+            </div>
           </div>
         </div>
 
-        {/* Live Interactive Telemetry Map */}
+        {/* Live Interactive Map with Google Maps Layer */}
         <LiveMap 
           orderStatus={activeOrder.status}
           restaurantName={activeOrder.restaurantName}
@@ -137,13 +139,30 @@ export const OrderTracker = () => {
           partnerName={partner?.name}
         />
 
-        {/* Stepper Grid */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-mono font-black text-emerald-400 uppercase tracking-wider">// DISPATCH PIPELINE STATUS</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+        {/* Real-Time Delivery Progress Stepper */}
+        <div className="space-y-3 bg-[#070b14]/70 p-5 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-mono font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              LIVE ORDER PROGRESS
+            </h3>
+            <span className="text-xs font-mono font-bold text-slate-400">{progressPercent}% Completed</span>
+          </div>
+
+          {/* Progress Bar Line */}
+          <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+            <div 
+              className="bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 h-full transition-all duration-700 ease-out rounded-full shadow-[0_0_12px_rgba(0,245,155,0.6)]"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+
+          {/* 6 Stage Timeline Steps */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 pt-2">
             {stages.map((stg, index) => {
               const isCompleted = index <= currentStageIdx;
               const isCurrent = index === currentStageIdx;
+              const StepIcon = stg.icon;
 
               return (
                 <div
@@ -158,9 +177,9 @@ export const OrderTracker = () => {
                 >
                   <div className="flex justify-center mb-1.5">
                     {isCompleted ? (
-                      <CheckCircle2 className={`w-5 h-5 ${isCurrent ? 'text-emerald-400 animate-pulse' : 'text-emerald-500'}`} />
+                      <StepIcon className={`w-5 h-5 ${isCurrent ? 'text-emerald-400 animate-bounce' : 'text-emerald-500'}`} />
                     ) : (
-                      <Clock className="w-5 h-5 text-slate-600" />
+                      <StepIcon className="w-5 h-5 text-slate-600" />
                     )}
                   </div>
                   <h4 className="font-black text-xs">{stg.label}</h4>
@@ -171,7 +190,7 @@ export const OrderTracker = () => {
           </div>
         </div>
 
-        {/* DELIVERY PARTNER CARD */}
+        {/* Assigned Delivery Partner Card */}
         {isOrderAccepted ? (
           <div className="bg-[#070b14] p-4.5 rounded-2xl border border-emerald-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
             <div className="flex items-center gap-3">
@@ -184,13 +203,13 @@ export const OrderTracker = () => {
                 <div className="flex items-center gap-2 flex-wrap">
                   <h4 className="font-black text-sm text-white">{partner.name}</h4>
                   <span className="bg-emerald-950 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold px-2 py-0.5 rounded-md">
-                    ASSIGNED DRONE RIDER
+                    ASSIGNED DELIVERY PARTNER
                   </span>
                   <span className="bg-[#111c33] text-amber-300 text-[10px] font-black px-2 py-0.5 rounded-md border border-amber-500/40">
                     ★ {partner.rating}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5 font-mono">{partner.vehicle} • Thermal Insulated Containment</p>
+                <p className="text-xs text-slate-400 mt-0.5 font-mono">{partner.vehicle} • Insulated Fresh Packaging</p>
               </div>
             </div>
 
@@ -199,24 +218,24 @@ export const OrderTracker = () => {
               className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 text-slate-950 text-xs font-black px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md active:scale-95 transition-all shrink-0 cursor-pointer"
             >
               <Phone className="w-3.5 h-3.5" />
-              Direct Comms
+              Call Rider
             </a>
           </div>
         ) : (
           <div className="bg-[#1a1708] p-4 rounded-2xl border border-amber-500/40 flex items-center gap-3 text-xs text-amber-300">
             <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 animate-pulse" />
             <div>
-              <span className="font-black block text-amber-200">Order Queued & Awaiting Kitchen Acceptance</span>
+              <span className="font-black block text-amber-200">Order Placed & Sent to Restaurant</span>
               <span className="text-[11px] text-amber-400 font-mono">
-                Kitchen reactor is verifying ingredients. Delivery drone telemetry will initialize immediately upon acceptance!
+                Restaurant is reviewing and confirming your order. Rider assignment will initialize immediately upon confirmation!
               </span>
             </div>
           </div>
         )}
 
-        {/* Items Summary */}
-        <div className="bg-[#070b14] p-4 rounded-2xl border border-slate-800">
-          <h4 className="font-mono font-black text-xs text-emerald-400 uppercase tracking-wider mb-2.5">CALIBRATED ORDER ITEMS</h4>
+        {/* Order Items Summary & Total Bill */}
+        <div className="bg-[#070b14] p-4.5 rounded-2xl border border-slate-800">
+          <h4 className="font-mono font-black text-xs text-emerald-400 uppercase tracking-wider mb-2.5">ORDER ITEMS SUMMARY</h4>
           <div className="divide-y divide-slate-800 font-mono">
             {activeOrder.items.map((it, idx) => (
               <div key={idx} className="py-2 flex items-center justify-between text-xs">
@@ -229,7 +248,7 @@ export const OrderTracker = () => {
             ))}
           </div>
           <div className="pt-3 border-t border-slate-800 flex justify-between items-center text-sm font-black text-white mt-2 font-mono">
-            <span>TOTAL AMOUNT</span>
+            <span>TOTAL BILL PAID</span>
             <span className="text-emerald-400 text-base">₹{activeOrder.totalAmount}</span>
           </div>
         </div>

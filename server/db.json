@@ -313,9 +313,9 @@
       "phone": "+91 98765 43210",
       "vehicle": "Honda Activa 6G (AP 31 BH 4092)",
       "rating": 4.9,
-      "deliveriesCount": 486,
+      "deliveriesCount": 488,
       "status": "On Delivery",
-      "activeOrderId": "ORD-9036",
+      "activeOrderId": "ORD-6987",
       "location": {
         "lat": 17.7289,
         "lng": 83.3031,
@@ -374,6 +374,98 @@
   ],
   "orders": [
     {
+      "id": "ORD-6987",
+      "customerName": "Rahul Malhotra",
+      "customerPhone": "+91 98765 00112",
+      "deliveryAddress": "Flat 402, High-Tech Tower, Hitec City Main Road (Landmark: Near Cyber Towers), Madhapur, Hyderabad",
+      "restaurantId": "rest-1",
+      "restaurantName": "Spicy Junction",
+      "items": [
+        {
+          "id": "item-101",
+          "restaurantId": "rest-1",
+          "name": "Hyderabadi Dum Chicken Biryani",
+          "price": 290,
+          "quantity": 1,
+          "isVeg": false
+        }
+      ],
+      "totalAmount": 240,
+      "subtotal": 290,
+      "deliveryFee": 35,
+      "taxes": 15,
+      "discount": 100,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Placed",
+      "createdAt": "2026-08-21T08:01:45.302Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "01:31 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹100)"
+        }
+      ]
+    },
+    {
+      "id": "ORD-3889",
+      "customerName": "Nived Reddy Tamma",
+      "customerPhone": "+91 77026 18534",
+      "deliveryAddress": "Bindra Nagar, Bindra Nagar, Pontinamallayyapalem (Landmark: Near Bindra Nagar), Bindra Nagar, Andhra Pradesh",
+      "restaurantId": "rest-2",
+      "restaurantName": "Burger Craft & Co.",
+      "items": [
+        {
+          "id": "item-202",
+          "restaurantId": "rest-2",
+          "name": "Crispy Veg Spicy Crunch Burger",
+          "price": 180,
+          "quantity": 1,
+          "isVeg": true
+        }
+      ],
+      "totalAmount": 189,
+      "subtotal": 180,
+      "deliveryFee": 35,
+      "taxes": 9,
+      "discount": 35,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Delivered",
+      "createdAt": "2026-08-21T07:58:21.136Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": "partner-1",
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "01:28 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹35)"
+        },
+        {
+          "status": "Preparing",
+          "timestamp": "01:28 PM",
+          "note": "Kitchen accepted order"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "01:28 PM",
+          "note": "Packed & ready for pickup"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "01:28 PM",
+          "note": "Rider picked up order from kitchen"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "01:29 PM",
+          "note": "Fast-forwarded to Delivered"
+        }
+      ]
+    },
+    {
       "id": "ORD-9036",
       "customerName": "Nived Reddy Tamma",
       "customerPhone": "+91 77026 18534",
@@ -397,7 +489,7 @@
       "discount": 100,
       "paymentMode": "UPI (PhonePe)",
       "paymentStatus": "Paid (ZapPay AI Verified)",
-      "status": "Preparing",
+      "status": "Delivered",
       "createdAt": "2026-08-21T07:53:17.756Z",
       "estimatedDeliveryMins": 25,
       "deliveryPartnerId": "partner-1",
@@ -411,6 +503,21 @@
           "status": "Preparing",
           "timestamp": "01:23 PM",
           "note": "Kitchen accepted order"
+        },
+        {
+          "status": "Ready",
+          "timestamp": "01:28 PM",
+          "note": "Packed & ready for pickup"
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "01:28 PM",
+          "note": "Rider picked up order from kitchen"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "01:29 PM",
+          "note": "Fast-forwarded to Delivered"
         }
       ]
     },

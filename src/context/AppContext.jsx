@@ -260,24 +260,68 @@ export const AppProvider = ({ children }) => {
           fetch(`${API_BASE}/partners`)
         ]);
 
-        if (resRest.ok && resMenu.ok && resOrders.ok && resPartners.ok) {
-          const restData = await resRest.json();
-          const menuData = await resMenu.json();
-          const ordersData = await resOrders.json();
-          const partnersData = await resPartners.json();
-
-          setRestaurants(restData);
-          setMenuItems(menuData);
-          setOrders(ordersData);
-          setDeliveryPartners(partnersData);
-          setIsBackendConnected(true);
+        if (resRest.ok && resMenu.ok) {
+          setRestaurants(await resRest.json());
+          setMenuItems(await resMenu.json());
         }
+        if (resOrders.ok) {
+          const o = await resOrders.json();
+          setOrders(o);
+          if (o.length > 0) setActiveTrackingOrderId(o[0].id);
+        }
+        if (resPartners.ok) setDeliveryPartners(await resPartners.json());
+        setIsBackendConnected(true);
       } catch (err) {
+        console.log('Using local fallback state (backend offline):', err);
         setIsBackendConnected(false);
       }
     };
 
     fetchBackendData();
+  }, []);
+
+  // Automatic Real-Time Order Progression (simulating real-time live restaurant & rider dispatch)
+  useEffect(() => {
+    const statusFlow = ['Placed', 'Accepted', 'Preparing', 'Ready', 'Out for Delivery', 'Delivered'];
+    const statusMessages = {
+      Accepted: '👨‍🍳 Restaurant confirmed your order! Kitchen is preparing.',
+      Preparing: '🍳 Chef started cooking your fresh meal.',
+      Ready: '📦 Food is packed & sealed! Waiting for delivery partner pickup.',
+      'Out for Delivery': '🛵 Delivery partner picked up your order and is on the way!',
+      Delivered: '🎉 Order delivered! Enjoy your meal.'
+    };
+
+    const interval = setInterval(() => {
+      setOrders((prevOrders) => {
+        let hasChanges = false;
+        const updated = prevOrders.map((ord) => {
+          if (ord.status !== 'Delivered') {
+            const currentIdx = statusFlow.indexOf(ord.status);
+            if (currentIdx !== -1 && currentIdx < statusFlow.length - 1) {
+              const nextStatus = statusFlow[currentIdx + 1];
+              hasChanges = true;
+              showNotification(statusMessages[nextStatus] || `Order ${ord.id}: ${nextStatus}`, 'success');
+              return {
+                ...ord,
+                status: nextStatus,
+                history: [
+                  ...(ord.history || []),
+                  {
+                    status: nextStatus,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    note: statusMessages[nextStatus] || nextStatus
+                  }
+                ]
+              };
+            }
+          }
+          return ord;
+        });
+        return hasChanges ? updated : prevOrders;
+      });
+    }, 12000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const playSoundChime = (type = 'success') => {
