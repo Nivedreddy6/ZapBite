@@ -33,6 +33,7 @@
   4. 📦 **Food Packed** — Ready for rider pickup
   5. 🛵 **On the Way** — Rider heading to your doorstep
   6. 🎉 **Delivered** — Handed over with rating feedback and instant "Order More Food" reset
+* **Automatic Lifecycle Normalization**: Stale/past session orders are automatically archived upon load so the live tracker only focuses on active ongoing deliveries.
 * **Zero Artificial Simulation**: The customer status screen is 100% read-only and automatically advances in real time or via Restaurant / Rider portal actions.
 
 ### 🎨 3. Cyber-Luxe Aesthetics & SVG Micro-Animations
