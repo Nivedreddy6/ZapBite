@@ -202,7 +202,7 @@ export const AppProvider = ({ children }) => {
   const [deliveryPartners, setDeliveryPartners] = useState(INITIAL_DELIVERY_PARTNERS);
   const [orders, setOrders] = useState(INITIAL_ORDERS);
   const [cart, setCart] = useState([]);
-  const [activeTrackingOrderId, setActiveTrackingOrderId] = useState('ORD-8821');
+  const [activeTrackingOrderId, setActiveTrackingOrderId] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isBiteBotOpen, setIsBiteBotOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -267,7 +267,8 @@ export const AppProvider = ({ children }) => {
         if (resOrders.ok) {
           const o = await resOrders.json();
           setOrders(o);
-          if (o.length > 0) setActiveTrackingOrderId(o[0].id);
+          const active = o.find(item => item.status !== 'Delivered');
+          if (active) setActiveTrackingOrderId(active.id);
         }
         if (resPartners.ok) setDeliveryPartners(await resPartners.json());
         setIsBackendConnected(true);

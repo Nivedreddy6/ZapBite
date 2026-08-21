@@ -135,7 +135,7 @@ const MainAppContent = () => {
                     LIVE TELEMETRY
                   </span>
                   <span>|</span>
-                  <span>Active Node: <span className="font-mono text-cyan-300 font-black">{activeTrackingOrderId}</span></span>
+                  <span>Active Order: <span className="font-mono text-cyan-300 font-black">{activeTrackingOrderId || 'None'}</span></span>
                 </div>
               </div>
             </div>

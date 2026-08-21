@@ -32,11 +32,11 @@ export const OrderTracker = () => {
 
   const [etaRemainingMins, setEtaRemainingMins] = useState(22);
 
-  // Active ongoing orders (excluding delivered past orders)
+  // Active ongoing orders (strictly not delivered)
   const ongoingOrders = orders.filter((o) => o.status !== 'Delivered');
 
-  // Active Order: prioritize matching activeTrackingOrderId, otherwise first ongoing order, otherwise most recent order
-  const activeOrder = orders.find((o) => o.id === activeTrackingOrderId) || ongoingOrders[0] || orders[0];
+  // Active Order: strictly an ongoing order, or null
+  const activeOrder = ongoingOrders.find((o) => o.id === activeTrackingOrderId) || ongoingOrders[0] || null;
   const partner = deliveryPartners.find((p) => p.id === activeOrder?.deliveryPartnerId) || deliveryPartners[0];
 
   // Authentic Food Delivery Milestones
@@ -52,7 +52,6 @@ export const OrderTracker = () => {
   const getStageIndex = (status) => stages.findIndex((s) => s.key === status);
   const currentStageIdx = activeOrder ? getStageIndex(activeOrder.status) : 0;
   const isOrderAccepted = activeOrder && activeOrder.status !== 'Placed';
-  const isDelivered = activeOrder?.status === 'Delivered';
 
   // Live dynamic ETA timer that updates every minute based on 30-35 mins delivery estimate
   useEffect(() => {
@@ -75,34 +74,28 @@ export const OrderTracker = () => {
     return () => clearInterval(interval);
   }, [activeOrder?.createdAt, activeOrder?.status, activeOrder?.estimatedDeliveryMins]);
 
-  const handleRate = (type, rating) => {
-    if (!activeOrder) return;
-    if (type === 'food') {
-      rateOrder(activeOrder.id, { foodRating: rating });
-      showNotification(`⭐ Rated food ${rating}/5 stars!`, 'success');
-    } else {
-      rateOrder(activeOrder.id, { deliveryRating: rating });
-      showNotification(`🛵 Rated delivery partner ${rating}/5 stars!`, 'success');
-    }
-  };
-
-  // If no orders exist at all
+  // If there are NO ongoing active orders in progress
   if (!activeOrder) {
     return (
-      <div className="max-w-xl mx-auto p-12 text-center text-slate-400 font-sans space-y-4">
-        <div className="w-16 h-16 rounded-3xl bg-[#0d1527] border border-slate-800 flex items-center justify-center mx-auto shadow-xl">
-          <ShoppingBag className="w-8 h-8 text-emerald-400" />
+      <div className="max-w-xl mx-auto py-16 px-6 text-center text-slate-100 font-sans space-y-6 animate-fade-in">
+        <div className="w-20 h-20 rounded-3xl bg-[#0d1527] border border-emerald-500/30 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(0,245,155,0.2)]">
+          <ShoppingBag className="w-10 h-10 text-emerald-400" />
         </div>
-        <h3 className="text-lg font-black text-white">No Active Deliveries</h3>
-        <p className="text-xs text-slate-400 max-w-sm mx-auto">
-          You don't have any ongoing food orders right now. Explore the menu and enjoy delicious food delivered to your doorstep!
-        </p>
+        <div className="space-y-2">
+          <h3 className="text-2xl font-black text-white">No Active Orders in Progress</h3>
+          <p className="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+            All your deliveries are completed! Explore our top-rated restaurants to order your next fresh and delicious meal.
+          </p>
+        </div>
         <button
-          onClick={() => setCustomerSubTab('menu')}
-          className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 text-slate-950 font-black text-xs px-6 py-3 rounded-2xl shadow-[0_0_20px_rgba(0,245,155,0.4)] inline-flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
+          onClick={() => {
+            setActiveTrackingOrderId(null);
+            setCustomerSubTab('menu');
+          }}
+          className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 text-slate-950 font-black text-sm px-8 py-3.5 rounded-2xl shadow-[0_0_25px_rgba(0,245,155,0.4)] inline-flex items-center gap-2.5 active:scale-95 transition-all cursor-pointer"
         >
           <Utensils className="w-4 h-4" />
-          Browse Food Menu
+          <span>Browse Food Menu</span>
         </button>
       </div>
     );
@@ -112,14 +105,12 @@ export const OrderTracker = () => {
   const totalMins = activeOrder.estimatedDeliveryMins || 32;
   const createdTime = new Date(activeOrder.createdAt).getTime();
   const elapsedMins = Math.max(0, (Date.now() - createdTime) / 60000);
-  const progressPercent = isDelivered
-    ? 100
-    : Math.min(95, Math.max(10, Math.round((elapsedMins / totalMins) * 100)));
+  const progressPercent = Math.min(95, Math.max(10, Math.round((elapsedMins / totalMins) * 100)));
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100 font-sans space-y-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 text-slate-100 font-sans space-y-6 animate-fade-in">
 
-      {/* Multiple Ongoing Orders Selector Tabs (only shows active undelivered orders) */}
+      {/* Multiple Ongoing Orders Selector Tabs */}
       {ongoingOrders.length > 1 && (
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           <span className="text-xs text-slate-400 font-mono font-bold shrink-0">ACTIVE ORDERS:</span>
@@ -150,17 +141,10 @@ export const OrderTracker = () => {
                 {activeOrder.id}
               </span>
               <h2 className="text-xl font-black text-white">{activeOrder.restaurantName}</h2>
-              {isDelivered ? (
-                <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-md font-mono font-black border border-emerald-500/40 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  DELIVERED
-                </span>
-              ) : (
-                <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-md font-mono font-black border border-emerald-500/40 flex items-center gap-1.5">
-                  <Radio className="w-3 h-3 text-emerald-400 animate-ping" />
-                  LIVE GPS TRACKING
-                </span>
-              )}
+              <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-md font-mono font-black border border-emerald-500/40 flex items-center gap-1.5">
+                <Radio className="w-3 h-3 text-emerald-400 animate-ping" />
+                LIVE GPS TRACKING
+              </span>
             </div>
             <p className="text-xs text-slate-400 mt-1 font-mono">
               Ordered at {new Date(activeOrder.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {activeOrder.paymentMode} ({activeOrder.paymentStatus})
@@ -170,74 +154,14 @@ export const OrderTracker = () => {
           {/* Real-Time ETA Card */}
           <div className="bg-[#070b14] px-5 py-3 rounded-2xl border border-emerald-500/30 text-right shrink-0">
             <div className="text-[10px] text-slate-400 uppercase font-mono font-bold tracking-wider">
-              {isDelivered ? 'ORDER STATUS' : 'ESTIMATED ARRIVAL'}
+              ESTIMATED ARRIVAL
             </div>
             <div className="text-xl font-black text-emerald-400 font-mono flex items-center gap-1.5 justify-end mt-0.5">
               <Clock className="w-4 h-4 text-cyan-400 animate-spin-slow" />
-              {isDelivered ? 'Delivered 🎉' : `${etaRemainingMins} Mins`}
+              {etaRemainingMins} Mins
             </div>
           </div>
         </div>
-
-        {/* Order Completed Reset Banner (Shown when delivery is completed) */}
-        {isDelivered && (
-          <div className="bg-gradient-to-r from-emerald-950/80 via-[#0d2218] to-slate-900 p-5 rounded-2xl border border-emerald-500/40 space-y-4 animate-fade-in shadow-xl">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 shrink-0 shadow-[0_0_15px_rgba(0,245,155,0.4)]">
-                  <Sparkles className="w-6 h-6 animate-pulse" />
-                </div>
-                <div>
-                  <h3 className="font-black text-base text-white">Order Delivered Successfully! 🎉</h3>
-                  <p className="text-xs text-emerald-300/80">Your hot meal has been delivered. Enjoy your food!</p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => {
-                  setCustomerSubTab('menu');
-                }}
-                className="bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 hover:from-emerald-400 text-slate-950 font-black text-xs px-5 py-3 rounded-xl shadow-[0_0_15px_rgba(0,245,155,0.4)] flex items-center gap-2 active:scale-95 transition-all cursor-pointer shrink-0"
-              >
-                <span>Order More Food</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Quick Star Rating Strip */}
-            <div className="pt-3 border-t border-emerald-500/20 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-              <div className="flex items-center justify-between bg-[#070b14]/70 p-2.5 rounded-xl border border-slate-800">
-                <span className="text-slate-300 font-bold">Rate Food:</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => handleRate('food', star)}
-                      className="p-0.5 hover:scale-125 transition-transform cursor-pointer"
-                    >
-                      <Star className={`w-4 h-4 ${star <= (activeOrder.foodRating || 0) ? 'fill-amber-400 text-amber-400' : 'text-slate-600 hover:text-amber-300'}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between bg-[#070b14]/70 p-2.5 rounded-xl border border-slate-800">
-                <span className="text-slate-300 font-bold">Rate Rider:</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => handleRate('delivery', star)}
-                      className="p-0.5 hover:scale-125 transition-transform cursor-pointer"
-                    >
-                      <Star className={`w-4 h-4 ${star <= (activeOrder.deliveryRating || 0) ? 'fill-amber-400 text-amber-400' : 'text-slate-600 hover:text-amber-300'}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Live Interactive Map with Google Maps Layer */}
         <LiveMap 
