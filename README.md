@@ -1,11 +1,13 @@
 # ⚡ ZapBite — Next-Gen AI Food Delivery & Smart Restaurant Logistics Platform
 
-[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![Express](https://img.shields.io/badge/Express-5-000000?logo=express)](https://expressjs.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs)](https://nodejs.org/)
-[![GitHub](https://img.shields.io/badge/GitHub-Nivedreddy6%2FZapBite-181717?logo=github)](https://github.com/Nivedreddy6/ZapBite)
+[![React](https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Google Maps](https://img.shields.io/badge/Google_Maps-API-4285F4?logo=googlemaps&logoColor=white)](https://maps.google.com/)
+[![Chart.js](https://img.shields.io/badge/Chart.js-Analytics-FF6384?logo=chartdotjs&logoColor=white)](https://www.chartjs.org/)
+[![GitHub](https://img.shields.io/badge/GitHub-Nivedreddy6%2FZapBite-181717?logo=github&logoColor=white)](https://github.com/Nivedreddy6/ZapBite)
 
 **ZapBite** is a full-stack, AI-powered food delivery and restaurant logistics ecosystem. Built with a cyber-luxe dark glassmorphic design system, real-time Google Maps GPS telemetry, automated realistic 30–35 minute delivery lifecycles, live multi-role portals, SMS OTP verification, and an intelligent food concierge (**BiteBot AI**).
 
@@ -58,14 +60,14 @@
 
 ## 🛠️ Technology Stack
 
-| Layer | Technologies Used |
+| Layer | Technologies & Tools |
 | :--- | :--- |
-| **Frontend** | React 19, Vite 8, React Context API |
-| **Styling & Animations** | Tailwind CSS v4, Custom SVG Animations, Lucide React, Canvas Confetti |
-| **Maps & Geolocation** | Leaflet, Google Maps Tiles, Komoot Photon, OpenStreetMap Nominatim |
-| **Charts & Analytics** | Chart.js, React-ChartJS-2 |
-| **Backend Server** | Node.js, Express 5, LowDB |
-| **State & Persistence** | React Context (`AppContext.jsx`) with LocalStorage & SessionStorage |
+| **Frontend UI** | [![React](https://img.shields.io/badge/React_19-20232A?style=flat&logo=react&logoColor=61DAFB)](https://react.dev/) [![Vite](https://img.shields.io/badge/Vite_8-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/) [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML) |
+| **Styling & Animations** | [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) [![Lucide Icons](https://img.shields.io/badge/Lucide_Icons-F56565?style=flat&logo=lucide&logoColor=white)](https://lucide.dev/) [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS) [![SVG Animations](https://img.shields.io/badge/SVG-Animations-FF9900?style=flat&logo=svg&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/SVG) [![Canvas Confetti](https://img.shields.io/badge/Canvas_Confetti-FFD700?style=flat&logo=sparkles&logoColor=black)](https://www.npmjs.com/package/canvas-confetti) |
+| **Maps & Geolocation** | [![Google Maps](https://img.shields.io/badge/Google_Maps_Tiles-4285F4?style=flat&logo=googlemaps&logoColor=white)](https://maps.google.com/) [![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat&logo=leaflet&logoColor=white)](https://leafletjs.com/) [![OpenStreetMap](https://img.shields.io/badge/OpenStreetMap_Nominatim-7EBC6F?style=flat&logo=openstreetmap&logoColor=white)](https://www.openstreetmap.org/) [![Photon](https://img.shields.io/badge/Komoot_Photon-FF6B6B?style=flat&logo=compass&logoColor=white)](https://photon.komoot.io/) |
+| **Charts & Analytics** | [![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=flat&logo=chartdotjs&logoColor=white)](https://www.chartjs.org/) [![React Chartjs 2](https://img.shields.io/badge/React_Chartjs_2-00D8FF?style=flat&logo=react&logoColor=white)](https://react-chartjs-2.js.org/) |
+| **Backend Server** | [![Node.js](https://img.shields.io/badge/Node.js_18+-339933?style=flat&logo=nodedotjs&logoColor=white)](https://nodejs.org/) [![Express 5](https://img.shields.io/badge/Express_5-000000?style=flat&logo=express&logoColor=white)](https://expressjs.com/) [![LowDB](https://img.shields.io/badge/LowDB-JSON_Store-00ADD8?style=flat&logo=json&logoColor=white)](https://github.com/typicode/lowdb) |
+| **State & Persistence** | [![React Context](https://img.shields.io/badge/React_Context_API-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/) [![LocalStorage](https://img.shields.io/badge/LocalStorage-State-FFA500?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) [![SessionStorage](https://img.shields.io/badge/SessionStorage-Session-4CAF50?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) |
 
 ---
 
@@ -74,37 +76,38 @@
 ```
 ZapBite/
 ├── server/
-│   ├── .env.example          # Sample environment variables
-│   ├── db.json               # LowDB persistent JSON store
-│   └── index.js              # Express REST API Server (Port 5000)
+│   ├── .env.example              # Sample environment variables
+│   ├── db.json                   # LowDB persistent JSON store
+│   └── index.js                  # Express REST API Server (Port 5000)
 ├── src/
-│   ├── components/           # UI Components & Role Portals
-│   │   ├── AdminView.jsx     # Admin Analytics & Fleet Overview
-│   │   ├── AnimatedFoodBanner.jsx # Dynamic Food Hero Carousel
-│   │   ├── BiteBotChatbot.jsx# AI Assistant Floating Widget
-│   │   ├── CartDrawer.jsx    # Slide-out Cart Vault Drawer
-│   │   ├── CustomerView.jsx  # Customer Menu & Restaurant Hub
-│   │   ├── DeliveryView.jsx  # Rider Fleet Portal
+│   ├── components/               # UI Components & Role Portals
+│   │   ├── AdminView.jsx         # Admin Analytics & Fleet Overview
+│   │   ├── AnimatedDeliveryIcon.jsx # Animated Delivery Vehicle SVGs
+│   │   ├── AnimatedFoodBanner.jsx   # Dynamic Food Hero Carousel
+│   │   ├── BiteBotChatbot.jsx    # AI Assistant Floating Widget
+│   │   ├── CartDrawer.jsx        # Slide-out Cart Vault Drawer
+│   │   ├── CustomerView.jsx      # Customer Menu & Restaurant Hub
+│   │   ├── DeliveryView.jsx      # Rider Fleet Portal
 │   │   ├── EcosystemSvgAnimations.jsx # Custom SVG micro-animations
-│   │   ├── LandingPage.jsx   # Role launcher & Ecosystem Showcase
-│   │   ├── LiveMap.jsx       # Google Maps Live Delivery Telemetry
+│   │   ├── LandingPage.jsx       # Role launcher & Ecosystem Showcase
+│   │   ├── LiveMap.jsx           # Google Maps Live Delivery Telemetry
 │   │   ├── LocationPickerModal.jsx # Google Maps Interactive Pin Picker
-│   │   ├── LoginPage.jsx     # Auth Modal with Quick Demo Logins
-│   │   ├── Navbar.jsx        # Top Navigation & Role Switcher
-│   │   ├── OrderTracker.jsx  # Real-Time Order Tracking HUD
-│   │   ├── PaymentModal.jsx  # ZapPay AI Gateway & OTP Verification
-│   │   ├── RestaurantView.jsx# Kitchen Display System (KDS)
-│   │   └── UserProfileModal.jsx # Profile & Address Manager
+│   │   ├── LoginPage.jsx         # Auth Modal with Quick Demo Logins
+│   │   ├── Navbar.jsx            # Top Navigation & Role Switcher
+│   │   ├── OrderTracker.jsx      # Real-Time Order Tracking HUD
+│   │   ├── PaymentModal.jsx      # ZapPay AI Gateway & OTP Verification
+│   │   ├── RestaurantView.jsx    # Kitchen Display System (KDS)
+│   │   └── UserProfileModal.jsx  # Profile & Address Manager
 │   ├── context/
-│   │   └── AppContext.jsx    # Global State & Real-Time Lifecycle Controller
+│   │   └── AppContext.jsx        # Global State & Real-Time Lifecycle Controller
 │   ├── data/
-│   │   └── mockData.js       # Preloaded Restaurants, Dishes & Riders
-│   ├── App.jsx               # Main Application Component
-│   ├── index.css             # Tailwind v4 Base Styles & Keyframes
-│   └── main.jsx              # React Entry Point
-├── package.json              # NPM Dependencies & Scripts
-├── vite.config.js            # Vite Bundler Setup (with db watcher ignore)
-└── README.md                 # Project Documentation
+│   │   └── mockData.js           # Preloaded Restaurants, Dishes & Riders
+│   ├── App.jsx                   # Main Application Component
+│   ├── index.css                 # Tailwind v4 Base Styles & Keyframes
+│   └── main.jsx                  # React Entry Point
+├── package.json                  # NPM Dependencies & Scripts
+├── vite.config.js                # Vite Bundler Setup (with db watcher ignore)
+└── README.md                     # Project Documentation
 ```
 
 ---
@@ -161,12 +164,12 @@ npm run dev
 
 You can test any role instantly using the built-in quick login modal:
 
-| Role | Email / ID | Demo Focus |
-| :--- | :--- | :--- |
-| **Customer** | `rahul@zapbite.ai` | Ordering, Live Google Maps GPS Tracking, AI Cart |
-| **Restaurant Kitchen** | `kitchen@spicyjunction.com` | Live Kitchen Display (KDS) & Menu Stock |
-| **Delivery Driver** | `rahul.rider@zapbite.ai` | Fleet Dispatch & Route Navigation |
-| **Admin** | `admin@zapbite.ai` | Platform Revenue, Chart.js Visuals & Fleet Metrics |
+| Role | Access Badge | Demo Email / ID | Demo Focus & Capabilities |
+| :--- | :---: | :--- | :--- |
+| **Customer** | ![Customer](https://img.shields.io/badge/Role-Customer-3B82F6?style=flat&logo=googlemaps&logoColor=white) | `rahul@zapbite.ai` | Ordering, Live Google Maps GPS Tracking, AI Concierge & ZapPay |
+| **Restaurant Kitchen** | ![Kitchen](https://img.shields.io/badge/Role-Kitchen_KDS-F97316?style=flat&logo=fastapi&logoColor=white) | `kitchen@spicyjunction.com` | Real-Time Kitchen Queue, Cooking Timers & Menu Item Stock |
+| **Delivery Driver** | ![Driver](https://img.shields.io/badge/Role-Fleet_Rider-10B981?style=flat&logo=speedtest&logoColor=white) | `rahul.rider@zapbite.ai` | Fleet Dispatch, Pickup Handover & Live GPS Route Navigation |
+| **Admin** | ![Admin](https://img.shields.io/badge/Role-Admin_Matrix-8B5CF6?style=flat&logo=adguard&logoColor=white) | `admin@zapbite.ai` | Platform Revenue, Chart.js Visuals & Live Fleet Analytics |
 
 ---
 
