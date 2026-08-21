@@ -374,6 +374,42 @@
   ],
   "orders": [
     {
+      "id": "ORD-2032",
+      "customerName": "Nived Reddy Tamma",
+      "customerPhone": "+91 77026 18534",
+      "deliveryAddress": "Bindra Nagar, Bindra Nagar, Pontinamallayyapalem (Landmark: Near Bindra Nagar), Bindra Nagar, Andhra Pradesh",
+      "restaurantId": "rest-2",
+      "restaurantName": "Burger Craft & Co.",
+      "items": [
+        {
+          "id": "item-202",
+          "restaurantId": "rest-2",
+          "name": "Crispy Veg Spicy Crunch Burger",
+          "price": 180,
+          "quantity": 1,
+          "isVeg": true
+        }
+      ],
+      "totalAmount": 189,
+      "subtotal": 180,
+      "deliveryFee": 35,
+      "taxes": 9,
+      "discount": 35,
+      "paymentMode": "UPI (PhonePe)",
+      "paymentStatus": "Paid (ZapPay AI Verified)",
+      "status": "Placed",
+      "createdAt": "2026-08-21T08:16:02.158Z",
+      "estimatedDeliveryMins": 25,
+      "deliveryPartnerId": null,
+      "history": [
+        {
+          "status": "Placed",
+          "timestamp": "01:46 PM",
+          "note": "Order placed via ZapPay AI (Saved ₹35)"
+        }
+      ]
+    },
+    {
       "id": "ORD-6552",
       "customerName": "Nived Reddy Tamma",
       "customerPhone": "+91 77026 18534",
