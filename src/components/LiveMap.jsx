@@ -56,7 +56,14 @@ const TILE_SERVERS = {
   }
 };
 
-export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerName }) => {
+export const LiveMap = ({ 
+  orderStatus, 
+  restaurantName, 
+  deliveryAddress, 
+  partnerName,
+  createdAt,
+  estimatedDeliveryMins = 32 
+}) => {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const tileLayerRef = useRef(null);
@@ -65,115 +72,117 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
   const remainingPolylineRef = useRef(null);
 
   const [activeTheme, setActiveTheme] = useState('standard');
-  const [telemetrySpeed, setTelemetrySpeed] = useState(34);
-  const [distanceLeftKm, setDistanceLeftKm] = useState('1.8');
-  const [headingMessage, setHeadingMessage] = useState('Rider is on the way');
+  const [telemetrySpeed, setTelemetrySpeed] = useState(0);
+  const [distanceLeftKm, setDistanceLeftKm] = useState('2.8 km remaining');
+  const [headingMessage, setHeadingMessage] = useState('Rider tracking initialized');
 
-  // Animation Progress state (0 to 1)
-  const [approachProgress, setApproachProgress] = useState(0.2);
-  const [deliveryProgress, setDeliveryProgress] = useState(0.1);
-
-  // Continuous live animation loop for real-time rider movement (just like Swiggy / Uber)
+  // Synchronized Realistic GPS Position calculation based on elapsed delivery time
   useEffect(() => {
-    let timer;
+    const updateRiderPosition = () => {
+      const createdTime = createdAt ? new Date(createdAt).getTime() : Date.now();
+      const elapsedMins = Math.max(0, (Date.now() - createdTime) / 60000);
+      const totalMins = estimatedDeliveryMins || 32;
 
-    if (orderStatus === 'Accepted' || orderStatus === 'Preparing') {
-      setHeadingMessage(`Rider heading to ${restaurantName || 'Restaurant'}`);
-      timer = setInterval(() => {
-        setApproachProgress((prev) => {
-          if (prev >= 0.98) return 0.98;
-          return prev + 0.015;
-        });
-        setTelemetrySpeed(Math.floor(28 + Math.random() * 8));
-      }, 500);
-    } else if (orderStatus === 'Ready') {
-      setHeadingMessage(`Rider at restaurant picking up fresh food`);
-      setApproachProgress(1.0);
-      setDeliveryProgress(0.02);
-      setTelemetrySpeed(0);
-    } else if (orderStatus === 'Out for Delivery') {
-      setHeadingMessage(`Rider on the way to your doorstep`);
-      timer = setInterval(() => {
-        setDeliveryProgress((prev) => {
-          if (prev >= 0.96) return 0.96;
-          return prev + 0.012;
-        });
-        setTelemetrySpeed(Math.floor(32 + Math.random() * 9));
-      }, 500);
-    } else if (orderStatus === 'Delivered') {
-      setHeadingMessage(`Order Delivered 🎉`);
-      setDeliveryProgress(1.0);
-      setTelemetrySpeed(0);
-    } else {
-      // Placed
-      setHeadingMessage(`Awaiting restaurant confirmation`);
-      setApproachProgress(0.05);
-      setTelemetrySpeed(0);
-    }
+      let currentPos = KITCHEN_COORDS;
+      let progressRatio = 0;
 
-    return () => clearInterval(timer);
-  }, [orderStatus, restaurantName]);
+      if (orderStatus === 'Delivered') {
+        currentPos = DOORSTEP_COORDS;
+        progressRatio = 1.0;
+        setDistanceLeftKm('0.0 km (Delivered)');
+        setHeadingMessage('Order Delivered 🎉');
+        setTelemetrySpeed(0);
 
-  // Interpolate Coordinates & Update Leaflet Marker smoothly
-  useEffect(() => {
-    let currentPos;
-    let activeRoute;
-    let activeRatio;
+        if (completedPolylineRef.current && remainingPolylineRef.current) {
+          completedPolylineRef.current.setLatLngs(DELIVERY_ROUTE_POINTS);
+          remainingPolylineRef.current.setLatLngs([]);
+        }
+      } else if (orderStatus === 'Out for Delivery') {
+        // Delivery transit phase (e.g. from 45% of total time to 100% of total time)
+        const transitStartMins = totalMins * 0.45; // ~14 mins
+        const transitDurationMins = totalMins - transitStartMins; // ~18 mins
+        const transitElapsed = Math.max(0, elapsedMins - transitStartMins);
+        
+        // Strictly compute progress ratio from 0.05 to 0.95 during transit
+        progressRatio = Math.min(0.95, Math.max(0.05, transitElapsed / transitDurationMins));
 
-    if (orderStatus === 'Placed' || orderStatus === 'Accepted' || orderStatus === 'Preparing') {
-      activeRoute = APPROACH_ROUTE_POINTS;
-      activeRatio = approachProgress;
-    } else {
-      activeRoute = DELIVERY_ROUTE_POINTS;
-      activeRatio = deliveryProgress;
-    }
+        const totalSegments = DELIVERY_ROUTE_POINTS.length - 1;
+        const scaledIndex = progressRatio * totalSegments;
+        const segIndex = Math.min(Math.floor(scaledIndex), totalSegments - 1);
+        const fraction = scaledIndex - segIndex;
 
-    const totalSegments = activeRoute.length - 1;
-    const scaledIndex = activeRatio * totalSegments;
-    const segIndex = Math.min(Math.floor(scaledIndex), totalSegments - 1);
-    const fraction = scaledIndex - segIndex;
+        const p1 = DELIVERY_ROUTE_POINTS[segIndex];
+        const p2 = DELIVERY_ROUTE_POINTS[segIndex + 1] || p1;
 
-    const p1 = activeRoute[segIndex];
-    const p2 = activeRoute[segIndex + 1] || p1;
+        currentPos = [
+          p1[0] + (p2[0] - p1[0]) * fraction,
+          p1[1] + (p2[1] - p1[1]) * fraction
+        ];
 
-    const lat = p1[0] + (p2[0] - p1[0]) * fraction;
-    const lng = p1[1] + (p2[1] - p1[1]) * fraction;
+        const remDist = (2.8 * (1 - progressRatio)).toFixed(1);
+        setDistanceLeftKm(`${remDist} km to doorstep`);
+        setHeadingMessage('Rider on the way to your doorstep');
+        setTelemetrySpeed(Math.floor(30 + Math.random() * 8));
 
-    currentPos = [lat, lng];
+        if (completedPolylineRef.current && remainingPolylineRef.current) {
+          const completedPts = DELIVERY_ROUTE_POINTS.slice(0, segIndex + 1);
+          completedPts.push(currentPos);
+          completedPolylineRef.current.setLatLngs(completedPts);
 
-    // Distance calculation
-    if (orderStatus === 'Delivered') {
-      setDistanceLeftKm('0.0');
-    } else if (orderStatus === 'Out for Delivery') {
-      const rem = (2.8 * (1 - deliveryProgress)).toFixed(1);
-      setDistanceLeftKm(rem > 0 ? rem : '0.1');
-    } else {
-      const rem = (1.5 * (1 - approachProgress)).toFixed(1);
-      setDistanceLeftKm(rem > 0 ? rem : '0.1');
-    }
+          const remainingPts = [currentPos, ...DELIVERY_ROUTE_POINTS.slice(segIndex + 1)];
+          remainingPolylineRef.current.setLatLngs(remainingPts);
+        }
+      } else if (orderStatus === 'Preparing' || orderStatus === 'Ready') {
+        // Rider is AT the restaurant waiting for cooking & packaging
+        currentPos = KITCHEN_COORDS;
+        progressRatio = 0;
+        setDistanceLeftKm('2.8 km to doorstep');
+        setHeadingMessage(`Rider at restaurant picking up order`);
+        setTelemetrySpeed(0);
 
-    // Move Rider Marker smoothly
-    if (riderMarkerRef.current) {
-      riderMarkerRef.current.setLatLng(currentPos);
-    }
-
-    // Update Polylines
-    if (completedPolylineRef.current && remainingPolylineRef.current) {
-      const fullPts = DELIVERY_ROUTE_POINTS;
-      if (orderStatus === 'Out for Delivery' || orderStatus === 'Delivered') {
-        const segIdx = Math.min(Math.floor(deliveryProgress * (fullPts.length - 1)), fullPts.length - 1);
-        const completedPts = fullPts.slice(0, segIdx + 1);
-        completedPts.push(currentPos);
-        completedPolylineRef.current.setLatLngs(completedPts);
-
-        const remainingPts = [currentPos, ...fullPts.slice(segIdx + 1)];
-        remainingPolylineRef.current.setLatLngs(remainingPts);
+        if (completedPolylineRef.current && remainingPolylineRef.current) {
+          completedPolylineRef.current.setLatLngs([KITCHEN_COORDS]);
+          remainingPolylineRef.current.setLatLngs(DELIVERY_ROUTE_POINTS);
+        }
       } else {
-        completedPolylineRef.current.setLatLngs([DELIVERY_ROUTE_POINTS[0]]);
-        remainingPolylineRef.current.setLatLngs(DELIVERY_ROUTE_POINTS);
+        // Placed or Accepted (Rider approaching restaurant)
+        const approachDuration = Math.max(1, totalMins * 0.1); // ~3 mins
+        const approachRatio = Math.min(0.98, Math.max(0.05, elapsedMins / approachDuration));
+
+        const totalSegments = APPROACH_ROUTE_POINTS.length - 1;
+        const scaledIndex = approachRatio * totalSegments;
+        const segIndex = Math.min(Math.floor(scaledIndex), totalSegments - 1);
+        const fraction = scaledIndex - segIndex;
+
+        const p1 = APPROACH_ROUTE_POINTS[segIndex];
+        const p2 = APPROACH_ROUTE_POINTS[segIndex + 1] || p1;
+
+        currentPos = [
+          p1[0] + (p2[0] - p1[0]) * fraction,
+          p1[1] + (p2[1] - p1[1]) * fraction
+        ];
+
+        const remDist = (1.5 * (1 - approachRatio)).toFixed(1);
+        setDistanceLeftKm(`${remDist} km to restaurant`);
+        setHeadingMessage(`Rider heading to ${restaurantName || 'Restaurant'}`);
+        setTelemetrySpeed(Math.floor(26 + Math.random() * 8));
+
+        if (completedPolylineRef.current && remainingPolylineRef.current) {
+          completedPolylineRef.current.setLatLngs([KITCHEN_COORDS]);
+          remainingPolylineRef.current.setLatLngs(DELIVERY_ROUTE_POINTS);
+        }
       }
-    }
-  }, [approachProgress, deliveryProgress, orderStatus]);
+
+      // Update rider Leaflet marker
+      if (riderMarkerRef.current) {
+        riderMarkerRef.current.setLatLng(currentPos);
+      }
+    };
+
+    updateRiderPosition();
+    const interval = setInterval(updateRiderPosition, 1000); // Live update synchronized every second
+    return () => clearInterval(interval);
+  }, [orderStatus, createdAt, estimatedDeliveryMins, restaurantName]);
 
   // Initialize Leaflet Map
   useEffect(() => {
@@ -182,7 +191,7 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
     // Create Map
     const map = L.map(mapContainerRef.current, {
       center: KITCHEN_COORDS,
-      zoom: 15,
+      zoom: 14,
       zoomControl: false,
       attributionControl: false
     });
@@ -341,7 +350,7 @@ export const LiveMap = ({ orderStatus, restaurantName, deliveryAddress, partnerN
           <span className="text-xs font-mono font-black text-white">{headingMessage}</span>
         </div>
         <span className="text-slate-600">|</span>
-        <span className="text-xs font-mono font-bold text-emerald-400">{distanceLeftKm} km remaining</span>
+        <span className="text-xs font-mono font-bold text-emerald-400">{distanceLeftKm}</span>
       </div>
 
       {/* Top Right Speed & Telemetry HUD */}

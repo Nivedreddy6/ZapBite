@@ -245,6 +245,8 @@ export const OrderTracker = () => {
           restaurantName={activeOrder.restaurantName}
           deliveryAddress={activeOrder.deliveryAddress}
           partnerName={partner?.name}
+          createdAt={activeOrder.createdAt}
+          estimatedDeliveryMins={activeOrder.estimatedDeliveryMins || 32}
         />
 
         {/* Real-Time Delivery Progress Stepper */}
